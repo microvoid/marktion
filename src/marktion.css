@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.ProseMirror {
+  @apply prose p-4 rounded-md relative shadow-lg border dark:prose-invert;
+}
