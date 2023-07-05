@@ -1,42 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
+import { GitHubLogoIcon, SunIcon, MoonIcon } from "@radix-ui/react-icons";
 import MarktionEditor from "./src/marktion.js";
-
-function Header() {
-  return (
-    <header className="w-full p-4 dark:bg-gray-800 dark:text-gray-100">
-      <div className="container flex justify-between h-16 mx-auto">
-        <a
-          rel="noopener noreferrer"
-          href="#"
-          aria-label="Back to homepage"
-          className="flex items-center p-2"
-        >
-          Marktion
-        </a>
-
-        <div className="items-center flex-shrink-0 lg:flex">
-          <label
-            htmlFor="theme-switch"
-            className="inline-flex items-center space-x-4 cursor-pointer dark:text-gray-100"
-          >
-            <span>Left</span>
-            <span className="relative">
-              <input
-                id="theme-switch"
-                type="checkbox"
-                className="hidden peer"
-              />
-              <div className="w-10 h-6 rounded-full shadow-inner dark:bg-gray-400 peer-checked:dark:bg-violet-400"></div>
-              <div className="absolute inset-y-0 left-0 w-4 h-4 m-1 rounded-full shadow peer-checked:right-0 peer-checked:left-auto dark:bg-gray-800"></div>
-            </span>
-            <span>Right</span>
-          </label>
-        </div>
-      </div>
-    </header>
-  );
-}
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
@@ -46,3 +11,67 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     </>
   </React.StrictMode>
 );
+
+function Header() {
+  const { isDarkMode, toggle } = useDarkMode();
+
+  return (
+    <header className="w-full p-4  dark:text-gray-100">
+      <div className="container flex justify-between items-center h-16 mx-auto">
+        <a className="rounded-lg cursor-pointer p-2 transition-colors duration-200 hover:bg-stone-100 sm:bottom-auto sm:top-5">
+          <GitHubLogoIcon />
+        </a>
+
+        <div
+          onClick={toggle}
+          className="rounded-lg cursor-pointer p-2 transition-colors duration-200 hover:bg- hover:text-base sm:bottom-auto sm:top-5"
+        >
+          {isDarkMode ? <MoonIcon /> : <SunIcon />}
+        </div>
+      </div>
+    </header>
+  );
+}
+
+function useDarkMode() {
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    let theme = getThemeFromStorage();
+
+    if (theme === null) {
+      theme = getThemeFromSystem();
+    }
+
+    return theme === "dark";
+  });
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.setAttribute("data-mode", "dark");
+    } else {
+      document.documentElement.removeAttribute("data-mode");
+    }
+
+    localStorage.setItem("theme", isDarkMode ? "dark" : "light");
+  }, [isDarkMode]);
+
+  return {
+    isDarkMode,
+    toggle: () => setIsDarkMode(!isDarkMode),
+  };
+}
+
+function getThemeFromStorage() {
+  const theme = localStorage.getItem("theme") || "";
+
+  if (!["dark", "light"].includes(theme)) {
+    return null;
+  }
+
+  return theme;
+}
+
+function getThemeFromSystem() {
+  const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+  return isDark ? "dark" : "light";
+}
