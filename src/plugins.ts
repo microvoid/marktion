@@ -18,11 +18,14 @@ export interface IntergrateExtension<M extends Methods = Methods> extends Plugin
   view: () => React.ReactNode;
 }
 
+let pluginId = 0;
+
 export function createIntergrateExtension<M extends Methods>(
   install: (ctx: PluginContext) => IntergrateExtension<M>
 ) {
   return {
     install,
+    id: pluginId++,
     type: PluginType.intergrate
   };
 }

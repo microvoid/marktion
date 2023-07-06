@@ -7,8 +7,9 @@ import { StyleProvider } from '@ant-design/cssinjs';
 
 import './marktion.css';
 import { PluginCreator, PluginType } from './plugins';
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { EditorBubbleMenuPlugin } from './plugins/bubble-menu';
+import { SlashCommand } from './plugins/slash-menu';
 
 type MarktionEditorProps = Partial<EditorOptions> & {
   darkMode?: boolean;
@@ -19,7 +20,7 @@ export function MarktionEditor(props: MarktionEditorProps) {
   const { darkMode = false, plugins = [EditorBubbleMenuPlugin] } = props;
 
   const editor = useEditor({
-    extensions: [StarterKit, Highlight, Typography],
+    extensions: [StarterKit, Highlight, Typography, SlashCommand],
     content: `<p>
   Markdown shortcuts make it easy to format the text while typing.
 </p>
@@ -37,8 +38,6 @@ export function MarktionEditor(props: MarktionEditorProps) {
 </p>`
   });
 
-  console.log('editor', editor);
-
   const intergrates = useMemo(() => {
     if (!editor) {
       return [];
@@ -46,11 +45,12 @@ export function MarktionEditor(props: MarktionEditorProps) {
 
     return plugins
       .filter(plugin => plugin.type === PluginType.intergrate)
-      .map(plugin =>
-        plugin.install({
+      .map(plugin => ({
+        plugin: plugin.install({
           editor: editor
-        })
-      );
+        }),
+        id: plugin.id
+      }));
   }, [plugins, editor]);
 
   return (
@@ -61,7 +61,9 @@ export function MarktionEditor(props: MarktionEditorProps) {
     >
       <StyleProvider hashPriority="high">
         <EditorContent className="marktion" editor={editor} />
-        {intergrates.map(plugin => plugin.view())}
+        {intergrates.map(item => (
+          <React.Fragment key={item.id}>{item.plugin.view()}</React.Fragment>
+        ))}
       </StyleProvider>
     </ConfigProvider>
   );

@@ -76,7 +76,11 @@ function EditorBubbleMenu(props: EditorBubbleMenuProps) {
       >
         {items.map(item => {
           return (
-            <Button type={item.isActive() ? 'primary' : 'text'} onClick={item.command}>
+            <Button
+              key={item.name}
+              type={item.isActive() ? 'primary' : 'text'}
+              onClick={item.command}
+            >
               {item.icon}
             </Button>
           );
