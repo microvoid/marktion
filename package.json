@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ant-design/cssinjs": "^1.11.1",
     "@radix-ui/react-icons": "^1.3.0",
     "@tiptap/extension-highlight": "^2.0.3",
     "@tiptap/extension-typography": "^2.0.3",

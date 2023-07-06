@@ -1,6 +1,5 @@
-import { useState } from 'react';
 import { Code } from 'lucide-react';
-import { Button } from 'antd';
+import { Button, Space } from 'antd';
 import { BubbleMenu, BubbleMenuProps } from '@tiptap/react';
 import { FontBoldIcon, FontItalicIcon, StrikethroughIcon } from '@radix-ui/react-icons';
 import { createIntergrateExtension } from '../plugins';
@@ -23,16 +22,12 @@ export interface BubbleMenuItem {
 }
 
 function EditorBubbleMenu(props: EditorBubbleMenuProps) {
-  const [isNodeSelectorOpen, setIsNodeSelectorOpen] = useState(false);
-  const [isColorSelectorOpen, setIsColorSelectorOpen] = useState(false);
-  const [isLinkSelectorOpen, setIsLinkSelectorOpen] = useState(false);
-
   const items: BubbleMenuItem[] = [
     {
       name: 'bold',
       isActive: () => props.editor.isActive('bold'),
       command: () => props.editor.chain().focus().toggleBold().run(),
-      icon: <FontBoldIcon />
+      icon: <FontBoldIcon className="w-[14px] h-[14px]" />
     },
     {
       name: 'italic',
@@ -65,22 +60,28 @@ function EditorBubbleMenu(props: EditorBubbleMenuProps) {
     },
     tippyOptions: {
       moveTransition: 'transform 0.15s ease-out',
-      onHidden: () => {
-        setIsNodeSelectorOpen(false);
-        setIsColorSelectorOpen(false);
-        setIsLinkSelectorOpen(false);
-      }
+      onHidden: () => {}
     }
   };
 
   return (
-    <BubbleMenu
-      className="flex p-2 divide-stone-200 rounded border border-stone-200 bg-white shadow-xl"
-      {...bubbleMenuProps}
-    >
-      {items.map(item => {
-        return <Button type={item.isActive() ? 'primary' : 'ghost'} icon={item.icon} />;
-      })}
+    <BubbleMenu {...bubbleMenuProps}>
+      <Space
+        direction="horizontal"
+        className="px-2 py-1 rounded-md relative shadow-lg border bg-white dark:bg-black"
+        onMouseDown={e => {
+          e.stopPropagation();
+          e.preventDefault();
+        }}
+      >
+        {items.map(item => {
+          return (
+            <Button type={item.isActive() ? 'primary' : 'text'} onClick={item.command}>
+              {item.icon}
+            </Button>
+          );
+        })}
+      </Space>
     </BubbleMenu>
   );
 }

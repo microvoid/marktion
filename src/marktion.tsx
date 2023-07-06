@@ -3,6 +3,7 @@ import Typography from '@tiptap/extension-typography';
 import Highlight from '@tiptap/extension-highlight';
 import StarterKit from '@tiptap/starter-kit';
 import { ConfigProvider, theme } from 'antd';
+import { StyleProvider } from '@ant-design/cssinjs';
 
 import './marktion.css';
 import { PluginCreator, PluginType } from './plugins';
@@ -58,9 +59,10 @@ export function MarktionEditor(props: MarktionEditorProps) {
         algorithm: darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm
       }}
     >
-      <EditorContent className="marktion" editor={editor} />
-
-      {intergrates.map(plugin => plugin.view())}
+      <StyleProvider hashPriority="high">
+        <EditorContent className="marktion" editor={editor} />
+        {intergrates.map(plugin => plugin.view())}
+      </StyleProvider>
     </ConfigProvider>
   );
 }
