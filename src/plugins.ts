@@ -1,4 +1,4 @@
-import { Editor } from '@tiptap/react';
+import { Editor, Extension } from '@tiptap/react';
 
 export enum PluginType {
   intergrate = 'intergrate'
@@ -15,13 +15,14 @@ export type PluginContext = {
 };
 
 export interface IntergrateExtension<M extends Methods = Methods> extends Plugin<M> {
-  view: () => React.ReactNode;
+  view: (ctx: PluginContext) => React.ReactNode;
+  extension?: Extension;
 }
 
 let pluginId = 0;
 
 export function createIntergrateExtension<M extends Methods>(
-  install: (ctx: PluginContext) => IntergrateExtension<M>
+  install: () => IntergrateExtension<M>
 ) {
   return {
     install,

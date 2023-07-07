@@ -5,3 +5,24 @@
 .ProseMirror {
   @apply prose p-4 rounded-md relative shadow-lg border dark:prose-invert;
 }
+
+.ProseMirror ul[data-type='taskList'] li {
+  margin: 1.25em 0;
+}
+
+.ProseMirror ul[data-type='taskList'] li > div {
+  display: inline-block;
+  margin: 0;
+}
+
+.ProseMirror ul[data-type='taskList'] li label {
+  margin-right: 8px;
+}
+
+.ProseMirror ul[data-type='taskList'] li p {
+  margin: 0;
+}
+
+.marktion {
+  position: relative;
+}

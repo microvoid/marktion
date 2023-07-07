@@ -1,15 +1,19 @@
+import React, { useMemo } from 'react';
+import { ConfigProvider, theme } from 'antd';
+import { StyleProvider } from '@ant-design/cssinjs';
 import { EditorContent, EditorOptions, useEditor } from '@tiptap/react';
 import Typography from '@tiptap/extension-typography';
 import Highlight from '@tiptap/extension-highlight';
 import StarterKit from '@tiptap/starter-kit';
-import { ConfigProvider, theme } from 'antd';
-import { StyleProvider } from '@ant-design/cssinjs';
+import TaskItemExtension from '@tiptap/extension-task-item';
+import TaskListExtension from '@tiptap/extension-task-list';
+
+import { PluginCreator, PluginType } from './plugins';
+import { EditorBubbleMenuPlugin } from './plugins/bubble-menu';
+import { SlashMenuPlugin } from './plugins/slash-menu';
+import { RootElContext } from './hooks';
 
 import './marktion.css';
-import { PluginCreator, PluginType } from './plugins';
-import React, { useMemo } from 'react';
-import { EditorBubbleMenuPlugin } from './plugins/bubble-menu';
-import { SlashCommand } from './plugins/slash-menu';
 
 type MarktionEditorProps = Partial<EditorOptions> & {
   darkMode?: boolean;
@@ -17,10 +21,31 @@ type MarktionEditorProps = Partial<EditorOptions> & {
 };
 
 export function MarktionEditor(props: MarktionEditorProps) {
-  const { darkMode = false, plugins = [EditorBubbleMenuPlugin] } = props;
+  const rootElRef = React.useRef<HTMLDivElement | null>(null);
+  const { darkMode = false, plugins = [EditorBubbleMenuPlugin, SlashMenuPlugin] } = props;
+
+  const intergrates = useMemo(() => {
+    return plugins
+      .filter(plugin => plugin.type === PluginType.intergrate)
+      .map(plugin => ({
+        plugin: plugin.install(),
+        id: plugin.id
+      }));
+  }, []);
+
+  const intergratePlugins = intergrates
+    .filter(item => Boolean(item.plugin.extension))
+    .map(item => item.plugin.extension!);
 
   const editor = useEditor({
-    extensions: [StarterKit, Highlight, Typography, SlashCommand],
+    extensions: [
+      StarterKit,
+      Highlight,
+      Typography,
+      TaskItemExtension,
+      TaskListExtension,
+      ...intergratePlugins
+    ],
     content: `<p>
   Markdown shortcuts make it easy to format the text while typing.
 </p>
@@ -38,20 +63,9 @@ export function MarktionEditor(props: MarktionEditorProps) {
 </p>`
   });
 
-  const intergrates = useMemo(() => {
-    if (!editor) {
-      return [];
-    }
-
-    return plugins
-      .filter(plugin => plugin.type === PluginType.intergrate)
-      .map(plugin => ({
-        plugin: plugin.install({
-          editor: editor
-        }),
-        id: plugin.id
-      }));
-  }, [plugins, editor]);
+  if (!editor) {
+    return null;
+  }
 
   return (
     <ConfigProvider
@@ -60,10 +74,18 @@ export function MarktionEditor(props: MarktionEditorProps) {
       }}
     >
       <StyleProvider hashPriority="high">
-        <EditorContent className="marktion" editor={editor} />
-        {intergrates.map(item => (
-          <React.Fragment key={item.id}>{item.plugin.view()}</React.Fragment>
-        ))}
+        <RootElContext.Provider value={rootElRef.current}>
+          <div className="marktion" ref={rootElRef}>
+            <EditorContent className="marktion-editor" editor={editor} />
+            {intergrates.map(item => (
+              <React.Fragment key={item.id}>
+                {item.plugin.view({
+                  editor: editor
+                })}
+              </React.Fragment>
+            ))}
+          </div>
+        </RootElContext.Provider>
       </StyleProvider>
     </ConfigProvider>
   );

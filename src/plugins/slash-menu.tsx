@@ -1,51 +1,134 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Dropdown, MenuProps, DropDownProps } from 'antd';
+import Suggestion, { SuggestionOptions, SuggestionProps } from '@tiptap/suggestion';
 import { Editor, Range, Extension } from '@tiptap/core';
-import { ReactRenderer } from '@tiptap/react';
-import Suggestion from '@tiptap/suggestion';
-import { useCallback, useEffect, useState } from 'react';
+import { CodeIcon, ListBulletIcon, QuoteIcon, TextIcon, ImageIcon } from '@radix-ui/react-icons';
+import { Heading1, Heading2, Heading3, ListChecksIcon, ListOrderedIcon } from 'lucide-react';
+import { createIntergrateExtension } from '../plugins';
+import { useRootEl } from '../hooks';
 
-const Command = Extension.create({
-  name: 'slash-command',
-  addOptions() {
-    return {
-      suggestion: {
-        char: '/',
-        command: ({ editor, range, props }: { editor: Editor; range: Range; props: any }) => {
-          props.command({ editor, range });
-        }
-      }
-    };
-  },
-  addProseMirrorPlugins() {
-    return [
-      Suggestion({
-        editor: this.editor,
-        ...this.options.suggestion
-      })
-    ];
-  }
-});
-
-export const SlashCommand = Command.configure({
-  suggestion: {
-    items: getSuggestionItems,
-    render: renderItems
-  }
-});
-
-interface CommandItemProps {
+interface SuggestionPropsItem {
   title: string;
   description: string;
   icon: React.ReactNode;
+  disabled?: boolean;
 }
 
-function SlashDropdown(props: {
-  items: CommandItemProps[];
-  command: any;
-  editor: any;
-  range: any;
-}) {
-  const { items, command, editor, range } = props;
+export const SlashMenuPlugin = createIntergrateExtension(() => {
+  const wrapperElRef: {
+    update: (props: SuggestionProps<SuggestionPropsItem> | null) => void;
+    setOpen: (open: boolean) => void;
+  } = {
+    update: () => {},
+    setOpen: () => {}
+  };
+
+  const suggestion: Omit<SuggestionOptions, 'editor'> = {
+    char: '/',
+    items: getSuggestionItems,
+    render: () => {
+      return {
+        onStart(props) {
+          wrapperElRef.update(props);
+          wrapperElRef.setOpen(true);
+        },
+        onUpdate(props) {
+          wrapperElRef.update(props);
+        },
+        onExit() {
+          wrapperElRef.setOpen(false);
+          wrapperElRef.update(null);
+        },
+        onKeyDown(props) {
+          if (props.event.key === 'Escape') {
+            wrapperElRef.setOpen(false);
+            return true;
+          }
+
+          if (props.event.key === 'Enter') {
+            return true;
+          }
+
+          return false;
+        }
+      };
+    },
+
+    command: ({ editor, range, props }) => {
+      props.command({ editor, range });
+    }
+  };
+
+  const SlashExtensions = Extension.create({
+    name: 'slash-command',
+    addOptions() {
+      return {
+        suggestion
+      };
+    },
+
+    addProseMirrorPlugins() {
+      return [
+        Suggestion({
+          editor: this.editor,
+          ...this.options.suggestion
+        })
+      ];
+    }
+  });
+
+  function Wrapper() {
+    const [open, setOpen] = useState(false);
+    const [props, setProps] = useState<SuggestionProps<SuggestionPropsItem> | null>(null);
+
+    wrapperElRef.update = setProps;
+    wrapperElRef.setOpen = setOpen;
+
+    return <SlashDropdown suggestions={props} open={open} onOpenChange={setOpen} />;
+  }
+
+  return {
+    extension: SlashExtensions,
+    view() {
+      return <Wrapper />;
+    }
+  };
+});
+
+type SlashDropdownProps = {
+  suggestions: SuggestionProps<SuggestionPropsItem> | null;
+  open: DropDownProps['open'];
+  onOpenChange: DropDownProps['onOpenChange'];
+};
+
+function SlashDropdown(props: SlashDropdownProps) {
+  const rootEl = useRootEl();
+
+  const triggerElRef = useRef<HTMLDivElement>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const { open, onOpenChange } = props;
+  const { items = [], command, clientRect } = props.suggestions! || {};
+
+  const rect = clientRect?.();
+
+  useEffect(() => {
+    const rootElRect = rootEl?.getBoundingClientRect();
+
+    if (rect && triggerElRef.current) {
+      triggerElRef.current.style.top = `${rect.top - rootElRect.top}px`;
+      triggerElRef.current.style.left = `${rect.left - rootElRect.left}px`;
+      triggerElRef.current.style.width = `${rect.width}px`;
+      triggerElRef.current.style.height = `${rect.height}px`;
+    }
+  }, [rect]);
+
+  useEffect(() => {
+    setSelectedIndex(0);
+
+    if (items.length === 0) {
+      onOpenChange?.(false);
+    }
+  }, [items]);
 
   const onSelectItem = useCallback(
     (index: number) => {
@@ -55,14 +138,12 @@ function SlashDropdown(props: {
         command(item);
       }
     },
-    [command, editor, items]
+    [command, items]
   );
 
   useEffect(() => {
-    setSelectedIndex(0);
-  }, [items]);
+    if (!open) return;
 
-  useEffect(() => {
     const navigationKeys = ['ArrowUp', 'ArrowDown', 'Enter'];
 
     const onKeyDown = (e: KeyboardEvent) => {
@@ -90,7 +171,35 @@ function SlashDropdown(props: {
     return () => {
       document.removeEventListener('keydown', onKeyDown);
     };
-  }, [items, selectedIndex, setSelectedIndex, onSelectItem]);
+  }, [open, items, selectedIndex, setSelectedIndex, onSelectItem]);
+
+  const menuProps: MenuProps = {
+    onClick: ({ key }) => {
+      const index = items.findIndex(item => item.title === key);
+      onSelectItem(index);
+    },
+    activeKey: items[selectedIndex]?.title,
+    items: items.map(item => {
+      return {
+        disabled: item.disabled,
+        icon: item.icon,
+        key: item.title,
+        label: item.title
+      };
+    })
+  };
+
+  return (
+    <Dropdown menu={menuProps} open={open} onOpenChange={onOpenChange} trigger={['click']}>
+      <div
+        data-role="slash-menu-trigger"
+        ref={triggerElRef}
+        style={{
+          position: 'absolute'
+        }}
+      ></div>
+    </Dropdown>
+  );
 }
 
 interface CommandProps {
@@ -100,26 +209,17 @@ interface CommandProps {
 
 function getSuggestionItems({ query }: { query: string }) {
   return [
-    {
-      title: 'Continue writing',
-      description: 'Use AI to expand your thoughts.',
-      searchTerms: ['gpt']
-      // icon: <Magic className="w-7 text-black" />,
-    },
-    {
-      title: 'Send Feedback',
-      description: 'Let us know how we can improve.',
-      // icon: <MessageSquarePlus size={18} />,
-      command: ({ editor, range }: CommandProps) => {
-        editor.chain().focus().deleteRange(range).run();
-        window.open('/feedback', '_blank');
-      }
-    },
+    // {
+    //   title: 'Continue writing',
+    //   description: 'Use AI to expand your thoughts.',
+    //   searchTerms: ['gpt']
+    //   // icon: <Magic className="w-7 text-black" />,
+    // },
     {
       title: 'Text',
       description: 'Just start typing with plain text.',
       searchTerms: ['p', 'paragraph'],
-      // icon: <Text size={18} />,
+      icon: <TextIcon className="w-[14px] h-[14px]" />,
       command: ({ editor, range }: CommandProps) => {
         editor.chain().focus().deleteRange(range).toggleNode('paragraph', 'paragraph').run();
       }
@@ -128,18 +228,16 @@ function getSuggestionItems({ query }: { query: string }) {
       title: 'To-do List',
       description: 'Track tasks with a to-do list.',
       searchTerms: ['todo', 'task', 'list', 'check', 'checkbox'],
-      // icon: <CheckSquare size={18} />,
+      icon: <ListChecksIcon className="w-[14px] h-[14px]" />,
       command: ({ editor, range }: CommandProps) => {
-        console.log(editor, range);
-
-        // editor.chain().focus().deleteRange(range).toggleTaskList().run();
+        editor.chain().focus().deleteRange(range).toggleTaskList().run();
       }
     },
     {
       title: 'Heading 1',
       description: 'Big section heading.',
       searchTerms: ['title', 'big', 'large'],
-      // icon: <Heading1 size={18} />,
+      icon: <Heading1 className="w-[14px] h-[14px]" />,
       command: ({ editor, range }: CommandProps) => {
         editor.chain().focus().deleteRange(range).setNode('heading', { level: 1 }).run();
       }
@@ -148,7 +246,7 @@ function getSuggestionItems({ query }: { query: string }) {
       title: 'Heading 2',
       description: 'Medium section heading.',
       searchTerms: ['subtitle', 'medium'],
-      // icon: <Heading2 size={18} />,
+      icon: <Heading2 className="w-[14px] h-[14px]" />,
       command: ({ editor, range }: CommandProps) => {
         editor.chain().focus().deleteRange(range).setNode('heading', { level: 2 }).run();
       }
@@ -157,7 +255,7 @@ function getSuggestionItems({ query }: { query: string }) {
       title: 'Heading 3',
       description: 'Small section heading.',
       searchTerms: ['subtitle', 'small'],
-      // icon: <Heading3 size={18} />,
+      icon: <Heading3 className="w-[14px] h-[14px]" />,
       command: ({ editor, range }: CommandProps) => {
         editor.chain().focus().deleteRange(range).setNode('heading', { level: 3 }).run();
       }
@@ -166,7 +264,7 @@ function getSuggestionItems({ query }: { query: string }) {
       title: 'Bullet List',
       description: 'Create a simple bullet list.',
       searchTerms: ['unordered', 'point'],
-      // icon: <List size={18} />,
+      icon: <ListBulletIcon className="w-[14px] h-[14px]" />,
       command: ({ editor, range }: CommandProps) => {
         editor.chain().focus().deleteRange(range).toggleBulletList().run();
       }
@@ -175,7 +273,7 @@ function getSuggestionItems({ query }: { query: string }) {
       title: 'Numbered List',
       description: 'Create a list with numbering.',
       searchTerms: ['ordered'],
-      // icon: <ListOrdered size={18} />,
+      icon: <ListOrderedIcon className="w-[14px] h-[14px]" />,
       command: ({ editor, range }: CommandProps) => {
         editor.chain().focus().deleteRange(range).toggleOrderedList().run();
       }
@@ -184,7 +282,7 @@ function getSuggestionItems({ query }: { query: string }) {
       title: 'Quote',
       description: 'Capture a quote.',
       searchTerms: ['blockquote'],
-      // icon: <TextQuote size={18} />,
+      icon: <QuoteIcon className="w-[14px] h-[14px]" />,
       command: ({ editor, range }: CommandProps) =>
         editor
           .chain()
@@ -198,7 +296,7 @@ function getSuggestionItems({ query }: { query: string }) {
       title: 'Code',
       description: 'Capture a code snippet.',
       searchTerms: ['codeblock'],
-      // icon: <Code size={18} />,
+      icon: <CodeIcon className="w-[14px] h-[14px]" />,
       command: ({ editor, range }: CommandProps) =>
         editor.chain().focus().deleteRange(range).toggleCodeBlock().run()
     },
@@ -206,8 +304,11 @@ function getSuggestionItems({ query }: { query: string }) {
       title: 'Image',
       description: 'Upload an image from your computer.',
       searchTerms: ['photo', 'picture', 'media'],
-      // icon: <ImageIcon size={18} />,
+      disabled: true,
+      icon: <ImageIcon className="w-[14px] h-[14px]" />,
       command: ({ editor, range }: CommandProps) => {
+        return;
+
         editor.chain().focus().deleteRange(range).run();
         // upload image
         const input = document.createElement('input');
@@ -233,49 +334,4 @@ function getSuggestionItems({ query }: { query: string }) {
     }
     return true;
   });
-}
-
-function renderItems() {
-  let component: ReactRenderer | null = null;
-  let popup: any | null = null;
-
-  return {
-    onStart: (props: { editor: Editor; clientRect: DOMRect }) => {
-      console.log('123', props);
-
-      // component = new ReactRenderer(CommandList, {
-      //   props,
-      //   editor: props.editor,
-      // });
-      // @ts-ignore
-      // popup = tippy("body", {
-      //   getReferenceClientRect: props.clientRect,
-      //   appendTo: () => document.body,
-      //   content: component.element,
-      //   showOnCreate: true,
-      //   interactive: true,
-      //   trigger: "manual",
-      //   placement: "bottom-start",
-      // });
-    },
-    onUpdate: (props: { editor: Editor; clientRect: DOMRect }) => {
-      // component?.updateProps(props);
-      // popup &&
-      //   popup[0].setProps({
-      //     getReferenceClientRect: props.clientRect,
-      //   });
-    },
-    onKeyDown: (props: { event: KeyboardEvent }) => {
-      // if (props.event.key === "Escape") {
-      //   popup?.[0].hide();
-      //   return true;
-      // }
-      // // @ts-ignore
-      // return component?.ref?.onKeyDown(props);
-    },
-    onExit: () => {
-      // popup?.[0].destroy();
-      // component?.destroy();
-    }
-  };
 }

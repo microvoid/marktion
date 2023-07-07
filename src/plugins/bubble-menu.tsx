@@ -4,9 +4,9 @@ import { BubbleMenu, BubbleMenuProps } from '@tiptap/react';
 import { FontBoldIcon, FontItalicIcon, StrikethroughIcon } from '@radix-ui/react-icons';
 import { createIntergrateExtension } from '../plugins';
 
-export const EditorBubbleMenuPlugin = createIntergrateExtension(ctx => {
+export const EditorBubbleMenuPlugin = createIntergrateExtension(() => {
   return {
-    view() {
+    view(ctx) {
       return <EditorBubbleMenu editor={ctx.editor} />;
     }
   };
