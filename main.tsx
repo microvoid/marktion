@@ -26,6 +26,11 @@ function App() {
 
   const onExport = () => {
     const content = marktionRef.current?.getMarkdown();
+
+    if (content) {
+      const filename = getMarktionTitle(content) || 'marktion';
+      downloadFile(`${filename}.md`, content);
+    }
   };
 
   return (
@@ -124,4 +129,20 @@ function getThemeFromSystem() {
   const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
   return isDark ? 'dark' : 'light';
+}
+
+async function downloadFile(filename: string, content: string) {
+  const FileSaver = (await import('file-saver')).default;
+  const blob = new Blob([content], {
+    type: 'text/plain;charset=utf-8'
+  });
+
+  return FileSaver.saveAs(blob, filename);
+}
+
+function getMarktionTitle(markdown: string) {
+  const paragraphs = markdown.split('\n');
+  const heading = paragraphs.find(item => item.startsWith('#')) || '';
+
+  return heading.replace(/#+\s/, '');
 }

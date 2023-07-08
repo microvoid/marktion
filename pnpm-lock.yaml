@@ -19,6 +19,7 @@ specifiers:
   '@tiptap/react': ^2.0.3
   '@tiptap/starter-kit': ^2.0.3
   '@tiptap/suggestion': ^2.0.3
+  '@types/file-saver': ^2.0.5
   '@types/react': ^18.0.37
   '@types/react-dom': ^18.0.11
   '@typescript-eslint/eslint-plugin': ^5.59.0
@@ -29,6 +30,7 @@ specifiers:
   eslint: ^8.38.0
   eslint-plugin-react-hooks: ^4.6.0
   eslint-plugin-react-refresh: ^0.3.4
+  file-saver: ^2.0.5
   lucide-react: ^0.258.0
   postcss: 8.4.24
   react: ^18.2.0
@@ -80,6 +82,7 @@ dependencies:
 
 devDependencies:
   '@tailwindcss/typography': 0.5.9_tailwindcss@3.3.2
+  '@types/file-saver': 2.0.5
   '@types/react': 18.2.14
   '@types/react-dom': 18.2.6
   '@typescript-eslint/eslint-plugin': 5.61.0_24v3duij7ab7rtbfz4qzw7dc5u
@@ -89,6 +92,7 @@ devDependencies:
   eslint: 8.44.0
   eslint-plugin-react-hooks: 4.6.0_eslint@8.44.0
   eslint-plugin-react-refresh: 0.3.5_eslint@8.44.0
+  file-saver: 2.0.5
   postcss: 8.4.24
   tailwindcss: 3.3.2
   typescript: 5.1.6
@@ -1300,6 +1304,10 @@ packages:
     resolution: {integrity: sha512-R1g/VyKFFI2HLC1QGAeTtCBWCo6n75l41OnsVYNbmKG+kempOESaodf6BeJyUM3Q0rKa/NQcTHbB2+66lNnxLw==}
     dev: false
 
+  /@types/file-saver/2.0.5:
+    resolution: {integrity: sha512-zv9kNf3keYegP5oThGLaPk8E081DFDuwfqjtiTzm6PoxChdJ1raSuADf2YGCVIyrSynLrgc8JWv296s7Q7pQSQ==}
+    dev: true
+
   /@types/hast/2.3.4:
     resolution: {integrity: sha512-wLEm0QvaoawEDoTRwzTXp4b4jpwiJDvR5KMnFnVodm3scufTlBOWRD6N1OBf9TZMhjlNsSfcO5V+7AF4+Vy+9g==}
     dependencies:
@@ -2140,6 +2148,10 @@ packages:
     engines: {node: ^10.12.0 || >=12.0.0}
     dependencies:
       flat-cache: 3.0.4
+    dev: true
+
+  /file-saver/2.0.5:
+    resolution: {integrity: sha512-P9bmyZ3h/PRG+Nzga+rbdI4OEpNDzAVyy74uVO9ATgzLK6VtAsYybF/+TOCvrc0MO793d6+42lLyZTw7/ArVzA==}
     dev: true
 
   /fill-range/7.0.1:
