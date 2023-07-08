@@ -25,7 +25,16 @@
     "antd": "^5.6.4",
     "lucide-react": "^0.258.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "rehype-parse": "^8.0.4",
+    "rehype-remark": "^9.1.2",
+    "rehype-stringify": "^9.0.3",
+    "remark-gfm": "^3.0.1",
+    "remark-html": "^15.0.2",
+    "remark-parse": "^10.0.2",
+    "remark-rehype": "^10.1.0",
+    "remark-stringify": "^10.0.3",
+    "unified": "^10.1.2"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.9",

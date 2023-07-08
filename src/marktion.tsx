@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useImperativeHandle } from 'react';
 import { ConfigProvider, theme } from 'antd';
 import { StyleProvider } from '@ant-design/cssinjs';
 import { EditorContent, EditorOptions, useEditor, Editor } from '@tiptap/react';
@@ -13,26 +13,40 @@ import TaskList from '@tiptap/extension-task-list';
 import { EditorBubbleMenuPlugin } from './plugin-bubble-menu';
 import { SlashMenuPlugin } from './plugin-slash-menu';
 import { PluginCreator, PluginType } from './plugins';
+import { MarkdownExtension, parse, serialize } from './plugin-markdown';
 import { UploadImageHandler } from './handler';
 import { RootElContext } from './hooks';
 
 import './marktion.css';
 
-export type MarktionEditorProps = Partial<EditorOptions> & {
-  darkMode?: boolean;
-  plugins?: PluginCreator[];
+export type MarktionProps = React.PropsWithChildren<
+  Partial<EditorOptions> & {
+    markdown?: string;
+    darkMode?: boolean;
+    plugins?: PluginCreator[];
 
-  onUploadImage?: (file: File, editor: Editor) => Promise<string>;
+    onUploadImage?: (file: File, editor: Editor) => Promise<string>;
+  }
+>;
+
+export type MarktionRef = {
+  getMarkdown: () => string;
+  editor: Editor;
 };
 
-export function MarktionEditor(props: MarktionEditorProps) {
+export const MarktionEditor = React.forwardRef<MarktionRef, MarktionProps>((props, ref) => {
   const rootElRef = React.useRef<HTMLDivElement | null>(null);
   const {
     darkMode = false,
     plugins = [EditorBubbleMenuPlugin, SlashMenuPlugin],
     onUploadImage,
+    content: propsContent,
+    markdown,
+    children,
     ...editorProps
   } = props;
+
+  const content = useMemo(() => propsContent || parse(markdown || ''), [propsContent, markdown]);
 
   const intergrates = useMemo(() => {
     return plugins
@@ -49,6 +63,7 @@ export function MarktionEditor(props: MarktionEditorProps) {
 
   const editor = useEditor({
     extensions: [
+      MarkdownExtension,
       StarterKit,
       Highlight,
       Typography,
@@ -58,7 +73,17 @@ export function MarktionEditor(props: MarktionEditorProps) {
       Link,
       ...intergratePlugins
     ],
+    content,
     ...editorProps
+  });
+
+  useImperativeHandle(ref, () => {
+    return {
+      editor: editor!,
+      getMarkdown() {
+        return serialize(editor?.getHTML() || '');
+      }
+    };
   });
 
   if (!editor) {
@@ -77,6 +102,7 @@ export function MarktionEditor(props: MarktionEditorProps) {
         <RootElContext.Provider value={rootElRef.current}>
           <div className="marktion" ref={rootElRef}>
             <EditorContent className="marktion-editor" editor={editor} />
+
             {intergrates.map(item => (
               <React.Fragment key={item.id}>
                 {item.plugin.view({
@@ -84,11 +110,13 @@ export function MarktionEditor(props: MarktionEditorProps) {
                 })}
               </React.Fragment>
             ))}
+
+            {children}
           </div>
         </RootElContext.Provider>
       </StyleProvider>
     </ConfigProvider>
   );
-}
+});
 
 export default MarktionEditor;
