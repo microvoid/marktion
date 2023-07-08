@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Dropdown, MenuProps, DropDownProps } from 'antd';
 import Suggestion, { SuggestionOptions, SuggestionProps } from '@tiptap/suggestion';
-import { Editor, Range, Extension } from '@tiptap/core';
+import { Range, Extension, Editor } from '@tiptap/react';
 import { CodeIcon, ListBulletIcon, QuoteIcon, TextIcon, ImageIcon } from '@radix-ui/react-icons';
 import { Heading1, Heading2, Heading3, ListChecksIcon, ListOrderedIcon } from 'lucide-react';
 import { createIntergrateExtension } from '../plugins';
 import { useRootEl } from '../hooks';
+import { UploadImageHandler } from '../handler';
+import { EditorModifier } from '../modifier';
 
 interface SuggestionPropsItem {
   title: string;
@@ -304,20 +306,28 @@ function getSuggestionItems({ query }: { query: string }) {
       title: 'Image',
       description: 'Upload an image from your computer.',
       searchTerms: ['photo', 'picture', 'media'],
-      disabled: true,
       icon: <ImageIcon className="w-[14px] h-[14px]" />,
       command: ({ editor, range }: CommandProps) => {
-        return;
-
         editor.chain().focus().deleteRange(range).run();
         // upload image
         const input = document.createElement('input');
         input.type = 'file';
         input.accept = 'image/*';
         input.onchange = async event => {
-          if (input.files?.length) {
-            const file = input.files[0];
-            // return handleImageUpload(file, editor.view, event);
+          const file = input.files?.[0];
+          const uploader = UploadImageHandler.get(editor);
+          if (file && uploader) {
+            const url = await uploader(file, editor);
+
+            EditorModifier.insertImage(
+              editor,
+              {
+                url,
+                title: file.name,
+                alt: file.name
+              },
+              event
+            );
           }
         };
         input.click();
