@@ -3,12 +3,17 @@ import { ConfigProvider, theme } from 'antd';
 import { StyleProvider } from '@ant-design/cssinjs';
 import { EditorContent, EditorOptions, useEditor, Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
+
 import Image from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
 import Highlight from '@tiptap/extension-highlight';
 import Typography from '@tiptap/extension-typography';
 import TaskItem from '@tiptap/extension-task-item';
 import TaskList from '@tiptap/extension-task-list';
+import Table from '@tiptap/extension-table';
+import TableCell from '@tiptap/extension-table-cell';
+import TableHeader from '@tiptap/extension-table-header';
+import TableRow from '@tiptap/extension-table-row';
 
 import { EditorBubbleMenuPlugin } from './plugin-bubble-menu';
 import { SlashMenuPlugin } from './plugin-slash-menu';
@@ -71,6 +76,10 @@ export const MarktionEditor = React.forwardRef<MarktionRef, MarktionProps>((prop
       TaskList,
       Image,
       Link,
+      Table,
+      TableHeader,
+      TableRow,
+      TableCell,
       ...intergratePlugins
     ],
     content,

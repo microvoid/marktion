@@ -1,5 +1,18 @@
 import { Range, Editor } from '@tiptap/react';
-import { CodeIcon, ListBulletIcon, QuoteIcon, TextIcon, ImageIcon } from '@radix-ui/react-icons';
+import {
+  CodeIcon,
+  ListBulletIcon,
+  QuoteIcon,
+  TextIcon,
+  ImageIcon,
+  BorderTopIcon,
+  BorderBottomIcon,
+  BorderLeftIcon,
+  DividerVerticalIcon,
+  DividerHorizontalIcon,
+  BorderRightIcon,
+  TableIcon
+} from '@radix-ui/react-icons';
 import { Heading1, Heading2, Heading3, ListChecksIcon, ListOrderedIcon } from 'lucide-react';
 import { UploadImageHandler } from '../handler';
 import { EditorModifier } from '../modifier';
@@ -10,7 +23,33 @@ interface CommandProps {
   range: Range;
 }
 
-export const getSuggestionItems: SuggestionOptions['items'] = ({ query, editor }) => {
+type GetSuggestionItems = NonNullable<SuggestionOptions['items']>;
+type SuggestionItem = {
+  title: string;
+  description: string;
+  searchTerms: string[];
+  icon: React.ReactNode;
+  command: ({ editor, range }: CommandProps) => void;
+};
+
+export const getSuggestionItems: GetSuggestionItems = ({ query, editor }) => {
+  const isTableActive = editor.isActive('table');
+  const suggestions = isTableActive ? getTableSuggestions() : getDefaultSuggestions();
+
+  return suggestions.filter(item => {
+    if (typeof query === 'string' && query.length > 0) {
+      const search = query.toLowerCase();
+      return (
+        item.title.toLowerCase().includes(search) ||
+        item.description.toLowerCase().includes(search) ||
+        (item.searchTerms && item.searchTerms.some((term: string) => term.includes(search)))
+      );
+    }
+    return true;
+  });
+};
+
+const getDefaultSuggestions = (): SuggestionItem[] => {
   return [
     // {
     //   title: 'Continue writing',
@@ -110,6 +149,7 @@ export const getSuggestionItems: SuggestionOptions['items'] = ({ query, editor }
       icon: <ImageIcon className="w-[14px] h-[14px]" />,
       command: ({ editor, range }: CommandProps) => {
         editor.chain().focus().deleteRange(range).run();
+
         // upload image
         const input = document.createElement('input');
         input.type = 'file';
@@ -133,16 +173,78 @@ export const getSuggestionItems: SuggestionOptions['items'] = ({ query, editor }
         };
         input.click();
       }
+    },
+    {
+      title: 'Table',
+      description: 'Simple powerfull table.',
+      searchTerms: ['table'],
+      icon: <TableIcon className="w-[14px] h-[14px]" />,
+      command: ({ editor, range }: CommandProps) =>
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
+          .run()
     }
-  ].filter(item => {
-    if (typeof query === 'string' && query.length > 0) {
-      const search = query.toLowerCase();
-      return (
-        item.title.toLowerCase().includes(search) ||
-        item.description.toLowerCase().includes(search) ||
-        (item.searchTerms && item.searchTerms.some((term: string) => term.includes(search)))
-      );
+  ];
+};
+
+const getTableSuggestions = (): SuggestionItem[] => {
+  return [
+    {
+      title: 'add row after',
+      description: '',
+      searchTerms: ['row', 'add', 'after'],
+      command: ({ editor }) => {
+        editor.chain().focus().addRowAfter().run();
+      },
+      icon: <BorderBottomIcon className="w-[14px] h-[14px]" />
+    },
+    {
+      title: 'add row before',
+      description: '',
+      searchTerms: ['row', 'add', 'before'],
+      command: ({ editor }) => {
+        editor.chain().focus().addRowBefore().run();
+      },
+      icon: <BorderTopIcon className="w-[14px] h-[14px]" />
+    },
+    {
+      title: 'add col after',
+      description: '',
+      searchTerms: ['col', 'add', 'after'],
+      command: ({ editor }) => {
+        editor.chain().focus().addColumnAfter().run();
+      },
+      icon: <BorderRightIcon className="w-[14px] h-[14px]" />
+    },
+    {
+      title: 'add col before',
+      description: '',
+      searchTerms: ['col', 'add', 'before'],
+      command: ({ editor }) => {
+        editor.chain().focus().addColumnBefore().run();
+      },
+      icon: <BorderLeftIcon className="w-[14px] h-[14px]" />
+    },
+    {
+      title: 'delete row',
+      description: '',
+      searchTerms: ['row', 'delete'],
+      command: ({ editor }) => {
+        editor.chain().focus().deleteRow().run();
+      },
+      icon: <DividerHorizontalIcon className="w-[14px] h-[14px]" />
+    },
+    {
+      title: 'delete col',
+      description: '',
+      searchTerms: ['col', 'delete'],
+      command: ({ editor }) => {
+        editor.chain().focus().deleteColumn().run();
+      },
+      icon: <DividerVerticalIcon className="w-[14px] h-[14px]" />
     }
-    return true;
-  });
+  ];
 };
