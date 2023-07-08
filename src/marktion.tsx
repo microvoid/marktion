@@ -9,8 +9,8 @@ import Typography from '@tiptap/extension-typography';
 import TaskItem from '@tiptap/extension-task-item';
 import TaskList from '@tiptap/extension-task-list';
 
-import { EditorBubbleMenuPlugin } from './plugins/bubble-menu';
-import { SlashMenuPlugin } from './plugins/slash-menu';
+import { EditorBubbleMenuPlugin } from './plugin-bubble-menu';
+import { SlashMenuPlugin } from './plugin-slash-menu';
 import { PluginCreator, PluginType } from './plugins';
 import { UploadImageHandler } from './handler';
 import { RootElContext } from './hooks';
