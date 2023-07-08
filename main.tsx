@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import { GitHubLogoIcon, SunIcon, MoonIcon } from '@radix-ui/react-icons';
 import MarktionEditor, { MarktionProps, MarktionRef } from './src/marktion';
-import { FloatButton } from 'antd';
+import { FloatButton, Segmented } from 'antd';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -10,9 +10,12 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   </React.StrictMode>
 );
 
+const INIT_MARKDOWN = [import.meta.env.VITE_README_ZH, import.meta.env.VITE_README_EN];
+
 function App() {
   const marktionRef = useRef<MarktionRef>(null);
   const { isDarkMode, toggle } = useDarkMode();
+  const [lang, setLang] = useState(0);
 
   const onUploadImage = useCallback<NonNullable<MarktionProps['onUploadImage']>>(file => {
     return new Promise(resolve => {
@@ -50,10 +53,32 @@ function App() {
         </div>
       </header>
       <div className="max-w-screen-lg w-full">
+        <div className="container flex justify-center">
+          <Segmented
+            options={[
+              {
+                label: '中文',
+                value: 0
+              },
+              {
+                label: 'English',
+                value: 1
+              }
+            ]}
+            value={lang}
+            onChange={value => {
+              const index = Number(value);
+
+              marktionRef.current?.editor.commands.setMarkdwon(INIT_MARKDOWN[index]);
+              setLang(index);
+            }}
+          />
+        </div>
+
         <MarktionEditor
           ref={marktionRef}
           darkMode={isDarkMode}
-          markdown={markdown}
+          markdown={INIT_MARKDOWN[lang]}
           onUploadImage={onUploadImage}
         >
           <FloatButton tooltip="Export markdwon" onClick={onExport} />
@@ -62,8 +87,6 @@ function App() {
     </>
   );
 }
-
-const markdown = import.meta.env.VITE_README_EN;
 
 function useDarkMode() {
   const [isDarkMode, setIsDarkMode] = useState(() => {

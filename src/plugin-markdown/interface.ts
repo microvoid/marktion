@@ -8,7 +8,11 @@ declare module '@tiptap/core' {
       /**
        * set markdwon content
        */
-      setMarkdwon: (content: string, emitUpdate: boolean, parseOptions: ParseOptions) => ReturnType;
+      setMarkdwon: (
+        content: string,
+        emitUpdate?: boolean,
+        parseOptions?: ParseOptions
+      ) => ReturnType;
 
       insertMarkdownAt: (
         position: number | Range,

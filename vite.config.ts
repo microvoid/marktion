@@ -7,6 +7,10 @@ process.env.VITE_README_EN = fs.readFileSync('./README.md', {
   encoding: 'utf8'
 });
 
+process.env.VITE_README_ZH = fs.readFileSync('./README-zh_CN.md', {
+  encoding: 'utf8'
+});
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
