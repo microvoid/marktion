@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .ProseMirror {
-  @apply prose p-4 rounded-md relative shadow-lg border dark:prose-invert;
+  @apply prose p-6 rounded-md relative shadow-lg border dark:prose-invert max-w-none;
 }
 
 .ProseMirror ul[data-type='taskList'] li {

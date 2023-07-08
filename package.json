@@ -1,7 +1,14 @@
 {
   "name": "marktion",
-  "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "marktion is a WYSIWYG Markdown editor",
+  "homepage": "https://remark.js.org",
+  "repository": "https://github.com/microvoid/marktion",
+  "bugs": "https://github.com/microvoid/issues",
+  "license": "MIT",
+  "author": "whistleryz@gmail.com",
+  "contributors": [],
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -43,6 +50,7 @@
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.9",
     "@types/file-saver": "^2.0.5",
+    "@types/node": "^20.4.1",
     "@types/react": "^18.0.37",
     "@types/react-dom": "^18.0.11",
     "@typescript-eslint/eslint-plugin": "^5.59.0",
@@ -56,6 +64,7 @@
     "postcss": "8.4.24",
     "tailwindcss": "3.3.2",
     "typescript": "^5.0.2",
-    "vite": "^4.3.9"
+    "vite": "^4.3.9",
+    "vite-plugin-dts": "^3.2.0"
   }
 }

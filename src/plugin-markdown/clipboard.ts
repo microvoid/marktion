@@ -15,7 +15,7 @@ export const MarkdownClipboardExtension = Extension.create({
       new Plugin({
         key: new PluginKey('markdownClipboard'),
         props: {
-          clipboardTextParser: (text, context, plainText) => {
+          clipboardTextParser: (text, _, plainText) => {
             if (plainText || !this.options.transformPastedText) {
               // pasting with shift key prevents formatting
               return Slice.empty;

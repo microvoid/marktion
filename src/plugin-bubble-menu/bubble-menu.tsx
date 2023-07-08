@@ -85,18 +85,11 @@ function EditorBubbleMenu(props: EditorBubbleMenuProps) {
     }
   };
 
-  useEffect(() => {
-    if (linkInputOpen) {
-      requestAnimationFrame(() => {
-        linkInputRef.current?.focus();
-      });
-    }
-  }, [linkInputOpen]);
-
   const linkInput = (
     <Input
       ref={linkInputRef}
       defaultValue={props.editor.getAttributes('link').href || ''}
+      onClick={() => linkInputRef.current?.focus()}
       placeholder="Insert Link"
       addonBefore="https://"
       onPressEnter={e => {

@@ -39,7 +39,7 @@ export type MarktionRef = {
   editor: Editor;
 };
 
-export const MarktionEditor = React.forwardRef<MarktionRef, MarktionProps>((props, ref) => {
+export const Marktion = React.forwardRef<MarktionRef, MarktionProps>((props, ref) => {
   const rootElRef = React.useRef<HTMLDivElement | null>(null);
   const {
     darkMode = false,
@@ -128,4 +128,4 @@ export const MarktionEditor = React.forwardRef<MarktionRef, MarktionProps>((prop
   );
 });
 
-export default MarktionEditor;
+export default Marktion;

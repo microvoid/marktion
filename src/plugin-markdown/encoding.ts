@@ -7,13 +7,13 @@ import rehypeParse from 'rehype-parse';
 import remarkStringify from 'remark-stringify';
 import rehypeStringify from 'rehype-stringify';
 
-export function parse(markdown: string, options?: {}) {
+export function parse(markdown: string) {
   const html = markdownToHtml(markdown);
 
   return html;
 }
 
-export function serialize(html: string, options?: {}) {
+export function serialize(html: string) {
   const markdown = htmlToMarkdown(html);
 
   return markdown;

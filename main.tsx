@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import { GitHubLogoIcon, SunIcon, MoonIcon } from '@radix-ui/react-icons';
-import MarktionEditor, { MarktionProps, MarktionRef } from './src/marktion.js';
+import MarktionEditor, { MarktionProps, MarktionRef } from './src/marktion';
 import { FloatButton } from 'antd';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
@@ -49,44 +49,21 @@ function App() {
           </div>
         </div>
       </header>
-      <MarktionEditor
-        ref={marktionRef}
-        darkMode={isDarkMode}
-        markdown={markdown}
-        onUploadImage={onUploadImage}
-      >
-        <FloatButton tooltip="Export markdwon" onClick={onExport} />
-      </MarktionEditor>
+      <div className="max-w-screen-lg w-full">
+        <MarktionEditor
+          ref={marktionRef}
+          darkMode={isDarkMode}
+          markdown={markdown}
+          onUploadImage={onUploadImage}
+        >
+          <FloatButton tooltip="Export markdwon" onClick={onExport} />
+        </MarktionEditor>
+      </div>
     </>
   );
 }
 
-const markdown = `# GFM
-
-## Autolink literals
-
-www.example.com, https://example.com, and contact@example.com.
-
-## Footnote
-
-A note[^1]
-
-[^1]: Big note.
-
-## Strikethrough
-
-~one~ or ~~two~~ tildes.
-
-## Table
-
-| a | b  |  c |  d  |
-| - | :- | -: | :-: |
-| a | b  |  c |  d  |
-
-## Tasklist
-
-* [ ] to do
-* [x] done`;
+const markdown = import.meta.env.VITE_README_EN;
 
 function useDarkMode() {
   const [isDarkMode, setIsDarkMode] = useState(() => {

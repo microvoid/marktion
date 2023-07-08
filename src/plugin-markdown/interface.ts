@@ -1,4 +1,4 @@
-import { Editor, Range } from '@tiptap/core';
+import { Range } from '@tiptap/core';
 import { ParseOptions } from '@tiptap/pm/model';
 import { parse, serialize } from './encoding';
 
