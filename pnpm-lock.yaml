@@ -7,6 +7,7 @@ specifiers:
   '@tiptap/core': ^2.0.3
   '@tiptap/extension-highlight': ^2.0.3
   '@tiptap/extension-image': ^2.0.3
+  '@tiptap/extension-link': ^2.0.3
   '@tiptap/extension-task-item': ^2.0.3
   '@tiptap/extension-task-list': ^2.0.3
   '@tiptap/extension-typography': ^2.0.3
@@ -38,6 +39,7 @@ dependencies:
   '@tiptap/core': 2.0.3_@tiptap+pm@2.0.3
   '@tiptap/extension-highlight': 2.0.3_@tiptap+core@2.0.3
   '@tiptap/extension-image': 2.0.3_@tiptap+core@2.0.3
+  '@tiptap/extension-link': 2.0.3_7qxxgdyo6i4mk7xrbxa2xtsga4
   '@tiptap/extension-task-item': 2.0.3_7qxxgdyo6i4mk7xrbxa2xtsga4
   '@tiptap/extension-task-list': 2.0.3_@tiptap+core@2.0.3
   '@tiptap/extension-typography': 2.0.3_@tiptap+core@2.0.3
@@ -1069,6 +1071,17 @@ packages:
       '@tiptap/core': ^2.0.0
     dependencies:
       '@tiptap/core': 2.0.3_@tiptap+pm@2.0.3
+    dev: false
+
+  /@tiptap/extension-link/2.0.3_7qxxgdyo6i4mk7xrbxa2xtsga4:
+    resolution: {integrity: sha512-H72tXQ5rkVCkAhFaf08fbEU7EBUCK0uocsqOF+4th9sOlrhfgyJtc8Jv5EXPDpxNgG5jixSqWBo0zKXQm9s9eg==}
+    peerDependencies:
+      '@tiptap/core': ^2.0.0
+      '@tiptap/pm': ^2.0.0
+    dependencies:
+      '@tiptap/core': 2.0.3_@tiptap+pm@2.0.3
+      '@tiptap/pm': 2.0.3_@tiptap+core@2.0.3
+      linkifyjs: 4.1.1
     dev: false
 
   /@tiptap/extension-list-item/2.0.3_@tiptap+core@2.0.3:
@@ -2259,6 +2272,10 @@ packages:
     resolution: {integrity: sha512-C7bfi1UZmoj8+PQx22XyeXCuBlokoyWQL5pWSP+EI6nzRylyThouddufc2c1NDIcP9k5agmN9fLpA7VNJfIiqw==}
     dependencies:
       uc.micro: 1.0.6
+    dev: false
+
+  /linkifyjs/4.1.1:
+    resolution: {integrity: sha512-zFN/CTVmbcVef+WaDXT63dNzzkfRBKT1j464NJQkV7iSgJU0sLBus9W0HBwnXK13/hf168pbrx/V/bjEHOXNHA==}
     dev: false
 
   /locate-path/6.0.0:

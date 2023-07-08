@@ -1,8 +1,15 @@
 import { Code } from 'lucide-react';
-import { Button, Space } from 'antd';
+import { Button, Divider, Input, Popover, Space, InputRef } from 'antd';
 import { BubbleMenu, BubbleMenuProps } from '@tiptap/react';
-import { FontBoldIcon, FontItalicIcon, StrikethroughIcon } from '@radix-ui/react-icons';
+import {
+  FontBoldIcon,
+  FontItalicIcon,
+  StrikethroughIcon,
+  Link1Icon,
+  TrashIcon
+} from '@radix-ui/react-icons';
 import { createIntergrateExtension } from '../plugins';
+import { useEffect, useRef, useState } from 'react';
 
 export const EditorBubbleMenuPlugin = createIntergrateExtension(() => {
   return {
@@ -22,6 +29,10 @@ export interface BubbleMenuItem {
 }
 
 function EditorBubbleMenu(props: EditorBubbleMenuProps) {
+  const linkInputRef = useRef<InputRef>(null);
+  const [linkInputOpen, setLinkInputOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
   const items: BubbleMenuItem[] = [
     {
       name: 'bold',
@@ -49,6 +60,13 @@ function EditorBubbleMenu(props: EditorBubbleMenuProps) {
     }
   ];
 
+  const link = {
+    name: 'link',
+    isActive: () => props.editor.isActive('link'),
+    command: (href: string) => props.editor.chain().focus().setLink({ href }).run(),
+    icon: <Link1Icon className="w-[14px] h-[14px]" />
+  };
+
   const bubbleMenuProps: EditorBubbleMenuProps = {
     ...props,
     shouldShow: ({ editor }) => {
@@ -56,17 +74,53 @@ function EditorBubbleMenu(props: EditorBubbleMenuProps) {
       if (editor.isActive('image')) {
         return false;
       }
+
       return editor.view.state.selection.content().size > 0;
     },
     tippyOptions: {
       moveTransition: 'transform 0.15s ease-out',
-      onHidden: () => {}
+      onHidden: () => {
+        setLinkInputOpen(false);
+      }
     }
   };
+
+  useEffect(() => {
+    if (linkInputOpen) {
+      requestAnimationFrame(() => {
+        linkInputRef.current?.focus();
+      });
+    }
+  }, [linkInputOpen]);
+
+  const linkInput = (
+    <Input
+      ref={linkInputRef}
+      defaultValue={props.editor.getAttributes('link').href || ''}
+      placeholder="Insert Link"
+      addonBefore="https://"
+      onPressEnter={e => {
+        const url = e.currentTarget.value;
+
+        link.command(url ? `https://${url}` : '');
+        setLinkInputOpen(false);
+      }}
+      addonAfter={
+        <TrashIcon
+          className="cursor-pointer"
+          onClick={() => {
+            props.editor.chain().focus().unsetLink().run();
+            setLinkInputOpen(false);
+          }}
+        />
+      }
+    />
+  );
 
   return (
     <BubbleMenu {...bubbleMenuProps}>
       <Space
+        ref={containerRef}
         direction="horizontal"
         className="px-2 py-1 rounded-md relative shadow-lg border bg-white dark:bg-black"
         onMouseDown={e => {
@@ -85,6 +139,22 @@ function EditorBubbleMenu(props: EditorBubbleMenuProps) {
             </Button>
           );
         })}
+        <Divider type="vertical" />
+
+        <Popover
+          arrow={false}
+          content={linkInput}
+          placement="topRight"
+          open={linkInputOpen}
+          onOpenChange={setLinkInputOpen}
+          destroyTooltipOnHide={true}
+          getPopupContainer={() => containerRef.current || document.body}
+          align={{ offset: [8, -10] }}
+        >
+          <Button key={link.name} type={link.isActive() ? 'primary' : 'text'}>
+            {link.icon}
+          </Button>
+        </Popover>
       </Space>
     </BubbleMenu>
   );

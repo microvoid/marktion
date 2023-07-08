@@ -4,6 +4,7 @@ import { StyleProvider } from '@ant-design/cssinjs';
 import { EditorContent, EditorOptions, useEditor, Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
+import Link from '@tiptap/extension-link';
 import Highlight from '@tiptap/extension-highlight';
 import Typography from '@tiptap/extension-typography';
 import TaskItem from '@tiptap/extension-task-item';
@@ -54,6 +55,7 @@ export function MarktionEditor(props: MarktionEditorProps) {
       TaskItem,
       TaskList,
       Image,
+      Link,
       ...intergratePlugins
     ],
     ...editorProps
