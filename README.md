@@ -103,7 +103,7 @@ We will review your pull request as soon as possible. Thank you for your contrib
 
 ## License
 
-This project is licensed under the MIT License. See the LICENSE file for more details.
+This project is licensed under the MIT License. See the [LICENSE](https://github.com/microvoid/marktion/blob/main/LICENSE) file for more details.
 
 ## Contact
 
