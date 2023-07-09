@@ -14,7 +14,7 @@
     "build": "tsc && vite build",
     "site": "tsc && vite build -c ./vite.config.site.ts",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "format": "npm run format:source && npm run format:other",
+    "format": "pnpm run format:source && pnpm run format:other",
     "format:other": "prettier ./**/*.{md,json,html} --write",
     "format:source": "prettier ./**/*.{ts,tsx,js} --write"
   },

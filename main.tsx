@@ -126,9 +126,11 @@ function getThemeFromStorage() {
 }
 
 function getThemeFromSystem() {
-  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  // const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-  return isDark ? 'dark' : 'light';
+  // return isDark ? 'dark' : 'light';
+
+  return 'light';
 }
 
 async function downloadFile(filename: string, content: string) {
