@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import * as path from 'path';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import dts from 'vite-plugin-dts';
@@ -21,6 +22,9 @@ export default defineConfig({
   ],
   build: {
     minify: false,
-    lib: { entry: 'src/marktion.tsx', name: 'marktionary' }
+    lib: { entry: 'src/index.ts', name: 'marktion' },
+    rollupOptions: {
+      external: ['react', 'react-dom']
+    }
   }
 });

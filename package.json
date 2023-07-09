@@ -1,7 +1,6 @@
 {
   "name": "marktion",
   "version": "0.0.1",
-  "type": "module",
   "description": "marktion is a WYSIWYG Markdown editor",
   "homepage": "https://remark.js.org",
   "repository": "https://github.com/microvoid/marktion",
@@ -18,6 +17,13 @@
     "format:other": "prettier ./**/*.{md,json,html} --write",
     "format:source": "prettier ./**/*.{ts,tsx,js} --write"
   },
+  "type": "module",
+  "main": "./dist/marktion.umd.js",
+  "module": "./dist/marktion.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist/"
+  ],
   "dependencies": {
     "@ant-design/cssinjs": "^1.11.1",
     "@radix-ui/react-icons": "^1.3.0",
