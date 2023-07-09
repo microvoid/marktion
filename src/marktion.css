@@ -23,6 +23,16 @@
   margin: 0;
 }
 
+.ProseMirror .code-block {
+  position: relative;
+}
+
+.ProseMirror .code-block .code-block-lang-select {
+  position: absolute;
+  top: -32px;
+  right: 0;
+}
+
 .marktion {
   position: relative;
 }

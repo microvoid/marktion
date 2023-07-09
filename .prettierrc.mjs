@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   arrowParens: 'avoid',
   alwaysParens: 'avoid',
   singleQuote: true,

@@ -81,7 +81,7 @@ function App() {
           markdown={INIT_MARKDOWN[lang]}
           onUploadImage={onUploadImage}
         >
-          <FloatButton tooltip="Export markdwon" onClick={onExport} />
+          <FloatButton tooltip="Export markdwon file" onClick={onExport} />
         </MarktionEditor>
       </div>
     </>
