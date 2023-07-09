@@ -4,9 +4,9 @@ Marktion 是一个基于 [tiptap](https://tiptap.dev/) 的所见即所得 Markdo
 
 ## Features
 
-- 所见即所得编辑：实时预览 Markdown 渲染结果，提供直观的编辑体验。
-- Slash 菜单和 Bubble 菜单：通过 Slash 命令菜单和 Bubble 菜单访问常用的格式化选项和命令，灵感来自 Notion 的编辑器。
-- 暗黑模式支持：支持开启或关闭 Dark 模式，以提供在低光环境下的舒适编辑体验。
+- **所见即所得编辑**：实时预览 Markdown 渲染结果，提供直观的编辑体验。
+- **Slash 菜单**和 **Bubble 菜单**：通过 Slash 命令菜单和 Bubble 菜单访问常用的格式化选项和命令，灵感来自 Notion 的编辑器。
+- **暗黑模式支持**：支持开启或关闭 Dark 模式，以提供在低光环境下的舒适编辑体验。
 
 ## 安装和使用
 
