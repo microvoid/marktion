@@ -48,7 +48,10 @@ function App() {
       <header className="w-full p-4  dark:text-gray-100">
         <div className="container flex justify-between items-center h-16 mx-auto">
           <Tooltip open={tooltipOpen} title="Star on Github" placement="right" color="purple">
-            <a className="rounded-lg cursor-pointer p-2 transition-colors duration-200 hover:bg-stone-100 hover:dark:text-black sm:bottom-auto sm:top-5">
+            <a
+              href="https://github.com/microvoid/marktion"
+              className="rounded-lg cursor-pointer p-2 transition-colors duration-200 hover:bg-stone-100 hover:dark:text-black sm:bottom-auto sm:top-5"
+            >
               <GitHubLogoIcon />
             </a>
           </Tooltip>
