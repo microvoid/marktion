@@ -1,3 +1,4 @@
+import { ChevronDownIcon } from '@radix-ui/react-icons';
 import { NodeViewContent, NodeViewWrapper } from '@tiptap/react';
 import { Select } from 'antd';
 import { useMemo } from 'react';
@@ -33,6 +34,7 @@ export function LanguageSelector({
         bordered={false}
         options={options}
         onChange={language => updateAttributes({ language })}
+        suffixIcon={<ChevronDownIcon />}
       />
     </NodeViewWrapper>
   );
