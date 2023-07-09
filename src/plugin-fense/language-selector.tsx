@@ -22,6 +22,10 @@ export function LanguageSelector({
 
   return (
     <NodeViewWrapper className="code-block">
+      <pre>
+        <NodeViewContent as="code" />
+      </pre>
+
       <Select
         defaultValue={defaultLanguage}
         className="code-block-lang-select"
@@ -30,10 +34,6 @@ export function LanguageSelector({
         options={options}
         onChange={language => updateAttributes({ language })}
       />
-
-      <pre>
-        <NodeViewContent as="code" />
-      </pre>
     </NodeViewWrapper>
   );
 }
