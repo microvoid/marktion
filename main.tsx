@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import { GitHubLogoIcon, SunIcon, MoonIcon } from '@radix-ui/react-icons';
 import MarktionEditor, { MarktionProps, MarktionRef } from './src/marktion';
-import { FloatButton, Segmented } from 'antd';
+import { FloatButton, Segmented, Tooltip } from 'antd';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -16,6 +16,7 @@ function App() {
   const marktionRef = useRef<MarktionRef>(null);
   const { isDarkMode, toggle } = useDarkMode();
   const [lang, setLang] = useState(0);
+  const [tooltipOpen, setTooltipOpen] = useState(false);
 
   const onUploadImage = useCallback<NonNullable<MarktionProps['onUploadImage']>>(file => {
     return new Promise(resolve => {
@@ -36,13 +37,21 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    setTimeout(() => {
+      setTooltipOpen(true);
+    }, 2000);
+  }, []);
+
   return (
     <>
       <header className="w-full p-4  dark:text-gray-100">
         <div className="container flex justify-between items-center h-16 mx-auto">
-          <a className="rounded-lg cursor-pointer p-2 transition-colors duration-200 hover:bg-stone-100 hover:dark:text-black sm:bottom-auto sm:top-5">
-            <GitHubLogoIcon />
-          </a>
+          <Tooltip open={tooltipOpen} title="Star on Github" placement="right" color="purple">
+            <a className="rounded-lg cursor-pointer p-2 transition-colors duration-200 hover:bg-stone-100 hover:dark:text-black sm:bottom-auto sm:top-5">
+              <GitHubLogoIcon />
+            </a>
+          </Tooltip>
 
           <div
             onClick={toggle}
