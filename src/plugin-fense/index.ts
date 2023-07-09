@@ -1,1 +1,1 @@
-export * from "./fense";
+export * from './fense';

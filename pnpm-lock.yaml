@@ -151,6 +151,9 @@ devDependencies:
   postcss:
     specifier: 8.4.24
     version: 8.4.24
+  prettier:
+    specifier: ^3.0.0
+    version: 3.0.0
   tailwindcss:
     specifier: 3.3.2
     version: 3.3.2
@@ -3823,6 +3826,12 @@ packages:
   /prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
+    dev: true
+
+  /prettier@3.0.0:
+    resolution: {integrity: sha512-zBf5eHpwHOGPC47h0zrPyNn+eAEIdEzfywMoYn2XPi0P44Zp0tSq64rq0xAREh4auw2cJZHo9QUob+NqCQky4g==}
+    engines: {node: '>=14'}
+    hasBin: true
     dev: true
 
   /property-information@6.2.0:

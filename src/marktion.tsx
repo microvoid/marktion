@@ -1,29 +1,29 @@
-import React, { useMemo, useImperativeHandle } from "react";
-import { ConfigProvider, theme } from "antd";
-import { StyleProvider } from "@ant-design/cssinjs";
-import { EditorContent, EditorOptions, useEditor, Editor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
+import React, { useMemo, useImperativeHandle } from 'react';
+import { ConfigProvider, theme } from 'antd';
+import { StyleProvider } from '@ant-design/cssinjs';
+import { EditorContent, EditorOptions, useEditor, Editor } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
 
-import Image from "@tiptap/extension-image";
-import Link from "@tiptap/extension-link";
-import Highlight from "@tiptap/extension-highlight";
-import Typography from "@tiptap/extension-typography";
-import TaskItem from "@tiptap/extension-task-item";
-import TaskList from "@tiptap/extension-task-list";
-import Table from "@tiptap/extension-table";
-import TableCell from "@tiptap/extension-table-cell";
-import TableHeader from "@tiptap/extension-table-header";
-import TableRow from "@tiptap/extension-table-row";
+import Image from '@tiptap/extension-image';
+import Link from '@tiptap/extension-link';
+import Highlight from '@tiptap/extension-highlight';
+import Typography from '@tiptap/extension-typography';
+import TaskItem from '@tiptap/extension-task-item';
+import TaskList from '@tiptap/extension-task-list';
+import Table from '@tiptap/extension-table';
+import TableCell from '@tiptap/extension-table-cell';
+import TableHeader from '@tiptap/extension-table-header';
+import TableRow from '@tiptap/extension-table-row';
 
-import { EditorBubbleMenuPlugin } from "./plugin-bubble-menu";
-import { SlashMenuPlugin } from "./plugin-slash-menu";
-import { PluginCreator, PluginType } from "./plugins";
-import { MarkdownExtension, parse, serialize } from "./plugin-markdown";
-import { UploadImageHandler } from "./handler";
-import { RootElContext } from "./hooks";
+import { EditorBubbleMenuPlugin } from './plugin-bubble-menu';
+import { SlashMenuPlugin } from './plugin-slash-menu';
+import { PluginCreator, PluginType } from './plugins';
+import { MarkdownExtension, parse, serialize } from './plugin-markdown';
+import { UploadImageHandler } from './handler';
+import { RootElContext } from './hooks';
 
-import "./marktion.css";
-import { FenseExtension } from "./plugin-fense";
+import './marktion.css';
+import { FenseExtension } from './plugin-fense';
 
 export type MarktionProps = React.PropsWithChildren<
   Partial<EditorOptions> & {
@@ -40,99 +40,94 @@ export type MarktionRef = {
   editor: Editor;
 };
 
-export const Marktion = React.forwardRef<MarktionRef, MarktionProps>(
-  (props, ref) => {
-    const rootElRef = React.useRef<HTMLDivElement | null>(null);
-    const {
-      darkMode = false,
-      plugins = [EditorBubbleMenuPlugin, SlashMenuPlugin],
-      onUploadImage,
-      content: propsContent,
-      markdown,
-      children,
-      ...editorProps
-    } = props;
+export const Marktion = React.forwardRef<MarktionRef, MarktionProps>((props, ref) => {
+  const rootElRef = React.useRef<HTMLDivElement | null>(null);
+  const {
+    darkMode = false,
+    plugins = [EditorBubbleMenuPlugin, SlashMenuPlugin],
+    onUploadImage,
+    content: propsContent,
+    markdown,
+    children,
+    ...editorProps
+  } = props;
 
-    const content = useMemo(
-      () => propsContent || parse(markdown || ""),
-      [propsContent, markdown]
-    );
+  const content = useMemo(() => propsContent || parse(markdown || ''), [propsContent, markdown]);
 
-    const intergrates = useMemo(() => {
-      return plugins
-        .filter(plugin => plugin.type === PluginType.intergrate)
-        .map(plugin => ({
-          plugin: plugin.install(),
-          id: plugin.id,
-        }));
-    }, []);
+  const intergrates = useMemo(() => {
+    return plugins
+      .filter(plugin => plugin.type === PluginType.intergrate)
+      .map(plugin => ({
+        plugin: plugin.install(),
+        id: plugin.id
+      }));
+  }, []);
 
-    const intergratePlugins = intergrates
-      .filter(item => Boolean(item.plugin.extension))
-      .map(item => item.plugin.extension!);
+  const intergratePlugins = intergrates
+    .filter(item => Boolean(item.plugin.extension))
+    .map(item => item.plugin.extension!);
 
-    const editor = useEditor({
-      extensions: [
-        MarkdownExtension,
-        StarterKit,
-        Highlight,
-        Typography,
-        TaskItem,
-        TaskList,
-        Image,
-        Link,
-        Table,
-        TableHeader,
-        TableRow,
-        TableCell,
-        FenseExtension,
-        ...intergratePlugins,
-      ],
-      content,
-      ...editorProps,
-    });
+  const editor = useEditor({
+    extensions: [
+      MarkdownExtension,
+      StarterKit,
+      Highlight,
+      Typography,
+      TaskItem,
+      TaskList,
+      Image,
+      Link,
+      Table,
+      TableHeader,
+      TableRow,
+      TableCell,
+      FenseExtension,
+      ...intergratePlugins
+    ],
+    content,
+    ...editorProps
+  });
 
-    useImperativeHandle(ref, () => {
-      return {
-        editor: editor!,
-        getMarkdown() {
-          return serialize(editor?.getHTML() || "");
-        },
-      };
-    });
+  useImperativeHandle(ref, () => {
+    return {
+      editor: editor!,
+      getMarkdown() {
+        return serialize(editor?.getHTML() || '');
+      }
+    };
+  });
 
-    if (!editor) {
-      return null;
-    }
-
-    UploadImageHandler.EDITOR_TO_HANDLER.set(editor, onUploadImage);
-
-    return (
-      <ConfigProvider
-        theme={{
-          algorithm: darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
-        }}
-      >
-        <StyleProvider hashPriority="high">
-          <RootElContext.Provider value={rootElRef.current}>
-            <div className="marktion" ref={rootElRef}>
-              <EditorContent className="marktion-editor" editor={editor} />
-
-              {intergrates.map(item => (
-                <React.Fragment key={item.id}>
-                  {item.plugin.view({
-                    editor: editor,
-                  })}
-                </React.Fragment>
-              ))}
-
-              {children}
-            </div>
-          </RootElContext.Provider>
-        </StyleProvider>
-      </ConfigProvider>
-    );
+  if (!editor) {
+    return null;
   }
-);
+
+  UploadImageHandler.EDITOR_TO_HANDLER.set(editor, onUploadImage);
+
+  return (
+    <ConfigProvider
+      theme={{
+        algorithm: darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm
+      }}
+    >
+      <StyleProvider hashPriority="high">
+        <RootElContext.Provider value={rootElRef.current}>
+          <div className="marktion" ref={rootElRef}>
+            <EditorContent className="marktion-editor" editor={editor} />
+
+            {intergrates.map(item => (
+              <React.Fragment key={item.id}>
+                {item.plugin.view({
+                  editor: editor
+                })}
+              </React.Fragment>
+            ))}
+
+            {children}
+          </div>
+        </RootElContext.Provider>
+      </StyleProvider>
+    </ConfigProvider>
+  );
+});
 
 export default Marktion;

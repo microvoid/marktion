@@ -1,25 +1,25 @@
-import { Code } from "lucide-react";
-import { Button, Divider, Input, Popover, Space, InputRef } from "antd";
-import { BubbleMenu, BubbleMenuProps } from "@tiptap/react";
+import { Code } from 'lucide-react';
+import { Button, Divider, Input, Popover, Space, InputRef } from 'antd';
+import { BubbleMenu, BubbleMenuProps } from '@tiptap/react';
 import {
   FontBoldIcon,
   FontItalicIcon,
   StrikethroughIcon,
   Link1Icon,
-  TrashIcon,
-} from "@radix-ui/react-icons";
-import { createIntergrateExtension } from "../plugins";
-import { useRef, useState } from "react";
+  TrashIcon
+} from '@radix-ui/react-icons';
+import { createIntergrateExtension } from '../plugins';
+import { useRef, useState } from 'react';
 
 export const EditorBubbleMenuPlugin = createIntergrateExtension(() => {
   return {
     view(ctx) {
       return <EditorBubbleMenu editor={ctx.editor} />;
-    },
+    }
   };
 });
 
-type EditorBubbleMenuProps = Omit<BubbleMenuProps, "children">;
+type EditorBubbleMenuProps = Omit<BubbleMenuProps, 'children'>;
 
 export interface BubbleMenuItem {
   name: string;
@@ -35,68 +35,67 @@ function EditorBubbleMenu(props: EditorBubbleMenuProps) {
 
   const items: BubbleMenuItem[] = [
     {
-      name: "bold",
-      isActive: () => props.editor.isActive("bold"),
+      name: 'bold',
+      isActive: () => props.editor.isActive('bold'),
       command: () => props.editor.chain().focus().toggleBold().run(),
-      icon: <FontBoldIcon className="w-[14px] h-[14px]" />,
+      icon: <FontBoldIcon className="w-[14px] h-[14px]" />
     },
     {
-      name: "italic",
-      isActive: () => props.editor.isActive("italic"),
+      name: 'italic',
+      isActive: () => props.editor.isActive('italic'),
       command: () => props.editor.chain().focus().toggleItalic().run(),
-      icon: <FontItalicIcon />,
+      icon: <FontItalicIcon />
     },
     {
-      name: "strike",
-      isActive: () => props.editor.isActive("strike"),
+      name: 'strike',
+      isActive: () => props.editor.isActive('strike'),
       command: () => props.editor.chain().focus().toggleStrike().run(),
-      icon: <StrikethroughIcon />,
+      icon: <StrikethroughIcon />
     },
     {
-      name: "code",
-      isActive: () => props.editor.isActive("code"),
+      name: 'code',
+      isActive: () => props.editor.isActive('code'),
       command: () => props.editor.chain().focus().toggleCode().run(),
-      icon: <Code className="w-[14px] h-[14px]" />,
-    },
+      icon: <Code className="w-[14px] h-[14px]" />
+    }
   ];
 
   const link = {
-    name: "link",
-    isActive: () => props.editor.isActive("link"),
-    command: (href: string) =>
-      props.editor.chain().focus().setLink({ href }).run(),
-    icon: <Link1Icon className="w-[14px] h-[14px]" />,
+    name: 'link',
+    isActive: () => props.editor.isActive('link'),
+    command: (href: string) => props.editor.chain().focus().setLink({ href }).run(),
+    icon: <Link1Icon className="w-[14px] h-[14px]" />
   };
 
   const bubbleMenuProps: EditorBubbleMenuProps = {
     ...props,
     shouldShow: ({ editor }) => {
       // don't show if image is selected
-      if (editor.isActive("image")) {
+      if (editor.isActive('image')) {
         return false;
       }
 
       return editor.view.state.selection.content().size > 0;
     },
     tippyOptions: {
-      moveTransition: "transform 0.15s ease-out",
+      moveTransition: 'transform 0.15s ease-out',
       onHidden: () => {
         setLinkInputOpen(false);
-      },
-    },
+      }
+    }
   };
 
   const linkInput = (
     <Input
       ref={linkInputRef}
-      defaultValue={props.editor.getAttributes("link").href || ""}
+      defaultValue={props.editor.getAttributes('link').href || ''}
       onClick={() => linkInputRef.current?.focus()}
       placeholder="Insert Link"
       addonBefore="https://"
       onPressEnter={e => {
         const url = e.currentTarget.value;
 
-        link.command(url ? `https://${url}` : "");
+        link.command(url ? `https://${url}` : '');
         setLinkInputOpen(false);
       }}
       addonAfter={
@@ -126,7 +125,7 @@ function EditorBubbleMenu(props: EditorBubbleMenuProps) {
           return (
             <Button
               key={item.name}
-              type={item.isActive() ? "primary" : "text"}
+              type={item.isActive() ? 'primary' : 'text'}
               onClick={item.command}
             >
               {item.icon}
@@ -145,7 +144,7 @@ function EditorBubbleMenu(props: EditorBubbleMenuProps) {
           getPopupContainer={() => containerRef.current || document.body}
           align={{ offset: [8, -10] }}
         >
-          <Button key={link.name} type={link.isActive() ? "primary" : "text"}>
+          <Button key={link.name} type={link.isActive() ? 'primary' : 'text'}>
             {link.icon}
           </Button>
         </Popover>

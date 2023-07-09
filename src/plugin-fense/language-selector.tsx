@@ -1,22 +1,22 @@
-import { NodeViewContent, NodeViewWrapper } from "@tiptap/react";
-import { Select } from "antd";
-import { useMemo } from "react";
+import { NodeViewContent, NodeViewWrapper } from '@tiptap/react';
+import { Select } from 'antd';
+import { useMemo } from 'react';
 
 export function LanguageSelector({
   node: {
-    attrs: { language: defaultLanguage },
+    attrs: { language: defaultLanguage }
   },
   updateAttributes,
-  extension,
+  extension
 }: any) {
   const languages = extension.options.lowlight.listLanguages() as string[];
 
   const options = useMemo(() => {
     return [
-      { value: "", label: "-" },
+      { value: '', label: '-' },
       ...languages.map(language => {
         return { value: language, label: language };
-      }),
+      })
     ];
   }, [languages]);
 
