@@ -2,7 +2,7 @@
   "name": "marktion",
   "version": "0.0.5",
   "description": "marktion is a WYSIWYG Markdown editor",
-  "homepage": "https://remark.js.org",
+  "homepage": "https://marktion.io",
   "repository": "https://github.com/microvoid/marktion",
   "bugs": "https://github.com/microvoid/issues",
   "license": "MIT",
