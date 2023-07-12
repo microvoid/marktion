@@ -4,7 +4,7 @@ import { StyleProvider } from '@ant-design/cssinjs';
 import { EditorContent, EditorOptions, useEditor, Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 
-import Image from '@tiptap/extension-image';
+import TiptapImage from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
 import Highlight from '@tiptap/extension-highlight';
 import Typography from '@tiptap/extension-typography';
@@ -39,6 +39,10 @@ export type MarktionRef = {
   getMarkdown: () => string;
   editor: Editor;
 };
+
+const Image = TiptapImage.configure({
+  allowBase64: true
+});
 
 export const Marktion = React.forwardRef<MarktionRef, MarktionProps>((props, ref) => {
   const rootElRef = React.useRef<HTMLDivElement | null>(null);
