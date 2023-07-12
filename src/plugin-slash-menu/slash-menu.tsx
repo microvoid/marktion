@@ -17,9 +17,11 @@ export const SlashMenuPlugin = createIntergrateExtension(() => {
   const wrapperElRef: {
     update: (props: SuggestionProps<SuggestionPropsItem> | null) => void;
     setOpen: (open: boolean) => void;
+    trigger: 'keyboard' | 'other';
   } = {
     update: () => {},
-    setOpen: () => {}
+    setOpen: () => {},
+    trigger: 'other'
   };
 
   const suggestion: Omit<SuggestionOptions, 'editor'> = {
@@ -28,8 +30,12 @@ export const SlashMenuPlugin = createIntergrateExtension(() => {
     render: () => {
       return {
         onStart(props) {
-          wrapperElRef.update(props);
-          wrapperElRef.setOpen(true);
+          if (wrapperElRef.trigger === 'keyboard') {
+            wrapperElRef.update(props);
+            wrapperElRef.setOpen(true);
+
+            wrapperElRef.trigger = 'other';
+          }
         },
         onUpdate(props) {
           wrapperElRef.update(props);
@@ -82,6 +88,22 @@ export const SlashMenuPlugin = createIntergrateExtension(() => {
 
     wrapperElRef.update = setProps;
     wrapperElRef.setOpen = setOpen;
+
+    useEffect(() => {
+      const onKeydown = (e: KeyboardEvent) => {
+        if (e.key === '/') {
+          wrapperElRef.trigger = 'keyboard';
+        } else {
+          wrapperElRef.trigger = 'other';
+        }
+      };
+
+      window.addEventListener('keydown', onKeydown);
+
+      return () => {
+        window.removeEventListener('keydown', onKeydown);
+      };
+    }, []);
 
     return <SlashDropdown suggestions={props} open={open} onOpenChange={setOpen} />;
   }
@@ -194,6 +216,7 @@ function SlashDropdown(props: SlashDropdownProps) {
         data-role="slash-menu-trigger"
         ref={triggerElRef}
         style={{
+          display: open ? 'block' : 'none',
           position: 'absolute'
         }}
       ></div>
