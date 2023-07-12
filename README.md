@@ -2,7 +2,11 @@
 
 # Introducing Marktion
 
+![](https://github.com/microvoid/marktion/blob/main/public/recorder.gif)
+
 Marktion is a WYSIWYG Markdown editor based on [tiptap](https://tiptap.dev/). It provides an intuitive way to edit and preview Markdown text, making it easier for users to create visually appealing documents.
+
+See our website [marktion.io](https://marktion.io) in action.
 
 ## Features
 
