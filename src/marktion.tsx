@@ -22,9 +22,10 @@ import { MarkdownExtension, parse, serialize } from './plugin-markdown';
 import { UploadImageHandler } from './handler';
 import { RootElContext } from './hooks';
 
-import './marktion.css';
 import { FenseExtension } from './plugin-fense';
 import { AIPlugin } from './plugin-ai';
+
+import './marktion.css';
 
 export type MarktionProps = React.PropsWithChildren<
   Partial<EditorOptions> & {
