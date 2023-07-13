@@ -40,7 +40,7 @@ export const AIPlugin = createIntergrateExtension(() => {
   }
 
   return {
-    view: ctx => {
+    view: () => {
       return <Wrapper />;
     },
     extension: AIExtensions

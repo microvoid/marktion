@@ -13,8 +13,6 @@ export function Home({ INIT_MARKDOWN }: { INIT_MARKDOWN: string[] }) {
   const { theme, setTheme } = useTheme();
   const isDarkMode = theme === 'dark';
 
-  console.log('theme', theme);
-
   const onUploadImage = useCallback<NonNullable<MarktionProps['onUploadImage']>>(file => {
     return new Promise(resolve => {
       const reader = new FileReader();
@@ -78,6 +76,7 @@ export function Home({ INIT_MARKDOWN }: { INIT_MARKDOWN: string[] }) {
             onChange={value => {
               const index = Number(value);
 
+              // @ts-ignore
               marktionRef.current?.editor.commands.setMarkdwon(INIT_MARKDOWN[index]);
               setLang(index);
             }}

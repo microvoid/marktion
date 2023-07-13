@@ -1,8 +1,8 @@
 import * as fs from 'fs';
-import * as path from 'path';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import dts from 'vite-plugin-dts';
+import pkg from './package.json';
 
 process.env.VITE_README_EN = fs.readFileSync('./README.md', {
   encoding: 'utf8'
@@ -24,7 +24,7 @@ export default defineConfig({
     minify: false,
     lib: { entry: 'src/index.ts', name: 'marktion' },
     rollupOptions: {
-      external: ['react', 'react-dom']
+      external: Object.keys(pkg.dependencies || {})
     }
   }
 });

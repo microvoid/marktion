@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { Home } from './page-home';
+import { AntdCss } from './provider';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -12,8 +13,10 @@ const INIT_MARKDOWN = [VITE_README_ZH, VITE_README_EN];
 
 export default function () {
   return (
-    <main className="flex min-h-screen flex-col items-center">
-      <Home INIT_MARKDOWN={INIT_MARKDOWN} />
-    </main>
+    <AntdCss>
+      <main className="flex min-h-screen flex-col items-center">
+        <Home INIT_MARKDOWN={INIT_MARKDOWN} />
+      </main>
+    </AntdCss>
   );
 }
