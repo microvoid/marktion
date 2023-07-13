@@ -1,36 +1,33 @@
 import { createParser } from 'eventsource-parser';
-import { Configuration, OpenAIApi, ConfigurationParameters } from 'openai-edge';
+import {
+  Configuration,
+  OpenAIApi,
+  ConfigurationParameters,
+  CreateChatCompletionRequest
+} from 'openai-edge';
 import pLimit from 'p-limit';
+import { DEFAULT_GPT_PROMPT } from './constants';
 
 const limit = pLimit(1);
 
 export const limitGpt = (...args: Parameters<typeof gpt>) => limit(() => gpt(...args));
 
-async function gpt(
-  content: string,
-  options?: {
-    systemMessage?: string;
-    config?: ConfigurationParameters;
-    onProgress?: (event: CreateChatCompletionDeltaResponse) => void;
-  }
-) {
-  const openai = new OpenAIApi(
-    new Configuration({
-      apiKey: import.meta.env.VITE_OPENAI_TOKEN,
-      basePath: import.meta.env.VITE_OPENAI_PROXY_URL,
-      ...options?.config
-    })
-  );
+export type GptOptions = {
+  systemMessage?: string;
+  config?: ConfigurationParameters;
+  completionConfig?: CreateChatCompletionRequest;
+  onProgress?: (event: CreateChatCompletionDeltaResponse) => void;
+};
+
+export async function gpt(content: string, options?: GptOptions) {
+  const openai = new OpenAIApi(new Configuration(options?.config));
 
   const response = await openai.createChatCompletion({
     model: 'gpt-3.5-turbo',
     messages: [
       {
         role: 'system',
-        content:
-          'You are an AI writing assistant that continues existing text based on context from prior text. ' +
-          'Give more weight/priority to the later characters than the beginning ones. ' +
-          'Limit your response to no more than 200 characters, but make sure to construct complete sentences.'
+        content: options?.systemMessage || DEFAULT_GPT_PROMPT
       },
       {
         role: 'user',
@@ -42,7 +39,8 @@ async function gpt(
     frequency_penalty: 0,
     presence_penalty: 0,
     stream: true,
-    n: 1
+    n: 1,
+    ...options?.completionConfig
   });
 
   return new Promise<CreateChatCompletionDeltaResponse>((resolve, reject) => {

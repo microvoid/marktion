@@ -1,20 +1,39 @@
 import { Extension } from '@tiptap/react';
 import { Editor } from '@tiptap/core';
+import { DEFAULT_CONTINUE_WRITING, DEFAULT_GPT_PROMPT } from './constants';
 import { createIntergrateExtension } from '../plugins';
-import { limitGpt } from './api';
+import { GptOptions, limitGpt } from './api';
+import { AIOptions, AIStorage } from './interface';
 
 export const AIPlugin = createIntergrateExtension(() => {
   const isAIContinueWriting = segments('+', 2);
+  const isAIAsking = segments('?', 2);
 
-  const AIExtensions = Extension.create({
+  const AIExtensions = Extension.create<AIOptions, AIStorage>({
     name: 'ai',
 
     addOptions() {
       return {
-        ai: {
-          apiKey: import.meta.env.VITE_OPENAI_PROXY_URL,
-          apiBaseUrl: import.meta.env.VITE_OPENAI_TOKEN,
-          model: 'gpt-3.5-turbo'
+        openai: {
+          apiKey: import.meta.env.VITE_OPENAI_TOKEN,
+          basePath: import.meta.env.VITE_OPENAI_PROXY_URL
+        }
+      };
+    },
+
+    addStorage() {
+      return {
+        AIContinueWriting: (editor: Editor, message) => {
+          dispathAICommand(editor, message, {
+            config: this.options.openai,
+            systemMessage: DEFAULT_CONTINUE_WRITING
+          });
+        },
+        AIAsking: (editor: Editor, message) => {
+          dispathAICommand(editor, message, {
+            config: this.options.openai,
+            systemMessage: DEFAULT_GPT_PROMPT
+          });
         }
       };
     },
@@ -25,36 +44,49 @@ export const AIPlugin = createIntergrateExtension(() => {
       }
 
       const editor = this.editor;
-      const text = getPrevText(editor, { chars: 1 });
+      const storage = editor.storage.ai as AIStorage;
+      const text = getPrevText(editor, { chars: 2 });
 
-      if (isAIContinueWriting(text)) {
-        console.log('ai');
+      if (isAIContinueWriting(text[1]) && text === '++') {
+        const question = getPrevText(editor, {
+          chars: 5000
+        });
+        storage.AIContinueWriting(editor, question);
+      } else if (isAIAsking(text[1]) && text === '??') {
+        const question = getPrevText(editor, {
+          chars: 5000
+        });
+        storage.AIAsking(editor, question);
       }
-
-      // const isAIActive = text === '++' || text === '??';
-
-      // if (isAIActive) {
-      // limitGpt(question, {
-      //   onProgress(event) {
-      //     const delta = event.choices[0].delta.content || '';
-      //     editor.commands.insertContent(delta);
-      //   }
-      // }).then(console.log);
-      // }
     }
   });
 
-  function Wrapper() {
-    return null;
-  }
-
   return {
-    view: () => {
-      return <Wrapper />;
-    },
     extension: AIExtensions
   };
 });
+
+function dispathAICommand(editor: Editor, question: string, options?: GptOptions) {
+  editor.commands.deleteRange({
+    from: editor.state.selection.from - 2,
+    to: editor.state.selection.from
+  });
+
+  limitGpt(question, {
+    ...options,
+    onProgress(event) {
+      const delta = event.choices[0].delta.content || '';
+      editor.commands.insertContent(delta);
+    }
+  }).then(res => {
+    const content = res.choices[0].delta.content || '';
+
+    editor.commands.setTextSelection({
+      from: editor.state.selection.from - content.length,
+      to: editor.state.selection.from
+    });
+  });
+}
 
 const segments = (token: string, count: number) => {
   let s = '';
@@ -69,9 +101,9 @@ const segments = (token: string, count: number) => {
       return false;
     }
 
-    if (s.length < count) {
-      s += input;
+    s += input;
 
+    if (s.length < count) {
       return false;
     }
 
