@@ -15,7 +15,7 @@ export type PluginContext = {
 };
 
 export interface IntergrateExtension<M extends Methods = Methods> extends Plugin<M> {
-  view: (ctx: PluginContext) => React.ReactNode;
+  view?: (ctx: PluginContext) => React.ReactNode;
   extension?: Extension;
 }
 

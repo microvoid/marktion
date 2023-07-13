@@ -24,6 +24,7 @@ import { RootElContext } from './hooks';
 
 import './marktion.css';
 import { FenseExtension } from './plugin-fense';
+import { AIPlugin } from './plugin-ai';
 
 export type MarktionProps = React.PropsWithChildren<
   Partial<EditorOptions> & {
@@ -48,7 +49,7 @@ export const Marktion = React.forwardRef<MarktionRef, MarktionProps>((props, ref
   const rootElRef = React.useRef<HTMLDivElement | null>(null);
   const {
     darkMode = false,
-    plugins = [EditorBubbleMenuPlugin, SlashMenuPlugin],
+    plugins = [EditorBubbleMenuPlugin, SlashMenuPlugin, AIPlugin],
     onUploadImage,
     content: propsContent,
     markdown,
@@ -116,13 +117,18 @@ export const Marktion = React.forwardRef<MarktionRef, MarktionProps>((props, ref
       <StyleProvider hashPriority="high">
         <RootElContext.Provider value={rootElRef.current}>
           <div className="marktion" ref={rootElRef}>
-            <EditorContent className="marktion-editor" editor={editor} />
+            <EditorContent
+              className="marktion-editor"
+              data-mode={darkMode ? 'dark' : null}
+              editor={editor}
+            />
 
             {intergrates.map(item => (
               <React.Fragment key={item.id}>
-                {item.plugin.view({
-                  editor: editor
-                })}
+                {item.plugin.view &&
+                  item.plugin.view({
+                    editor: editor
+                  })}
               </React.Fragment>
             ))}
 
