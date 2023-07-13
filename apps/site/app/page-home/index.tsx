@@ -6,7 +6,12 @@ import { FloatButton, Segmented, Tooltip } from 'antd';
 import { MarktionRef, MarktionProps, Marktion } from 'marktion';
 import { useTheme } from 'next-themes';
 
-export function Home({ INIT_MARKDOWN }: { INIT_MARKDOWN: string[] }) {
+const INIT_MARKDOWN = [
+  '\n# Marktion\n\n一个简单的 Markdown 编辑器，他支持以下功能：',
+  '\n# Marktion\n\nA simple markdown editor'
+];
+
+export function Home() {
   const marktionRef = useRef<MarktionRef>(null);
   const [lang, setLang] = useState(0);
   const [tooltipOpen, setTooltipOpen] = useState(false);

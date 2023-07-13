@@ -1,20 +1,28 @@
-import {
-  Configuration,
-  OpenAIApi,
-  ConfigurationParameters,
-  CreateChatCompletionResponse
-} from 'openai-edge';
+import { createParser } from 'eventsource-parser';
+import { Configuration, OpenAIApi, ConfigurationParameters } from 'openai-edge';
+import pLimit from 'p-limit';
 
-export async function gpt(content: string, config?: ConfigurationParameters) {
+const limit = pLimit(1);
+
+export const limitGpt = (...args: Parameters<typeof gpt>) => limit(() => gpt(...args));
+
+async function gpt(
+  content: string,
+  options?: {
+    systemMessage?: string;
+    config?: ConfigurationParameters;
+    onProgress?: (event: CreateChatCompletionDeltaResponse) => void;
+  }
+) {
   const openai = new OpenAIApi(
     new Configuration({
       apiKey: import.meta.env.VITE_OPENAI_TOKEN,
       basePath: import.meta.env.VITE_OPENAI_PROXY_URL,
-      ...config
+      ...options?.config
     })
   );
 
-  const completion = await openai.createChatCompletion({
+  const response = await openai.createChatCompletion({
     model: 'gpt-3.5-turbo',
     messages: [
       {
@@ -33,13 +41,100 @@ export async function gpt(content: string, config?: ConfigurationParameters) {
     top_p: 1,
     frequency_penalty: 0,
     presence_penalty: 0,
-    // stream: true,
-    stream: false,
+    stream: true,
     n: 1
   });
 
-  const response = new Response(completion.body);
-  const body: CreateChatCompletionResponse = await response.json();
+  return new Promise<CreateChatCompletionDeltaResponse>((resolve, reject) => {
+    let result: CreateChatCompletionDeltaResponse;
 
-  console.log(body);
+    handleStream(response, {
+      onError: reject,
+      onProgress: message => {
+        if (message === '[DONE]') {
+          return resolve(result);
+        }
+
+        const event = JSON.parse(message) as CreateChatCompletionDeltaResponse;
+
+        options?.onProgress?.(event);
+
+        if (!result) {
+          result = event;
+        } else {
+          const delta = event.choices[0].delta?.content;
+
+          if (delta) {
+            result.choices[0].delta.content += delta;
+          }
+        }
+      }
+    });
+  });
+}
+
+export type Role = 'user' | 'assistant' | 'system';
+
+export interface CreateChatCompletionDeltaResponse {
+  id: string;
+  object: 'chat.completion.chunk';
+  created: number;
+  model: string;
+  choices: [
+    {
+      delta: {
+        role: Role;
+        content?: string;
+      };
+      index: number;
+      finish_reason: string | null;
+    }
+  ];
+}
+
+type HandleStreamOptions = {
+  onProgress?: (message: string) => void;
+  onError?: (err: Error) => void;
+};
+
+async function handleStream(response: Response, options?: HandleStreamOptions) {
+  const { onProgress, onError } = options || {};
+
+  if (!response.body) {
+    throw new Error('The response body is empty.');
+  }
+
+  const parser = createParser(event => {
+    if (event.type === 'event') {
+      onProgress?.(event.data);
+    }
+  });
+
+  let content = '';
+
+  try {
+    for await (const chunk of streamAsyncIterable(response.body)) {
+      const str = new TextDecoder().decode(chunk);
+      parser.feed(str);
+    }
+  } catch (err) {
+    onError?.(err as Error);
+  }
+
+  return content;
+}
+
+async function* streamAsyncIterable<T>(stream: ReadableStream<T>) {
+  const reader = stream.getReader();
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) {
+        return;
+      }
+      yield value;
+    }
+  } finally {
+    reader.releaseLock();
+  }
 }

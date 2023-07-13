@@ -6,11 +6,7 @@ import { ConfigProvider, theme as AntdTheme } from 'antd';
 import { StyleProvider, createCache, extractStyle } from '@ant-design/cssinjs';
 
 export function Provider({ children }: React.PropsWithChildren) {
-  return (
-    <ThemeProvider attribute="class">
-      <AntdProvider>{children}</AntdProvider>
-    </ThemeProvider>
-  );
+  return <ThemeProvider attribute="class">{children}</ThemeProvider>;
 }
 
 function AntdProvider({ children }: React.PropsWithChildren) {
@@ -30,13 +26,15 @@ function AntdProvider({ children }: React.PropsWithChildren) {
 
 export function AntdCss({ children }: React.PropsWithChildren) {
   const cache = createCache();
+  const withConfig = <AntdProvider>{children}</AntdProvider>;
 
-  renderToString(<StyleProvider cache={cache}>{children}</StyleProvider>);
+  renderToString(<StyleProvider cache={cache}>{withConfig}</StyleProvider>);
 
   return (
     <>
       <style id="antd" dangerouslySetInnerHTML={{ __html: extractStyle(cache, true) }}></style>
-      {children}
+
+      {withConfig}
     </>
   );
 }

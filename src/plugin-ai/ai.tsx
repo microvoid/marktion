@@ -1,9 +1,11 @@
 import { Extension } from '@tiptap/react';
 import { Editor } from '@tiptap/core';
 import { createIntergrateExtension } from '../plugins';
-import { gpt } from './api';
+import { limitGpt } from './api';
 
 export const AIPlugin = createIntergrateExtension(() => {
+  const isAIContinueWriting = segments('+', 2);
+
   const AIExtensions = Extension.create({
     name: 'ai',
 
@@ -22,16 +24,23 @@ export const AIPlugin = createIntergrateExtension(() => {
         return;
       }
 
-      const text = getPrevText(this.editor, { chars: 2 });
-      const isAIActive = text === '++' || '??';
+      const editor = this.editor;
+      const text = getPrevText(editor, { chars: 1 });
 
-      if (isAIActive) {
-        const question = getPrevText(this.editor, {
-          chars: 5000
-        });
-
-        gpt(question).then(console.log);
+      if (isAIContinueWriting(text)) {
+        console.log('ai');
       }
+
+      // const isAIActive = text === '++' || text === '??';
+
+      // if (isAIActive) {
+      // limitGpt(question, {
+      //   onProgress(event) {
+      //     const delta = event.choices[0].delta.content || '';
+      //     editor.commands.insertContent(delta);
+      //   }
+      // }).then(console.log);
+      // }
     }
   });
 
@@ -46,6 +55,31 @@ export const AIPlugin = createIntergrateExtension(() => {
     extension: AIExtensions
   };
 });
+
+const segments = (token: string, count: number) => {
+  let s = '';
+
+  const reset = () => {
+    s = '';
+  };
+
+  return (input: string) => {
+    if (input !== token) {
+      reset();
+      return false;
+    }
+
+    if (s.length < count) {
+      s += input;
+
+      return false;
+    }
+
+    reset();
+
+    return true;
+  };
+};
 
 export const getPrevText = (
   editor: Editor,
