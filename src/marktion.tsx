@@ -79,8 +79,17 @@ export const Marktion = React.forwardRef<MarktionRef, MarktionProps>((props, ref
       StarterKit,
       Highlight,
       Typography,
-      TaskItem,
-      TaskList,
+      TaskList.configure({
+        HTMLAttributes: {
+          class: 'not-prose pl-2'
+        }
+      }),
+      TaskItem.configure({
+        HTMLAttributes: {
+          class: 'flex items-start my-4'
+        },
+        nested: true
+      }),
       Image,
       Link,
       Table,
