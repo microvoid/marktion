@@ -123,9 +123,9 @@ function useDarkMode() {
 
   useEffect(() => {
     if (isDarkMode) {
-      document.documentElement.setAttribute('data-mode', 'dark');
+      document.documentElement.classList.add('dark');
     } else {
-      document.documentElement.removeAttribute('data-mode');
+      document.documentElement.classList.remove('dark');
     }
 
     localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
@@ -148,11 +148,9 @@ function getThemeFromStorage() {
 }
 
 function getThemeFromSystem() {
-  // const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-  // return isDark ? 'dark' : 'light';
-
-  return 'light';
+  return isDark ? 'dark' : 'light';
 }
 
 async function downloadFile(filename: string, content: string) {

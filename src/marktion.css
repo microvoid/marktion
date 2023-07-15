@@ -2,16 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-
+.marktion {
+  position: relative;
+}
 
 .ProseMirror {
   --marktion-black: rgb(0 0 0);
   --marktion-white: rgb(255 255 255);
   
-  @apply prose p-6 rounded-md relative shadow-lg border dark:prose-invert max-w-none;
+  @apply prose p-6 rounded-md relative shadow-lg border dark:prose-invert max-w-none outline-none;
 }
 
-[data-mode="dark"] .ProseMirror {
+.dark .ProseMirror {
   --marktion-black: rgb(255 255 255);
   --marktion-white: rgb(25 25 25);
 }
@@ -77,8 +79,4 @@ ul[data-type="taskList"] li[data-checked="true"] > div > p {
   position: absolute;
   top: -32px;
   right: 0;
-}
-
-.marktion {
-  position: relative;
 }
