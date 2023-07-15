@@ -54,7 +54,7 @@ function App() {
 
   return (
     <>
-      <header className="container w-full p-4  dark:text-gray-100">
+      <header className="container w-full dark:text-gray-100">
         <div className="flex justify-between items-center h-16">
           <Tooltip open={tooltipOpen} title="Star on Github" placement="right" color="purple">
             <a
