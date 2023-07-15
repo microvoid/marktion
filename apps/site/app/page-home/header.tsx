@@ -15,9 +15,10 @@ export function Header() {
       setTooltipOpen(true);
     }, 2000);
   }, []);
+
   return (
-    <header className="w-full p-4  dark:text-gray-100">
-      <div className="container flex justify-between items-center h-16 mx-auto">
+    <header className="container dark:text-gray-100">
+      <div className="flex justify-between items-center h-16 mx-auto">
         <Tooltip open={tooltipOpen} title="Star on Github" placement="right" color="purple">
           <a
             href="https://github.com/microvoid/marktion"

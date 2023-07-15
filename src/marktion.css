@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .marktion {
-  @apply rounded-md relative shadow-lg border sm:pt-[48px] pt-[24px];
+  @apply rounded-md relative shadow-lg border pt-[48px];
 }
 
 .ProseMirror {

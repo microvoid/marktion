@@ -73,7 +73,7 @@ function App() {
           </div>
         </div>
       </header>
-      <div className="container max-w-screen-lg">
+      <div className="container max-w-screen-md">
         <div className="flex justify-center">
           <Segmented
             options={[

@@ -30,7 +30,7 @@ export type MarktionProps = React.PropsWithChildren<
     darkMode?: boolean;
     plugins?: Plugin[];
 
-    toolbarProps?: ToolbarProps;
+    toolbarProps?: Omit<ToolbarProps, 'editor'>;
 
     onUploadImage?: (file: File, editor: Editor) => Promise<string>;
   }

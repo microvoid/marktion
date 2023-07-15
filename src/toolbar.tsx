@@ -14,16 +14,19 @@ export function Toolbar(props: ToolbarProps) {
   const [isAffixed, setIsAffixed] = useState<Boolean>();
 
   return (
-    <div className="absolute top-2 left-0 w-full">
+    <div className="absolute top-2 left-0 w-full overscroll-x-auto">
       <Affix offsetTop={top} onChange={setIsAffixed}>
         <div
-          className={`bg-white dark:bg-black px-6 py-1 flex items-center justify-between ${
-            isAffixed ? 'border-b rounded-md h-[60px]' : ''
+          className={`bg-white dark:bg-black px-2 py-1 flex items-center justify-between ${
+            isAffixed ? 'border-b h-[60px]' : ''
           }`}
         >
-          <div className="hidden sm:block">
-            <InlineTools editor={props.editor} />
-            {props.addonLeft && <Divider type="vertical" />}
+          <div className="flex items-center">
+            <div className="sm:inline-block">
+              <InlineTools editor={props.editor} />
+              {props.addonLeft && <Divider type="vertical" />}
+            </div>
+
             {props.addonLeft}
           </div>
           {props.addonRight}

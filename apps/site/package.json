@@ -27,6 +27,7 @@
     "eslint": "8.44.0",
     "eslint-config-next": "13.4.9",
     "jsdom": "^22.1.0",
+    "lodash": "^4.17.21",
     "marktion": "link:../..",
     "nanoid": "^4.0.2",
     "next": "13.4.9",
@@ -38,6 +39,7 @@
     "typescript": "5.1.6"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.195",
     "prisma": "^5.0.0"
   }
 }
