@@ -25,16 +25,7 @@ function App() {
   const [lang, setLang] = useState(0);
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const plugins = useMemo(() => {
-    return [
-      EditorBubbleMenuPlugin(),
-      SlashMenuPlugin(),
-      AIPlugin({
-        openai: {
-          apiKey: import.meta.env.VITE_OPENAI_TOKEN,
-          basePath: import.meta.env.VITE_OPENAI_PROXY_URL
-        }
-      })
-    ];
+    return [EditorBubbleMenuPlugin(), SlashMenuPlugin()];
   }, []);
 
   const onUploadImage = useCallback<NonNullable<MarktionProps['onUploadImage']>>(file => {
