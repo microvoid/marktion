@@ -18,7 +18,7 @@ See our website [marktion.io](https://marktion.io) in action.
 
 1. Install dependencies.
 
-```shell
+```bash
 npm intall marktion
 ```
 
@@ -86,14 +86,14 @@ Thank you for considering contributing to Marktion! If you would like to contrib
 
 2. Clone the forked repository to your local machine.
 
-```shell
+```bash
 git clone https://github.com/yourusername/marktion.git
 cd marktion
 ```
 
 3. Install dependencies.
 
-```shell
+```bash
 pnpm i
 ```
 

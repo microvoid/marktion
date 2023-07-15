@@ -1,5 +1,5 @@
 import { Code } from 'lucide-react';
-import { Button, Divider, Input, Popover, Space, InputRef } from 'antd';
+import { Button, Divider, Input, Popover, InputRef } from 'antd';
 import { BubbleMenu, BubbleMenuProps } from '@tiptap/react';
 import {
   FontBoldIcon,
@@ -10,6 +10,7 @@ import {
 } from '@radix-ui/react-icons';
 import { createIntergrateExtension } from '../plugins';
 import { useRef, useState } from 'react';
+import { Editor } from '@tiptap/core';
 
 export const EditorBubbleMenuPlugin = createIntergrateExtension(() => {
   return {
@@ -29,6 +30,40 @@ export interface BubbleMenuItem {
 }
 
 function EditorBubbleMenu(props: EditorBubbleMenuProps) {
+  const bubbleMenuProps: EditorBubbleMenuProps = {
+    ...props,
+    shouldShow: ({ editor }) => {
+      // don't show if image is selected
+      if (editor.isActive('image')) {
+        return false;
+      }
+
+      return editor.view.state.selection.content().size > 0;
+    },
+    tippyOptions: {
+      moveTransition: 'transform 0.15s ease-out',
+      onHidden: () => {
+        // setLinkInputOpen(false);
+      }
+    }
+  };
+
+  return (
+    <BubbleMenu {...bubbleMenuProps}>
+      <div
+        className="flex items-center px-2 py-1 rounded-md relative shadow-lg border bg-white dark:bg-black"
+        onMouseDown={e => {
+          e.stopPropagation();
+          e.preventDefault();
+        }}
+      >
+        <InlineTools editor={props.editor} />
+      </div>
+    </BubbleMenu>
+  );
+}
+
+export function InlineTools(props: { editor: Editor }) {
   const linkInputRef = useRef<InputRef>(null);
   const [linkInputOpen, setLinkInputOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -67,24 +102,6 @@ function EditorBubbleMenu(props: EditorBubbleMenuProps) {
     icon: <Link1Icon className="w-[14px] h-[14px]" />
   };
 
-  const bubbleMenuProps: EditorBubbleMenuProps = {
-    ...props,
-    shouldShow: ({ editor }) => {
-      // don't show if image is selected
-      if (editor.isActive('image')) {
-        return false;
-      }
-
-      return editor.view.state.selection.content().size > 0;
-    },
-    tippyOptions: {
-      moveTransition: 'transform 0.15s ease-out',
-      onHidden: () => {
-        setLinkInputOpen(false);
-      }
-    }
-  };
-
   const linkInput = (
     <Input
       ref={linkInputRef}
@@ -111,44 +128,44 @@ function EditorBubbleMenu(props: EditorBubbleMenuProps) {
   );
 
   return (
-    <BubbleMenu {...bubbleMenuProps}>
-      <Space
+    <>
+      {items.map(item => {
+        return (
+          <Button
+            key={item.name}
+            type={item.isActive() ? 'primary' : 'text'}
+            onClick={item.command}
+          >
+            {item.icon}
+          </Button>
+        );
+      })}
+
+      <Divider type="vertical" />
+
+      <div
         ref={containerRef}
-        direction="horizontal"
-        className="px-2 py-1 rounded-md relative shadow-lg border bg-white dark:bg-black"
+        style={{ display: 'inline-block' }}
         onMouseDown={e => {
           e.stopPropagation();
           e.preventDefault();
         }}
       >
-        {items.map(item => {
-          return (
-            <Button
-              key={item.name}
-              type={item.isActive() ? 'primary' : 'text'}
-              onClick={item.command}
-            >
-              {item.icon}
-            </Button>
-          );
-        })}
-        <Divider type="vertical" />
-
         <Popover
           arrow={false}
-          content={linkInput}
-          placement="topRight"
+          content={<div className="min-w-[240px]">{linkInput}</div>}
+          placement="bottom"
           open={linkInputOpen}
           onOpenChange={setLinkInputOpen}
           destroyTooltipOnHide={true}
           getPopupContainer={() => containerRef.current || document.body}
-          align={{ offset: [8, -10] }}
+          align={{ offset: [8, 10] }}
         >
           <Button key={link.name} type={link.isActive() ? 'primary' : 'text'}>
             {link.icon}
           </Button>
         </Popover>
-      </Space>
-    </BubbleMenu>
+      </div>
+    </>
   );
 }

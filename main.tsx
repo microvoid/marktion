@@ -54,8 +54,8 @@ function App() {
 
   return (
     <>
-      <header className="w-full p-4  dark:text-gray-100">
-        <div className="container flex justify-between items-center h-16 mx-auto">
+      <header className="container w-full p-4  dark:text-gray-100">
+        <div className="flex justify-between items-center h-16">
           <Tooltip open={tooltipOpen} title="Star on Github" placement="right" color="purple">
             <a
               href="https://github.com/microvoid/marktion"
@@ -73,8 +73,8 @@ function App() {
           </div>
         </div>
       </header>
-      <div className="max-w-screen-lg w-full">
-        <div className="container flex justify-center">
+      <div className="container max-w-screen-lg">
+        <div className="flex justify-center">
           <Segmented
             options={[
               {

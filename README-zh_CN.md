@@ -12,7 +12,7 @@ Marktion 是一个基于 [tiptap](https://tiptap.dev/) 的所见即所得 Markdo
 
 1. 安装依赖项。
 
-```shell
+```bash
 npm intall marktion
 ```
 
@@ -79,14 +79,14 @@ function App() {
 1. 将仓库 Fork 到您的 GitHub 账户。
 2. 将 Fork 的仓库克隆到本地机器。
 
-```shell
+```bash
 git clone https://github.com/yourusername/marktion.git
 cd marktion
 ```
 
 3. 安装依赖项。
 
-```shell
+```bash
 pnpm i
 ```
 

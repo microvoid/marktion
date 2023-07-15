@@ -18,9 +18,9 @@ import TableRow from '@tiptap/extension-table-row';
 import { Plugin, PluginType } from './plugins';
 import { MarkdownExtension, parse, serialize } from './plugin-markdown';
 import { UploadImageHandler } from './handler';
-import { RootElContext } from './hooks';
-
 import { FenseExtension } from './plugin-fense';
+import { RootElContext } from './hooks';
+import { Toolbar, ToolbarProps } from './toolbar';
 
 import './marktion.css';
 
@@ -29,6 +29,8 @@ export type MarktionProps = React.PropsWithChildren<
     markdown?: string;
     darkMode?: boolean;
     plugins?: Plugin[];
+
+    toolbarProps?: ToolbarProps;
 
     onUploadImage?: (file: File, editor: Editor) => Promise<string>;
   }
@@ -52,6 +54,7 @@ export const Marktion = React.forwardRef<MarktionRef, MarktionProps>((props, ref
     content: propsContent,
     markdown,
     children,
+    toolbarProps,
     ...editorProps
   } = props;
 
@@ -119,6 +122,8 @@ export const Marktion = React.forwardRef<MarktionRef, MarktionProps>((props, ref
       <StyleProvider hashPriority="high">
         <RootElContext.Provider value={rootElRef.current}>
           <div className="marktion" ref={rootElRef}>
+            <Toolbar editor={editor} {...toolbarProps} />
+
             <EditorContent
               className="marktion-editor"
               data-mode={darkMode ? 'dark' : null}
