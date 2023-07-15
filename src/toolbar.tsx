@@ -17,13 +17,12 @@ export function Toolbar(props: ToolbarProps) {
     <div className="absolute top-2 left-0 w-full">
       <Affix offsetTop={top} onChange={setIsAffixed}>
         <div
-          className={`bg-white dark:bg-black hidden sm:block px-2 py-1 ${
-            isAffixed ? 'border-b rounded-md' : ''
+          className={`bg-white dark:bg-black px-6 py-1 flex items-center justify-between ${
+            isAffixed ? 'border-b rounded-md h-[60px]' : ''
           }`}
         >
-          <div>
+          <div className="hidden sm:block">
             <InlineTools editor={props.editor} />
-
             {props.addonLeft && <Divider type="vertical" />}
             {props.addonLeft}
           </div>
