@@ -1,8 +1,15 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import { GitHubLogoIcon, SunIcon, MoonIcon } from '@radix-ui/react-icons';
-import MarktionEditor, { MarktionProps, MarktionRef } from './src/marktion';
 import { FloatButton, Segmented, Tooltip } from 'antd';
+import {
+  EditorBubbleMenuPlugin,
+  AIPlugin,
+  SlashMenuPlugin,
+  Marktion,
+  MarktionProps,
+  MarktionRef
+} from './src';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -17,6 +24,18 @@ function App() {
   const { isDarkMode, toggle } = useDarkMode();
   const [lang, setLang] = useState(0);
   const [tooltipOpen, setTooltipOpen] = useState(false);
+  const plugins = useMemo(() => {
+    return [
+      EditorBubbleMenuPlugin(),
+      SlashMenuPlugin(),
+      AIPlugin({
+        openai: {
+          apiKey: import.meta.env.VITE_OPENAI_TOKEN,
+          basePath: import.meta.env.VITE_OPENAI_PROXY_URL
+        }
+      })
+    ];
+  }, []);
 
   const onUploadImage = useCallback<NonNullable<MarktionProps['onUploadImage']>>(file => {
     return new Promise(resolve => {
@@ -87,14 +106,15 @@ function App() {
           />
         </div>
 
-        <MarktionEditor
+        <Marktion
           ref={marktionRef}
           darkMode={isDarkMode}
           markdown={INIT_MARKDOWN[lang]}
           onUploadImage={onUploadImage}
+          plugins={plugins}
         >
           <FloatButton tooltip="Export markdwon file" onClick={onExport} />
-        </MarktionEditor>
+        </Marktion>
       </div>
     </>
   );

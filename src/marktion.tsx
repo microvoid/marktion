@@ -15,15 +15,12 @@ import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
 import TableRow from '@tiptap/extension-table-row';
 
-import { EditorBubbleMenuPlugin } from './plugin-bubble-menu';
-import { SlashMenuPlugin } from './plugin-slash-menu';
-import { PluginCreator, PluginType } from './plugins';
+import { Plugin, PluginType } from './plugins';
 import { MarkdownExtension, parse, serialize } from './plugin-markdown';
 import { UploadImageHandler } from './handler';
 import { RootElContext } from './hooks';
 
 import { FenseExtension } from './plugin-fense';
-import { AIPlugin } from './plugin-ai';
 
 import './marktion.css';
 
@@ -31,7 +28,7 @@ export type MarktionProps = React.PropsWithChildren<
   Partial<EditorOptions> & {
     markdown?: string;
     darkMode?: boolean;
-    plugins?: PluginCreator[];
+    plugins?: Plugin[];
 
     onUploadImage?: (file: File, editor: Editor) => Promise<string>;
   }
@@ -50,7 +47,7 @@ export const Marktion = React.forwardRef<MarktionRef, MarktionProps>((props, ref
   const rootElRef = React.useRef<HTMLDivElement | null>(null);
   const {
     darkMode = false,
-    plugins = [EditorBubbleMenuPlugin, SlashMenuPlugin, AIPlugin],
+    plugins = [],
     onUploadImage,
     content: propsContent,
     markdown,
@@ -61,17 +58,12 @@ export const Marktion = React.forwardRef<MarktionRef, MarktionProps>((props, ref
   const content = useMemo(() => propsContent || parse(markdown || ''), [propsContent, markdown]);
 
   const intergrates = useMemo(() => {
-    return plugins
-      .filter(plugin => plugin.type === PluginType.intergrate)
-      .map(plugin => ({
-        plugin: plugin.install(),
-        id: plugin.id
-      }));
+    return plugins.filter(plugin => plugin.type === PluginType.intergrate);
   }, []);
 
   const intergratePlugins = intergrates
-    .filter(item => Boolean(item.plugin.extension))
-    .map(item => item.plugin.extension!);
+    .filter(item => Boolean(item.extension))
+    .map(item => item.extension!);
 
   const editor = useEditor({
     extensions: [
@@ -135,8 +127,8 @@ export const Marktion = React.forwardRef<MarktionRef, MarktionProps>((props, ref
 
             {intergrates.map(item => (
               <React.Fragment key={item.id}>
-                {item.plugin.view &&
-                  item.plugin.view({
+                {item.view &&
+                  item.view({
                     editor: editor
                   })}
               </React.Fragment>

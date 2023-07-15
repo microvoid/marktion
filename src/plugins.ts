@@ -6,29 +6,35 @@ export enum PluginType {
 
 export type Methods = Record<string, (...args: any[]) => void>;
 
-export interface Plugin<M extends Methods = Methods> {
-  methods?: M;
-}
-
 export type PluginContext = {
   editor: Editor;
 };
 
-export interface IntergrateExtension<M extends Methods = Methods> extends Plugin<M> {
+export interface IntergrateInstall<M extends Methods = Methods> {
   view?: (ctx: PluginContext) => React.ReactNode;
+  methods?: M;
   extension?: Extension;
 }
 
 let pluginId = 0;
 
-export function createIntergrateExtension<M extends Methods>(
-  install: () => IntergrateExtension<M>
-) {
-  return {
-    install,
-    id: pluginId++,
-    type: PluginType.intergrate
+export function createIntergrateExtension<
+  M extends Methods,
+  I extends (...args: any[]) => IntergrateInstall<M>
+>(install: I) {
+  return (...args: Parameters<typeof install>) => {
+    const ext = install(...args);
+
+    return {
+      ...ext,
+      id: pluginId++,
+      type: PluginType.intergrate
+    };
   };
 }
 
 export type PluginCreator = ReturnType<typeof createIntergrateExtension>;
+export type Plugin<M extends Methods = Methods> = IntergrateInstall<M> & {
+  id: number;
+  type: PluginType;
+};

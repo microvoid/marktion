@@ -7,5 +7,5 @@ export interface AIStorage {
 }
 
 export interface AIOptions {
-  openai?: ConfigurationParameters;
+  openai: ConfigurationParameters;
 }

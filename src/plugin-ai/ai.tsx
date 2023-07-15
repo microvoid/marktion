@@ -5,7 +5,7 @@ import { createIntergrateExtension } from '../plugins';
 import { GptOptions, limitGpt } from './api';
 import { AIOptions, AIStorage } from './interface';
 
-export const AIPlugin = createIntergrateExtension(() => {
+export const AIPlugin = createIntergrateExtension((options: AIOptions) => {
   const isAIContinueWriting = segments('+', 2);
   const isAIAsking = segments('?', 2);
 
@@ -14,10 +14,7 @@ export const AIPlugin = createIntergrateExtension(() => {
 
     addOptions() {
       return {
-        openai: {
-          apiKey: import.meta.env.VITE_OPENAI_TOKEN,
-          basePath: import.meta.env.VITE_OPENAI_PROXY_URL
-        }
+        openai: options.openai
       };
     },
 
