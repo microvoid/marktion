@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { GitHubLogoIcon, SunIcon, MoonIcon } from '@radix-ui/react-icons';
 import { FloatButton, Segmented, Tooltip } from 'antd';
 import { MarktionRef, MarktionProps, Marktion } from 'marktion';
 import { useTheme } from 'next-themes';
+import { getPlugins } from './plugins';
 
 const INIT_MARKDOWN = [
   '\n# Marktion\n\n一个简单的 Markdown 编辑器，他支持以下功能：',
@@ -16,6 +17,7 @@ export function Home() {
   const [lang, setLang] = useState(0);
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const { theme, setTheme } = useTheme();
+  const plugins = useMemo(() => getPlugins(), []);
   const isDarkMode = theme === 'dark';
 
   const onUploadImage = useCallback<NonNullable<MarktionProps['onUploadImage']>>(file => {
@@ -93,6 +95,7 @@ export function Home() {
             ref={marktionRef}
             darkMode={isDarkMode}
             markdown={INIT_MARKDOWN[lang]}
+            plugins={plugins}
             onUploadImage={onUploadImage}
           >
             <FloatButton tooltip="Export markdwon file" onClick={onExport} />

@@ -4,7 +4,6 @@ import { GitHubLogoIcon, SunIcon, MoonIcon } from '@radix-ui/react-icons';
 import { FloatButton, Segmented, Tooltip } from 'antd';
 import {
   EditorBubbleMenuPlugin,
-  AIPlugin,
   SlashMenuPlugin,
   Marktion,
   MarktionProps,
