@@ -3,14 +3,14 @@
 @tailwind utilities;
 
 .marktion {
-  @apply rounded-md relative shadow-lg border px-6 py-12 sm:py-24;
+  @apply rounded-md relative shadow-lg border px-6 pt-[48px];
 }
 
 .ProseMirror {
   --marktion-black: rgb(0 0 0);
   --marktion-white: rgb(255 255 255);
   
-  @apply prose relative dark:prose-invert max-w-none outline-none;
+  @apply prose relative dark:prose-invert max-w-none outline-none pb-12 first:mt-[20px];
 }
 
 .dark .ProseMirror {
