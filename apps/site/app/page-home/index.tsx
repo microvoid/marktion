@@ -2,19 +2,13 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { GitHubLogoIcon, SunIcon, MoonIcon } from '@radix-ui/react-icons';
-import { FloatButton, Segmented, Tooltip } from 'antd';
+import { FloatButton, Tooltip } from 'antd';
 import { MarktionRef, MarktionProps, Marktion } from 'marktion';
 import { useTheme } from 'next-themes';
 import { getPlugins } from './plugins';
 
-const INIT_MARKDOWN = [
-  '\n# Marktion\n\n一个简单的 Markdown 编辑器，他支持以下功能：',
-  '\n# Marktion\n\nA simple markdown editor'
-];
-
 export function Home() {
   const marktionRef = useRef<MarktionRef>(null);
-  const [lang, setLang] = useState(0);
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const plugins = useMemo(() => getPlugins(), []);
@@ -67,34 +61,11 @@ export function Home() {
         </div>
       </header>
       <div className="max-w-screen-lg w-full flex-1">
-        <div className="container flex justify-center">
-          <Segmented
-            options={[
-              {
-                label: '中文',
-                value: 0
-              },
-              {
-                label: 'English',
-                value: 1
-              }
-            ]}
-            value={lang}
-            onChange={value => {
-              const index = Number(value);
-
-              // @ts-ignore
-              marktionRef.current?.editor.commands.setMarkdwon(INIT_MARKDOWN[index]);
-              setLang(index);
-            }}
-          />
-        </div>
-
         <div className="mt-[50px] pb-[100px]">
           <Marktion
             ref={marktionRef}
             darkMode={isDarkMode}
-            markdown={INIT_MARKDOWN[lang]}
+            markdown={'\n# Marktion\n\nA simple markdown editor'}
             plugins={plugins}
             onUploadImage={onUploadImage}
           >
