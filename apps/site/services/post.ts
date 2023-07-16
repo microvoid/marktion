@@ -2,9 +2,25 @@ import { nanoid } from 'nanoid';
 import { Post } from '@prisma/client';
 import { prisma } from '@/libs';
 import { ErrorUtils } from '@/utils';
+import { UserFirstMarkdown } from '@/constants-server';
 
-export async function upsert(post: Post, userId: string) {
+export async function initUserFirstPost(userId: string) {
+  return upsert(
+    {
+      markdown: UserFirstMarkdown,
+      title: 'Hello World',
+      publicStats: 'private'
+    },
+    userId
+  );
+}
+
+export async function upsert(post: Partial<Post>, userId: string) {
   const { markdown, slug = nanoid(5), id, title, publicStats } = post;
+
+  if (!markdown) {
+    return new Error('markdown is required');
+  }
 
   if (id) {
     const post = await prisma.post.update({

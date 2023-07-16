@@ -20,7 +20,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en">
       <body className={`${inter.className} bg-white dark:bg-black`}>
-        <Provider guestId={user!.id}>{children}</Provider>
+        <Provider user={user}>{children}</Provider>
       </body>
     </html>
   );

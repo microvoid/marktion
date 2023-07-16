@@ -2,19 +2,26 @@
 
 import React, { useCallback, useMemo, useRef } from 'react';
 import { MarktionRef, MarktionProps, Marktion } from 'marktion';
+import { RocketIcon, DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { useTheme } from 'next-themes';
 import { Post } from '@prisma/client';
 import { OpenInNewWindowIcon } from '@radix-ui/react-icons';
-import { Button, FloatButton } from 'antd';
-import { debounce } from 'lodash';
+import { Button, Dropdown, FloatButton } from 'antd';
+import { debounce, set } from 'lodash';
 import fetch from 'axios';
 import { getPlugins } from './plugins';
+import { PostHandler } from '../handler';
+import { HandlerKey } from '../handler/post';
 
 export type EditorProps = {
-  defaultPost: Post | null;
+  defaultPost?: Post;
+
+  mode?: 'create' | 'preview';
+
+  onResetEditor?: () => void;
 };
 
-export function Editor({ defaultPost }: EditorProps) {
+export function Editor({ defaultPost, mode = 'preview', onResetEditor }: EditorProps) {
   const marktionRef = useRef<MarktionRef>(null);
   const { theme } = useTheme();
   const plugins = useMemo(() => getPlugins(), []);
@@ -35,12 +42,15 @@ export function Editor({ defaultPost }: EditorProps) {
   }, []);
 
   const onExport = () => {
-    const content = marktionRef.current?.getMarkdown();
+    PostHandler.handle('download', post!);
+  };
 
-    if (content) {
-      const filename = getMarktionTitle(content) || 'marktion';
-      downloadFile(`${filename}.md`, content);
-    }
+  const onReset = () => {
+    marktionRef.current?.editor.commands.clearContent();
+    setPost(undefined);
+    setIsSaving(false);
+
+    onResetEditor?.();
   };
 
   const onUpdateOrCreatePost = useMemo(
@@ -83,49 +93,71 @@ export function Editor({ defaultPost }: EditorProps) {
       {postId && (
         <>
           <OpenInNewWindowIcon className="inline mr-1" />
-          Link
+          Link({post?.slug})
         </>
       )}
     </Button>
   );
 
+  const createModeActionMenu = () => {
+    return (
+      <Button onClick={onReset} type="text" icon={<RocketIcon className="inline-block" />}></Button>
+    );
+  };
+
+  const previewModeActionMenu = () => {
+    const items = [
+      {
+        key: 'download',
+        label: `Export ${post?.title}.md file`
+      },
+
+      {
+        key: 'delete',
+        danger: true,
+        label: 'Delete'
+      }
+    ];
+
+    return (
+      <Dropdown
+        menu={{
+          items,
+          onClick: async ({ key }) => {
+            await PostHandler.handle(key as HandlerKey, post!);
+
+            if (['delete'].includes(key)) {
+              onResetEditor?.();
+            }
+          }
+        }}
+      >
+        <Button type="text" icon={<DotsHorizontalIcon className="inline-block" />}></Button>
+      </Dropdown>
+    );
+  };
+
   return (
-    <>
-      <div className="max-w-screen-md w-full">
-        <div className="mt-[50px] pb-[100px]">
-          <Marktion
-            ref={marktionRef}
-            darkMode={isDarkMode}
-            markdown={'\n# Marktion\n\nA simple markdown editor'}
-            plugins={plugins}
-            onUploadImage={onUploadImage}
-            toolbarProps={{
-              addonLeft: toolbarAddonLeft
-            }}
-            onTransaction={({ transaction }) => {
-              if (transaction.docChanged) {
-                const markdown = marktionRef.current?.getMarkdown()!;
-                const title = getMarktionTitle(markdown);
+    <Marktion
+      ref={marktionRef}
+      darkMode={isDarkMode}
+      plugins={plugins}
+      markdown={post?.markdown || ''}
+      onUploadImage={onUploadImage}
+      toolbarProps={{
+        addonLeft: toolbarAddonLeft,
+        addonRight: mode === 'create' ? createModeActionMenu() : previewModeActionMenu()
+      }}
+      onTransaction={({ transaction }) => {
+        if (transaction.docChanged) {
+          const markdown = marktionRef.current?.getMarkdown()!;
+          const title = getMarktionTitle(markdown);
 
-                onUpdateOrCreatePost(markdown, title);
-              }
-            }}
-          >
-            <FloatButton tooltip="Export markdwon file" onClick={onExport} />
-          </Marktion>
-        </div>
-      </div>
-    </>
+          onUpdateOrCreatePost(markdown, title);
+        }
+      }}
+    />
   );
-}
-
-async function downloadFile(filename: string, content: string) {
-  const FileSaver = (await import('file-saver')).default;
-  const blob = new Blob([content], {
-    type: 'text/plain;charset=utf-8'
-  });
-
-  return FileSaver.saveAs(blob, filename);
 }
 
 function getMarktionTitle(markdown: string) {
