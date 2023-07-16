@@ -1,15 +1,15 @@
 import React, { useMemo, useImperativeHandle } from 'react';
 import { ConfigProvider, theme } from 'antd';
 import { StyleProvider } from '@ant-design/cssinjs';
-import { EditorContent, EditorOptions, useEditor, Editor } from '@tiptap/react';
+import { EditorContent, EditorOptions, useEditor, Editor, mergeAttributes } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 
 import TiptapImage from '@tiptap/extension-image';
+import TiptapTaskItem from '@tiptap/extension-task-item';
+import TiptapTaskList from '@tiptap/extension-task-list';
 import Link from '@tiptap/extension-link';
 import Highlight from '@tiptap/extension-highlight';
 import Typography from '@tiptap/extension-typography';
-import TaskItem from '@tiptap/extension-task-item';
-import TaskList from '@tiptap/extension-task-list';
 import Table from '@tiptap/extension-table';
 import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
@@ -23,6 +23,49 @@ import { RootElContext } from './hooks';
 import { Toolbar, ToolbarProps } from './toolbar';
 
 import './marktion.css';
+
+const TaskList = TiptapTaskList.extend({
+  parseHTML() {
+    return [
+      {
+        tag: `ul[data-type="${this.name}"]`,
+        priority: 51
+      },
+      {
+        tag: 'ul.contains-task-list',
+        priority: 51
+      }
+    ];
+  }
+});
+
+const TaskItem = TiptapTaskItem.extend({
+  addAttributes() {
+    return {
+      checked: {
+        default: false,
+        parseHTML: element =>
+          element.querySelector('input[type="checkbox"]')?.hasAttribute('checked'),
+        renderHTML: attributes => ({
+          'data-checked': attributes.checked
+        })
+      }
+    };
+  },
+
+  parseHTML() {
+    return [
+      {
+        tag: `li[data-type="${this.name}"]`,
+        priority: 51
+      },
+      {
+        tag: `li.task-list-item`,
+        priority: 51
+      }
+    ];
+  }
+});
 
 export type MarktionProps = React.PropsWithChildren<
   Partial<EditorOptions> & {
@@ -76,12 +119,12 @@ export const Marktion = React.forwardRef<MarktionRef, MarktionProps>((props, ref
       Typography,
       TaskList.configure({
         HTMLAttributes: {
-          class: 'not-prose pl-2'
+          class: 'contains-task-list not-prose pl-2'
         }
       }),
       TaskItem.configure({
         HTMLAttributes: {
-          class: 'flex items-start my-4'
+          class: 'task-list-item flex items-start my-4'
         },
         nested: true
       }),

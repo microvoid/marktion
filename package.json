@@ -62,7 +62,8 @@
     "remark-parse": "^10.0.2",
     "remark-rehype": "^10.1.0",
     "remark-stringify": "^10.0.3",
-    "unified": "^10.1.2"
+    "unified": "^10.1.2",
+    "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.9",

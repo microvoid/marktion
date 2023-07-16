@@ -47,6 +47,9 @@ function App() {
   };
 
   useEffect(() => {
+    // @ts-ignore
+    window['marktion'] = marktionRef;
+
     setTimeout(() => {
       setTooltipOpen(true);
     }, 2000);
@@ -154,6 +157,9 @@ function getThemeFromSystem() {
 }
 
 async function downloadFile(filename: string, content: string) {
+  console.log(content);
+  return;
+
   const FileSaver = (await import('file-saver')).default;
   const blob = new Blob([content], {
     type: 'text/plain;charset=utf-8'
