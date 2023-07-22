@@ -1,5 +1,5 @@
 import { PostService } from '@/services';
-import { MarktionSSR } from './marktion-ssr';
+import { MarktionSSR } from 'marktion/dist/marktion-ssr';
 
 export default async function PostDetail({ params: { slug } }: { params: { slug: string } }) {
   const post = await PostService.getPostBySlugId(slug);

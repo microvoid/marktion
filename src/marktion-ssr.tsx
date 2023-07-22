@@ -1,4 +1,4 @@
-import { parse } from 'marktion/dist/plugin-markdown/encoding';
+import { parse } from './plugin-markdown/encoding';
 
 export function MarktionSSR({ markdown }: { markdown: string }) {
   return (
