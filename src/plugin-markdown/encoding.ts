@@ -6,12 +6,11 @@ import remarkRehype from 'remark-rehype';
 import remarkStringify from 'remark-stringify';
 import rehypeParse from 'rehype-parse';
 import rehypeStringify from 'rehype-stringify';
+import rehypeHighlight from 'rehype-highlight';
 import { visit } from 'unist-util-visit';
 
-export function parse(markdown: string) {
-  const html = markdownToHtml(markdown);
-
-  console.log(html);
+export function parse(markdown: string, options: MarkdownToHtmlOptions = {}) {
+  const html = markdownToHtml(markdown, options);
 
   return html;
 }
@@ -22,13 +21,21 @@ export function serialize(html: string) {
   return markdown;
 }
 
-export function markdownToHtml(markdown: string) {
-  const file = unified()
-    .use(remarkParse)
-    .use(remarkGfm)
-    .use(remarkRehype)
-    .use(rehypeStringify)
-    .processSync(markdown);
+type MarkdownToHtmlOptions = {
+  codeHighlight?: boolean;
+};
+
+export function markdownToHtml(
+  markdown: string,
+  { codeHighlight = false }: MarkdownToHtmlOptions = {}
+) {
+  const u = unified().use(remarkParse).use(remarkGfm).use(remarkRehype);
+
+  if (codeHighlight) {
+    u.use(rehypeHighlight);
+  }
+
+  const file = u.use(rehypeStringify).processSync(markdown);
 
   return String(file);
 }

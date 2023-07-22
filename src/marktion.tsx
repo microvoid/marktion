@@ -117,12 +117,12 @@ export const Marktion = React.forwardRef<MarktionRef, MarktionProps>((props, ref
       Typography,
       TaskList.configure({
         HTMLAttributes: {
-          class: 'contains-task-list not-prose pl-2'
+          class: 'contains-task-list not-prose'
         }
       }),
       TaskItem.configure({
         HTMLAttributes: {
-          class: 'task-list-item flex items-start my-4'
+          class: 'task-list-item'
         },
         nested: true
       }),

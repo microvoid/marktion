@@ -5,11 +5,13 @@ export default async function PostDetail({ params: { slug } }: { params: { slug:
   const post = await PostService.getPostBySlugId(slug);
 
   return (
-    <div className="max-w-screen-lg w-full mt-10">
-      {/* <div className="mt-[50px] pb-[100px]"> */}
-      <div className="mb-6">
-        <MarktionSSR markdown={post?.markdown!} />
+    <main className="flex min-h-screen flex-col items-center">
+      <div className="max-w-screen-lg w-full mt-10">
+        {/* <div className="mt-[50px] pb-[100px]"> */}
+        <div className="mb-6">
+          <MarktionSSR markdown={post?.markdown!} />
+        </div>
       </div>
-    </div>
+    </main>
   );
 }

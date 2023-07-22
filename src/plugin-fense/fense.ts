@@ -17,8 +17,6 @@ import php from 'highlight.js/lib/languages/php';
 import go from 'highlight.js/lib/languages/go';
 import cpp from 'highlight.js/lib/languages/cpp';
 
-import 'highlight.js/styles/base16/onedark.css';
-
 import { LanguageSelector } from './language-selector';
 
 lowlight.registerLanguage('html', html);
