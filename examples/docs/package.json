@@ -13,7 +13,8 @@
     "antd": "^5.7.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "tailwindcss": "^3.3.3"
+    "tailwindcss": "^3.3.3",
+    "usehooks-ts": "^2.9.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",
@@ -24,6 +25,8 @@
     "eslint": "^8.45.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
+    "file-saver": "^2.0.5",
+    "gh-pages": "^5.0.0",
     "typescript": "^5.0.2",
     "vite": "^4.4.5"
   }
