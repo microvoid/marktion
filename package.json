@@ -10,7 +10,7 @@
   "contributors": [],
   "scripts": {
     "build": "tsc && pnpm run build:css",
-    "build:css": "tailwindcss -o ./dist/style.css",
+    "build:css": "tailwindcss -i ./style/index.css -o ./dist/style.css",
     "site": "tsc && vite build -c ./vite.config.site.ts",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "format": "pnpm run format:source && pnpm run format:other",
