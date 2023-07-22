@@ -1,7 +1,7 @@
 import React, { useMemo, useImperativeHandle } from 'react';
 import { ConfigProvider, theme } from 'antd';
 import { StyleProvider } from '@ant-design/cssinjs';
-import { EditorContent, EditorOptions, useEditor, Editor, mergeAttributes } from '@tiptap/react';
+import { EditorContent, EditorOptions, useEditor, Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 
 import TiptapImage from '@tiptap/extension-image';
@@ -21,8 +21,6 @@ import { UploadImageHandler } from './handler';
 import { FenseExtension } from './plugin-fense';
 import { RootElContext } from './hooks';
 import { Toolbar, ToolbarProps } from './toolbar';
-
-import './marktion.css';
 
 const TaskList = TiptapTaskList.extend({
   parseHTML() {

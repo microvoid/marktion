@@ -37,7 +37,7 @@ export function htmlToMarkdown(html: string) {
   const file = unified()
     .use(rehypeParse, { fragment: true })
     .use(() => (mdast: Root) => {
-      visit(mdast, 'element', function (node, index, parent) {
+      visit(mdast, 'element', function (node, _, parent) {
         if (parent['tagName'] === 'li' && parent['properties']?.['dataType'] === 'taskItem') {
           if (node['tagName'] === 'label') {
             // @ts-ignore

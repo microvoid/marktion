@@ -8,7 +8,10 @@ import {
   Marktion,
   MarktionProps,
   MarktionRef
-} from './src';
+} from '../../..';
+
+import '../../../dist/style.css';
+import './main.css';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>

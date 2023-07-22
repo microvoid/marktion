@@ -9,8 +9,8 @@
   "author": "whistleryz@gmail.com",
   "contributors": [],
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && pnpm run build:css",
+    "build:css": "tailwindcss -o ./dist/style.css",
     "site": "tsc && vite build -c ./vite.config.site.ts",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "format": "pnpm run format:source && pnpm run format:other",
@@ -18,8 +18,7 @@
     "format:source": "prettier ./**/*.{ts,tsx,js} --write"
   },
   "type": "module",
-  "main": "./dist/marktion.umd.js",
-  "module": "./dist/marktion.js",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
     "dist/"
