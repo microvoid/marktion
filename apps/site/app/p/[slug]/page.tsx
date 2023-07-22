@@ -1,7 +1,15 @@
 import { PostService } from '@/services';
-import { parse, serialize } from 'marktion';
+import { MarktionSSR } from './marktion-ssr';
 
 export default async function PostDetail({ params: { slug } }: { params: { slug: string } }) {
   const post = await PostService.getPostBySlugId(slug);
-  return <div dangerouslySetInnerHTML={{ __html: parse(post?.markdown || '') }}></div>;
+
+  return (
+    <div className="max-w-screen-lg w-full mt-10">
+      {/* <div className="mt-[50px] pb-[100px]"> */}
+      <div className="mb-6">
+        <MarktionSSR markdown={post?.markdown!} />
+      </div>
+    </div>
+  );
 }
