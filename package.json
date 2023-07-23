@@ -57,6 +57,7 @@
     "react-dom": "^18.2.0",
     "rehype-highlight": "^6.0.0",
     "rehype-parse": "^8.0.4",
+    "rehype-preset-minify": "^6.0.0",
     "rehype-remark": "^9.1.2",
     "rehype-stringify": "^9.0.3",
     "remark-gfm": "^3.0.1",
