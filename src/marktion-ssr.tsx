@@ -7,7 +7,7 @@ export function MarktionSSR({ markdown }: { markdown: string }) {
         <div
           className="ProseMirror"
           dangerouslySetInnerHTML={{ __html: parse(markdown, { codeHighlight: true }) }}
-        ></div>
+        />
       </div>
     </div>
   );

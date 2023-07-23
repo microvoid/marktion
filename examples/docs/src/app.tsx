@@ -1,24 +1,30 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { GitHubLogoIcon, SunIcon, MoonIcon } from '@radix-ui/react-icons';
-import { FloatButton, Segmented, Tooltip } from 'antd';
+import { FloatButton, Segmented } from 'antd';
 import { useDarkMode } from 'usehooks-ts';
 import {
   EditorBubbleMenuPlugin,
   SlashMenuPlugin,
   Marktion,
+  MarktionSSR,
   MarktionProps,
   MarktionRef
 } from '../../..';
+import { Header } from './header';
 
 const INIT_MARKDOWN = [import.meta.env.VITE_README_ZH, import.meta.env.VITE_README_EN];
 
 export function App() {
   const marktionRef = useRef<MarktionRef>(null);
-  const { isDarkMode, toggle } = useDarkMode();
+  const { isDarkMode } = useDarkMode();
   const [lang, setLang] = useState(0);
-  const [tooltipOpen, setTooltipOpen] = useState(false);
+  const [ssr, setSSR] = useState(0);
   const plugins = useMemo(() => {
     return [EditorBubbleMenuPlugin(), SlashMenuPlugin()];
+  }, []);
+
+  useEffect(() => {
+    // @ts-ignore
+    window['marktion'] = marktionRef;
   }, []);
 
   const onUploadImage = useCallback<NonNullable<MarktionProps['onUploadImage']>>(file => {
@@ -40,39 +46,14 @@ export function App() {
     }
   };
 
-  useEffect(() => {
-    // @ts-ignore
-    window['marktion'] = marktionRef;
-
-    setTimeout(() => {
-      setTooltipOpen(true);
-    }, 2000);
-  }, []);
-
   return (
     <>
-      <header className="container w-full dark:text-gray-100">
-        <div className="flex justify-between items-center h-16">
-          <Tooltip open={tooltipOpen} title="Star on Github" placement="right" color="purple">
-            <a
-              href="https://github.com/microvoid/marktion"
-              className="rounded-lg cursor-pointer p-2 transition-colors duration-200 hover:bg-stone-100 hover:dark:text-black sm:bottom-auto sm:top-5"
-            >
-              <GitHubLogoIcon />
-            </a>
-          </Tooltip>
+      <Header />
 
-          <div
-            onClick={toggle}
-            className="rounded-lg cursor-pointer p-2 transition-colors duration-200 hover:bg- hover:text-base sm:bottom-auto sm:top-5"
-          >
-            {isDarkMode ? <MoonIcon /> : <SunIcon />}
-          </div>
-        </div>
-      </header>
       <div className="container max-w-screen-md">
         <div className="flex justify-center">
           <Segmented
+            className="mr-4"
             options={[
               {
                 label: '中文',
@@ -92,17 +73,38 @@ export function App() {
               setLang(index);
             }}
           />
+
+          <Segmented
+            options={[
+              {
+                label: 'CSR',
+                value: 0
+              },
+              {
+                label: 'SSR',
+                value: 1
+              }
+            ]}
+            value={ssr}
+            onChange={value => {
+              setSSR(Number(value));
+            }}
+          />
         </div>
 
-        <Marktion
-          ref={marktionRef}
-          darkMode={isDarkMode}
-          markdown={INIT_MARKDOWN[lang]}
-          onUploadImage={onUploadImage}
-          plugins={plugins}
-        >
-          <FloatButton tooltip="Export markdwon file" onClick={onExport} />
-        </Marktion>
+        {ssr === 0 && (
+          <Marktion
+            ref={marktionRef}
+            darkMode={isDarkMode}
+            markdown={INIT_MARKDOWN[lang]}
+            onUploadImage={onUploadImage}
+            plugins={plugins}
+          >
+            <FloatButton tooltip="Export markdwon file" onClick={onExport} />
+          </Marktion>
+        )}
+
+        {ssr === 1 && <MarktionSSR markdown={INIT_MARKDOWN[lang]} />}
       </div>
     </>
   );

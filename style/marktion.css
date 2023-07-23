@@ -6,11 +6,11 @@
   @apply rounded-md relative shadow-lg border pt-[48px];
 }
 
-.ProseMirror {
+.marktion .ProseMirror {
   --marktion-black: rgb(0 0 0);
   --marktion-white: rgb(255 255 255);
   
-  @apply prose relative dark:prose-invert px-6 max-w-none outline-none pb-12 first:mt-[20px];
+  @apply prose relative dark:prose-invert px-6 max-w-none outline-none pb-12 first:mt-[20px] whitespace-normal;
 }
 
 .dark .ProseMirror {
