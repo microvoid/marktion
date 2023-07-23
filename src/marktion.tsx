@@ -14,6 +14,7 @@ import Table from '@tiptap/extension-table';
 import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
 import TableRow from '@tiptap/extension-table-row';
+import Placeholder from '@tiptap/extension-placeholder';
 
 import { Plugin, PluginType } from './plugins';
 import { MarkdownExtension, parse, serialize } from './plugin-markdown';
@@ -101,6 +102,15 @@ export const defaultTiptapExtensions = [
       class: 'task-list-item'
     },
     nested: true
+  }),
+  Placeholder.configure({
+    placeholder: ({ node }) => {
+      if (node.type.name === 'heading') {
+        return `Heading ${node.attrs.level}`;
+      }
+      return "Press '/' for commands, '++' for AI autocomplete, '??' for AI question...";
+    },
+    includeChildren: true
   }),
   Image,
   Link,

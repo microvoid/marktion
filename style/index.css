@@ -1,2 +1,4 @@
 @import 'highlight.js/styles/base16/onedark.css';
+@import '@radix-ui/colors/gray.css';
+@import '@radix-ui/colors/gray-dark.css';
 @import './marktion.css'
