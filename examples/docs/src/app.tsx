@@ -87,6 +87,7 @@ export function App() {
             onChange={value => {
               const index = Number(value);
 
+              // @ts-ignore
               marktionRef.current?.editor.commands.setMarkdwon(INIT_MARKDOWN[index]);
               setLang(index);
             }}
