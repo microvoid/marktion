@@ -86,6 +86,31 @@ const Image = TiptapImage.configure({
   allowBase64: true
 });
 
+export const defaultTiptapExtensions = [
+  MarkdownExtension,
+  StarterKit,
+  Highlight,
+  Typography,
+  TaskList.configure({
+    HTMLAttributes: {
+      class: 'contains-task-list not-prose'
+    }
+  }),
+  TaskItem.configure({
+    HTMLAttributes: {
+      class: 'task-list-item'
+    },
+    nested: true
+  }),
+  Image,
+  Link,
+  Table,
+  TableHeader,
+  TableRow,
+  TableCell,
+  FenseExtension
+];
+
 export const Marktion = React.forwardRef<MarktionRef, MarktionProps>((props, ref) => {
   const rootElRef = React.useRef<HTMLDivElement | null>(null);
   const {
@@ -96,6 +121,7 @@ export const Marktion = React.forwardRef<MarktionRef, MarktionProps>((props, ref
     markdown,
     children,
     toolbarProps,
+    extensions = defaultTiptapExtensions,
     ...editorProps
   } = props;
 
@@ -105,36 +131,12 @@ export const Marktion = React.forwardRef<MarktionRef, MarktionProps>((props, ref
     return plugins.filter(plugin => plugin.type === PluginType.intergrate);
   }, []);
 
-  const intergratePlugins = intergrates
+  const intergrateExtensions = intergrates
     .filter(item => Boolean(item.extension))
     .map(item => item.extension!);
 
   const editor = useEditor({
-    extensions: [
-      MarkdownExtension,
-      StarterKit,
-      Highlight,
-      Typography,
-      TaskList.configure({
-        HTMLAttributes: {
-          class: 'contains-task-list not-prose'
-        }
-      }),
-      TaskItem.configure({
-        HTMLAttributes: {
-          class: 'task-list-item'
-        },
-        nested: true
-      }),
-      Image,
-      Link,
-      Table,
-      TableHeader,
-      TableRow,
-      TableCell,
-      FenseExtension,
-      ...intergratePlugins
-    ],
+    extensions: [...extensions, ...intergrateExtensions],
     content,
     ...editorProps
   });
