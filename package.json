@@ -9,6 +9,9 @@
   "author": "whistleryz@gmail.com",
   "contributors": [],
   "scripts": {
+    "dev": "run-p dev:ts dev:css",
+    "dev:ts": "tsc -w",
+    "dev:css": "tailwindcss -i ./style/index.css -o ./dist/style.css -w",
     "build": "tsc && pnpm run build:css",
     "build:css": "tailwindcss -i ./style/index.css -o ./dist/style.css",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
@@ -77,6 +80,7 @@
     "eslint": "^8.38.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.3.4",
+    "npm-run-all": "^4.1.5",
     "postcss": "8.4.24",
     "postcss-import": "^15.1.0",
     "prettier": "^3.0.0",
