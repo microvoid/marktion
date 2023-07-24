@@ -40,16 +40,24 @@ export function markdownToHtml(
 
           if (classes && classes.includes('task-list-item')) {
             // @ts-ignore
-            const input = node.children[0];
+            const [input, ...rest] = node.children;
             const label = {
               children: [input],
               properties: {},
               tagName: 'label',
               type: 'element'
             };
+            const div = {
+              children: [...rest],
+              properties: {},
+              tagName: 'div',
+              type: 'element'
+            };
 
             // @ts-ignore
-            node.children[0] = label;
+            node.children = [label, div];
+            // @ts-ignore
+            node['properties']['data-checked'] = input['properties']['checked'];
           }
         }
       });

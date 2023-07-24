@@ -22,6 +22,7 @@ module.exports = {
         DEFAULT: {
           css: {
             p: {
+              margin: 0,
               '&:first-of-type::before': {
                 content: 'none'
               },

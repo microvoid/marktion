@@ -18,6 +18,7 @@ export function App() {
   const { isDarkMode } = useDarkMode();
   const [lang, setLang] = useState(0);
   const [ssr, setSSR] = useState(0);
+  const [ssrContent, setSSRContent] = useState(INIT_MARKDOWN[lang]);
   const plugins = useMemo(() => {
     return [EditorBubbleMenuPlugin(), SlashMenuPlugin()];
   }, []);
@@ -87,6 +88,9 @@ export function App() {
             ]}
             value={ssr}
             onChange={value => {
+              const content = marktionRef.current?.getMarkdown();
+
+              setSSRContent(content);
               setSSR(Number(value));
             }}
           />
@@ -104,7 +108,7 @@ export function App() {
           </Marktion>
         )}
 
-        {ssr === 1 && <MarktionSSR markdown={INIT_MARKDOWN[lang]} />}
+        {ssr === 1 && <MarktionSSR markdown={ssrContent} />}
       </div>
     </>
   );
