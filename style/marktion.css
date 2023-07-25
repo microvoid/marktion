@@ -1,0 +1,137 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.marktion {
+  @apply rounded-md relative shadow-lg border pt-[48px];
+}
+
+.marktion .ProseMirror {
+  --marktion-black: rgb(0 0 0);
+  --marktion-white: rgb(255 255 255);
+
+  --gray-1: hsl(0, 0%, 99.0%);
+  --gray-2: hsl(0, 0%, 97.3%);
+  --gray-3: hsl(0, 0%, 95.1%);
+  --gray-4: hsl(0, 0%, 93.0%);
+  --gray-5: hsl(0, 0%, 90.9%);
+  --gray-6: hsl(0, 0%, 88.7%);
+  --gray-7: hsl(0, 0%, 85.8%);
+  --gray-8: hsl(0, 0%, 78.0%);
+  --gray-9: hsl(0, 0%, 56.1%);
+  --gray-10: hsl(0, 0%, 52.3%);
+  --gray-11: hsl(0, 0%, 43.5%);
+  --gray-12: hsl(0, 0%, 9.0%);
+  
+  @apply prose relative dark:prose-invert px-6 max-w-none outline-none pb-12 first:mt-[20px] whitespace-normal;
+
+  & > p {
+    @apply my-5;
+  }
+}
+
+.dark .ProseMirror {
+  --marktion-black: rgb(255 255 255);
+  --marktion-white: rgb(25 25 25);
+
+  --gray-1: hsl(0, 0%, 8.5%);
+  --gray-2: hsl(0, 0%, 11.0%);
+  --gray-3: hsl(0, 0%, 13.6%);
+  --gray-4: hsl(0, 0%, 15.8%);
+  --gray-5: hsl(0, 0%, 17.9%);
+  --gray-6: hsl(0, 0%, 20.5%);
+  --gray-7: hsl(0, 0%, 24.3%);
+  --gray-8: hsl(0, 0%, 31.2%);
+  --gray-9: hsl(0, 0%, 43.9%);
+  --gray-10: hsl(0, 0%, 49.4%);
+  --gray-11: hsl(0, 0%, 62.8%);
+  --gray-12: hsl(0, 0%, 93.0%);
+}
+
+
+.ProseMirror .is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: var(--gray-8);
+  pointer-events: none;
+  height: 0;
+}
+.ProseMirror .is-empty::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: var(--gray-8);
+  pointer-events: none;
+  height: 0;
+}
+
+/* Custom TODO list checkboxes – shoutout to this awesome tutorial: https://github.com/steven-tey/novel/blob/main/styles/prosemirror.css */
+.ProseMirror ul.contains-task-list {
+  padding-left: 0;
+
+  > .task-list-item {
+    @apply flex items-start my-4 pl-0;
+  }
+}
+
+.ProseMirror ul.contains-task-list .task-list-item > label {
+  margin-right: 0.2rem;
+  user-select: none;
+}
+
+@media screen and (max-width: 768px) {
+  .ProseMirror ul.contains-task-list .task-list-item > label {
+    margin-right: 0.5rem;
+  }
+}
+
+.ProseMirror ul.contains-task-list .task-list-item > label input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: var(--marktion-white);
+  margin: 0;
+  cursor: pointer;
+  width: 1.2em;
+  height: 1.2em;
+  position: relative;
+  top: 5px;
+  border: 2px solid var(--marktion-black);
+  margin-right: 0.3rem;
+  display: grid;
+  place-content: center;
+
+  &::before {
+    content: "";
+    width: 0.65em;
+    height: 0.65em;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em;
+    transform-origin: center;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  }
+
+  &:checked::before {
+    transform: scale(1);
+  }
+}
+
+.ProseMirror ul.contains-task-list .task-list-item[data-checked] > div {
+  color: var(--marktion-black);
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+}
+
+.ProseMirror ul.contains-task-list .task-list-item[data-checked="false"] > div {
+  color: inherit;
+  text-decoration: none;
+}
+
+.ProseMirror .code-block {
+  position: relative;
+}
+
+.ProseMirror .code-block .code-block-lang-select {
+  position: absolute;
+  top: -32px;
+  right: 0;
+}

@@ -6,12 +6,11 @@ import remarkRehype from 'remark-rehype';
 import remarkStringify from 'remark-stringify';
 import rehypeParse from 'rehype-parse';
 import rehypeStringify from 'rehype-stringify';
+import rehypeHighlight from 'rehype-highlight';
 import { visit } from 'unist-util-visit';
 
-export function parse(markdown: string) {
-  const html = markdownToHtml(markdown);
-
-  console.log(html);
+export function parse(markdown: string, options: MarkdownToHtmlOptions = {}) {
+  const html = markdownToHtml(markdown, options);
 
   return html;
 }
@@ -22,13 +21,53 @@ export function serialize(html: string) {
   return markdown;
 }
 
-export function markdownToHtml(markdown: string) {
-  const file = unified()
+type MarkdownToHtmlOptions = {
+  codeHighlight?: boolean;
+};
+
+export function markdownToHtml(
+  markdown: string,
+  { codeHighlight = false }: MarkdownToHtmlOptions = {}
+) {
+  const u = unified()
     .use(remarkParse)
     .use(remarkGfm)
     .use(remarkRehype)
-    .use(rehypeStringify)
-    .processSync(markdown);
+    .use(() => (mdast: Root) => {
+      visit(mdast, 'element', function (node, _) {
+        if (node['tagName'] === 'li') {
+          const classes = node['properties']['className'] as string[];
+
+          if (classes && classes.includes('task-list-item')) {
+            // @ts-ignore
+            const [input, ...rest] = node.children;
+            const label = {
+              children: [input],
+              properties: {},
+              tagName: 'label',
+              type: 'element'
+            };
+            const div = {
+              children: [...rest],
+              properties: {},
+              tagName: 'div',
+              type: 'element'
+            };
+
+            // @ts-ignore
+            node.children = [label, div];
+            // @ts-ignore
+            node['properties']['data-checked'] = input['properties']['checked'];
+          }
+        }
+      });
+    });
+
+  if (codeHighlight) {
+    u.use(rehypeHighlight);
+  }
+
+  const file = u.use(rehypeStringify).processSync(markdown);
 
   return String(file);
 }
@@ -37,7 +76,7 @@ export function htmlToMarkdown(html: string) {
   const file = unified()
     .use(rehypeParse, { fragment: true })
     .use(() => (mdast: Root) => {
-      visit(mdast, 'element', function (node, index, parent) {
+      visit(mdast, 'element', function (node, _, parent) {
         if (parent['tagName'] === 'li' && parent['properties']?.['dataType'] === 'taskItem') {
           if (node['tagName'] === 'label') {
             // @ts-ignore

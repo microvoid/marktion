@@ -1,7 +1,7 @@
 import React, { useMemo, useImperativeHandle } from 'react';
 import { ConfigProvider, theme } from 'antd';
 import { StyleProvider } from '@ant-design/cssinjs';
-import { EditorContent, EditorOptions, useEditor, Editor, mergeAttributes } from '@tiptap/react';
+import { EditorContent, EditorOptions, useEditor, Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 
 import TiptapImage from '@tiptap/extension-image';
@@ -14,6 +14,7 @@ import Table from '@tiptap/extension-table';
 import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
 import TableRow from '@tiptap/extension-table-row';
+import Placeholder from '@tiptap/extension-placeholder';
 
 import { Plugin, PluginType } from './plugins';
 import { MarkdownExtension, parse, serialize } from './plugin-markdown';
@@ -21,8 +22,6 @@ import { UploadImageHandler } from './handler';
 import { FenseExtension } from './plugin-fense';
 import { RootElContext } from './hooks';
 import { Toolbar, ToolbarProps } from './toolbar';
-
-import './marktion.css';
 
 const TaskList = TiptapTaskList.extend({
   parseHTML() {
@@ -88,6 +87,40 @@ const Image = TiptapImage.configure({
   allowBase64: true
 });
 
+export const defaultTiptapExtensions = [
+  MarkdownExtension,
+  StarterKit,
+  Highlight,
+  Typography,
+  TaskList.configure({
+    HTMLAttributes: {
+      class: 'contains-task-list not-prose'
+    }
+  }),
+  TaskItem.configure({
+    HTMLAttributes: {
+      class: 'task-list-item'
+    },
+    nested: true
+  }),
+  Placeholder.configure({
+    placeholder: ({ node }) => {
+      if (node.type.name === 'heading') {
+        return `Heading ${node.attrs.level}`;
+      }
+      return "Press '/' for commands, '++' for AI autocomplete, '??' for AI question...";
+    },
+    includeChildren: true
+  }),
+  Image,
+  Link,
+  Table,
+  TableHeader,
+  TableRow,
+  TableCell,
+  FenseExtension
+];
+
 export const Marktion = React.forwardRef<MarktionRef, MarktionProps>((props, ref) => {
   const rootElRef = React.useRef<HTMLDivElement | null>(null);
   const {
@@ -98,6 +131,7 @@ export const Marktion = React.forwardRef<MarktionRef, MarktionProps>((props, ref
     markdown,
     children,
     toolbarProps,
+    extensions = defaultTiptapExtensions,
     ...editorProps
   } = props;
 
@@ -107,36 +141,12 @@ export const Marktion = React.forwardRef<MarktionRef, MarktionProps>((props, ref
     return plugins.filter(plugin => plugin.type === PluginType.intergrate);
   }, []);
 
-  const intergratePlugins = intergrates
+  const intergrateExtensions = intergrates
     .filter(item => Boolean(item.extension))
     .map(item => item.extension!);
 
   const editor = useEditor({
-    extensions: [
-      MarkdownExtension,
-      StarterKit,
-      Highlight,
-      Typography,
-      TaskList.configure({
-        HTMLAttributes: {
-          class: 'contains-task-list not-prose pl-2'
-        }
-      }),
-      TaskItem.configure({
-        HTMLAttributes: {
-          class: 'task-list-item flex items-start my-4'
-        },
-        nested: true
-      }),
-      Image,
-      Link,
-      Table,
-      TableHeader,
-      TableRow,
-      TableCell,
-      FenseExtension,
-      ...intergratePlugins
-    ],
+    extensions: [...extensions, ...intergrateExtensions],
     content,
     ...editorProps
   });

@@ -1,17 +1,18 @@
+import { gray, grayDark, blackA, blueDarkA } from '@radix-ui/colors';
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ['class'],
-  content: [
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './packages/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/**/*.{js,ts,jsx,tsx,mdx}',
-    './index.html',
-    './main.tsx'
-  ],
+  content: ['./src/**/*.{js,ts,jsx,tsx,mdx}', './style/index.css'],
   theme: {
     extend: {
+      colors: {
+        ...gray,
+        ...grayDark,
+        ...blackA,
+        ...blueDarkA
+      },
+
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))'
@@ -21,6 +22,7 @@ module.exports = {
         DEFAULT: {
           css: {
             p: {
+              margin: 0,
               '&:first-of-type::before': {
                 content: 'none'
               },

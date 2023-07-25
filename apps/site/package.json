@@ -26,6 +26,7 @@
     "dayjs": "^1.11.9",
     "eslint": "8.44.0",
     "eslint-config-next": "13.4.9",
+    "file-saver": "^2.0.5",
     "jsdom": "^22.1.0",
     "lodash": "^4.17.21",
     "marktion": "link:../..",
