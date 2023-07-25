@@ -1,9 +1,5 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  experimental: {
-    serverActions: true
-  }
-};
+const nextConfig = {};
 
 if (process.env.BUILD_TARGET === 'desktop') {
   nextConfig.output = 'export';
