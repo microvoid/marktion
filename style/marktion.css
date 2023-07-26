@@ -1,4 +1,4 @@
-@tailwind base;
+/* @tailwind base; */
 @tailwind components;
 @tailwind utilities;
 
@@ -66,11 +66,11 @@
 
 /* Custom TODO list checkboxes – shoutout to this awesome tutorial: https://github.com/steven-tey/novel/blob/main/styles/prosemirror.css */
 .ProseMirror ul.contains-task-list {
-  padding-left: 0;
+  @apply pl-0;
+}
 
-  > .task-list-item {
-    @apply flex items-start my-4 pl-0;
-  }
+.ProseMirror .task-list-item {
+  @apply flex items-start my-4 pl-0;
 }
 
 .ProseMirror ul.contains-task-list .task-list-item > label {
@@ -96,7 +96,7 @@
   top: 5px;
   border: 2px solid var(--marktion-black);
   margin-right: 0.3rem;
-  display: grid;
+  display: inline-block;
   place-content: center;
 
   &::before {
@@ -113,6 +113,10 @@
   &:checked::before {
     transform: scale(1);
   }
+}
+
+.ProseMirror ul.contains-task-list .task-list-item[data-checked] > div {
+  display: inline-block;
 }
 
 .ProseMirror ul.contains-task-list .task-list-item[data-checked] > div {
