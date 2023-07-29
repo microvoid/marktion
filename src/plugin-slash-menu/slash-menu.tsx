@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Dropdown, MenuProps, DropDownProps } from 'antd';
 import Suggestion, { SuggestionOptions, SuggestionProps } from '@tiptap/suggestion';
 import { Extension } from '@tiptap/react';
-import { useRootEl } from '../hooks';
+import { useRootElRef } from '../hooks';
 import { getSuggestionItems } from './suggestions';
 import { createIntergrateExtension } from '../plugins';
 
@@ -123,7 +123,7 @@ type SlashDropdownProps = {
 };
 
 function SlashDropdown(props: SlashDropdownProps) {
-  const rootEl = useRootEl();
+  const rootEl = useRootElRef();
 
   const triggerElRef = useRef<HTMLDivElement>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -133,9 +133,9 @@ function SlashDropdown(props: SlashDropdownProps) {
   const rect = clientRect?.();
 
   useEffect(() => {
-    const rootElRect = rootEl?.getBoundingClientRect();
+    if (rect && rootEl.current && triggerElRef.current) {
+      const rootElRect = rootEl.current.getBoundingClientRect();
 
-    if (rect && triggerElRef.current) {
       triggerElRef.current.style.top = `${rect.top - rootElRect.top}px`;
       triggerElRef.current.style.left = `${rect.left - rootElRect.left}px`;
       triggerElRef.current.style.width = `${rect.width}px`;

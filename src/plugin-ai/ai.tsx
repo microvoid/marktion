@@ -1,9 +1,12 @@
 import { Extension } from '@tiptap/react';
-import { Editor } from '@tiptap/core';
-import { DEFAULT_CONTINUE_WRITING, DEFAULT_GPT_PROMPT } from './constants';
+import { Editor, posToDOMRect } from '@tiptap/core';
+import { DEFAULT_CONTINUE_WRITING } from './constants';
 import { createIntergrateExtension } from '../plugins';
 import { GptOptions, limitGpt } from './api';
 import { AIOptions, AIStorage } from './interface';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { ChatPanel } from './ui-chat-panel';
+import { useEditor, useRootElRef } from '../hooks';
 
 export const AIPlugin = createIntergrateExtension((options: AIOptions) => {
   const isAIContinueWriting = segments('+', 2);
@@ -26,10 +29,16 @@ export const AIPlugin = createIntergrateExtension((options: AIOptions) => {
             systemMessage: DEFAULT_CONTINUE_WRITING
           });
         },
-        AIAsking: (editor: Editor, message) => {
-          dispathAICommand(editor, message, {
-            config: this.options.openai,
-            systemMessage: DEFAULT_GPT_PROMPT
+        AIAsking: (editor: Editor) => {
+          const view = editor.view;
+          const selection = editor.state.selection;
+
+          const rect = posToDOMRect(view, selection.from, selection.to);
+
+          wrapperElRef.update({
+            open: true,
+            rect,
+            config: this.options.openai
           });
         }
       };
@@ -58,8 +67,69 @@ export const AIPlugin = createIntergrateExtension((options: AIOptions) => {
     }
   });
 
+  const wrapperElRef: {
+    update: (options: {
+      open?: boolean;
+      rect: DOMRect | null;
+      config: GptOptions['config'];
+    }) => void;
+  } = {
+    update: () => {}
+  };
+
+  function ViewWrapper() {
+    const rootEl = useRootElRef();
+    const [open, setOpen] = useState(false);
+    const editor = useEditor();
+    const triggerElRef = useRef<HTMLDivElement>(null);
+    const [gptConfig, setGptConfig] = useState<GptOptions['config']>();
+
+    const setRect = (rect: DOMRect | null) => {
+      const rootElRect = rootEl.current!.getBoundingClientRect();
+
+      if (rect && triggerElRef.current) {
+        triggerElRef.current.style.top = `${rect.top - rootElRect.top}px`;
+        triggerElRef.current.style.left = `${rect.left - rootElRect.left}px`;
+        triggerElRef.current.style.width = `${rect.width}px`;
+        triggerElRef.current.style.height = `${rect.height}px`;
+      }
+    };
+
+    useEffect(() => {
+      wrapperElRef.update = ({ open, rect, config }) => {
+        setRect(rect);
+        setOpen(open || false);
+        setGptConfig(config);
+      };
+    }, [rootEl]);
+
+    const onOpenChange = useCallback((open: boolean) => {
+      setOpen(open);
+
+      if (!open) {
+        editor.commands.focus();
+      }
+    }, []);
+
+    return (
+      <ChatPanel open={open} onOpenChange={onOpenChange} gptConfig={gptConfig}>
+        <div
+          data-role="ai-chatpanel-trigger"
+          ref={triggerElRef}
+          style={{
+            display: open ? 'block' : 'none',
+            position: 'absolute'
+          }}
+        ></div>
+      </ChatPanel>
+    );
+  }
+
   return {
-    extension: AIExtensions
+    extension: AIExtensions,
+    view() {
+      return <ViewWrapper />;
+    }
   };
 });
 

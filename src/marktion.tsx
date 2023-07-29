@@ -20,7 +20,7 @@ import { Plugin, PluginType } from './plugins';
 import { MarkdownExtension, parse, serialize } from './plugin-markdown';
 import { UploadImageHandler } from './handler';
 import { FenseExtension } from './plugin-fense';
-import { RootElContext } from './hooks';
+import { EditorContext, RootElContext } from './hooks';
 import { Toolbar, ToolbarProps } from './toolbar';
 
 const TaskList = TiptapTaskList.extend({
@@ -173,28 +173,30 @@ export const Marktion = React.forwardRef<MarktionRef, MarktionProps>((props, ref
       }}
     >
       <StyleProvider hashPriority="high">
-        <RootElContext.Provider value={rootElRef.current}>
-          <div className="marktion" ref={rootElRef}>
-            <Toolbar editor={editor} {...toolbarProps} />
+        <EditorContext.Provider value={editor}>
+          <RootElContext.Provider value={rootElRef}>
+            <div className="marktion" ref={rootElRef}>
+              <Toolbar editor={editor} {...toolbarProps} />
 
-            <EditorContent
-              className="marktion-editor"
-              data-mode={darkMode ? 'dark' : null}
-              editor={editor}
-            />
+              <EditorContent
+                className="marktion-editor"
+                data-mode={darkMode ? 'dark' : null}
+                editor={editor}
+              />
 
-            {intergrates.map(item => (
-              <React.Fragment key={item.id}>
-                {item.view &&
-                  item.view({
-                    editor: editor
-                  })}
-              </React.Fragment>
-            ))}
+              {intergrates.map(item => (
+                <React.Fragment key={item.id}>
+                  {item.view &&
+                    item.view({
+                      editor: editor
+                    })}
+                </React.Fragment>
+              ))}
 
-            {children}
-          </div>
-        </RootElContext.Provider>
+              {children}
+            </div>
+          </RootElContext.Provider>
+        </EditorContext.Provider>
       </StyleProvider>
     </ConfigProvider>
   );

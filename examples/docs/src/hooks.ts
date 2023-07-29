@@ -1,30 +1,25 @@
 import { useEffect, useState } from 'react';
+import { useDarkMode as useMode } from 'usehooks-ts';
 
 export function useDarkMode() {
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    let theme = getThemeFromStorage();
+  const [defaultMode] = useState(() => {
+    const mode = getThemeFromStorage();
 
-    if (theme === null) {
-      theme = getThemeFromSystem();
-    }
-
-    return theme === 'dark';
+    return mode ? mode === 'dark' : void 0;
   });
+  const result = useMode(defaultMode);
 
   useEffect(() => {
-    if (isDarkMode) {
+    if (result.isDarkMode) {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
     }
 
-    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
-  }, [isDarkMode]);
+    localStorage.setItem('theme', result.isDarkMode ? 'dark' : 'light');
+  }, [result.isDarkMode]);
 
-  return {
-    isDarkMode,
-    toggle: () => setIsDarkMode(!isDarkMode)
-  };
+  return result;
 }
 
 function getThemeFromStorage() {
@@ -35,10 +30,4 @@ function getThemeFromStorage() {
   }
 
   return theme;
-}
-
-function getThemeFromSystem() {
-  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-  return isDark ? 'dark' : 'light';
 }

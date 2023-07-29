@@ -54,6 +54,7 @@
     "highlight.js": "^11.8.0",
     "lowlight": "^2.9.0",
     "lucide-react": "^0.258.0",
+    "nanoid": "^4.0.2",
     "openai-edge": "^1.2.0",
     "p-limit": "^4.0.0",
     "react": "^18.2.0",
