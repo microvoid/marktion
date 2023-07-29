@@ -9,9 +9,10 @@
   "author": "whistleryz@gmail.com",
   "contributors": [],
   "scripts": {
-    "dev": "run-p dev:ts dev:css",
+    "dev": "run-p dev:ts dev:css dev:docs",
     "dev:ts": "tsc -w",
     "dev:css": "tailwindcss -i ./style/index.css -o ./dist/style.css -w",
+    "dev:docs": "cd examples/docs && pnpm run dev",
     "build": "tsc && pnpm run build:css",
     "build:css": "tailwindcss -i ./style/index.css -o ./dist/style.css",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
