@@ -1,15 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FloatButton, Segmented } from 'antd';
 import { useDarkMode } from 'usehooks-ts';
-import {
-  EditorBubbleMenuPlugin,
-  SlashMenuPlugin,
-  Marktion,
-  MarktionSSR,
-  MarktionProps,
-  MarktionRef
-} from '../../..';
+import { Marktion, MarktionSSR, MarktionProps, MarktionRef } from '../../..';
 import { Header } from './header';
+import { getPlugins } from './plugins';
 
 const INIT_MARKDOWN = [import.meta.env.VITE_README_ZH, import.meta.env.VITE_README_EN];
 
@@ -19,9 +13,7 @@ export function App() {
   const [lang, setLang] = useState(0);
   const [ssr, setSSR] = useState(0);
   const [ssrContent, setSSRContent] = useState(INIT_MARKDOWN[lang]);
-  const plugins = useMemo(() => {
-    return [EditorBubbleMenuPlugin(), SlashMenuPlugin()];
-  }, []);
+  const plugins = useMemo(() => getPlugins(), []);
 
   useEffect(() => {
     // @ts-ignore
