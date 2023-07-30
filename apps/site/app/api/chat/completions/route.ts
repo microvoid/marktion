@@ -36,6 +36,9 @@ export async function POST(req: Request): Promise<Response> {
     n: 1
   });
 
+  // temp
+  response.headers.set('Access-Control-Allow-Origin', '*');
+
   // Respond with the stream
   return response;
 }
