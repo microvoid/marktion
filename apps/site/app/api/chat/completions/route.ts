@@ -15,7 +15,7 @@ export async function POST(req: Request): Promise<Response> {
 
   const { success, limit, reset, remaining } = await limitFree(`novel_ratelimit_${ip}`);
 
-  if (!success) {
+  if (process.env.NODE_ENV !== 'development' && !success) {
     return new Response('You have reached your request limit for the day.', {
       status: 429,
       headers: {
@@ -37,15 +37,16 @@ export async function POST(req: Request): Promise<Response> {
     n: 1
   });
 
-  // temp
-  response.headers.set('Access-Control-Allow-Origin', '*');
-  response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
   const aiStream = OpenAIStream(response);
 
   // Respond with the stream
-  return new StreamingTextResponse(aiStream);
+  return new StreamingTextResponse(aiStream, {
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+    }
+  });
 }
 
 export const OPTIONS = () =>
