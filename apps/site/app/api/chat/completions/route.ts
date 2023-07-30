@@ -1,4 +1,5 @@
 import { CreateChatCompletionRequest, OpenAIApi } from 'openai-edge';
+import { StreamingTextResponse, OpenAIStream } from 'ai';
 import { limitFree } from '@/utils';
 import { getConfig } from './config';
 
@@ -41,8 +42,10 @@ export async function POST(req: Request): Promise<Response> {
   response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
+  const aiStream = OpenAIStream(response);
+
   // Respond with the stream
-  return response;
+  return new StreamingTextResponse(aiStream);
 }
 
 export const OPTIONS = () =>
