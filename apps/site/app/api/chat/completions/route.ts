@@ -1,11 +1,8 @@
+import { CreateChatCompletionRequest, OpenAIApi } from 'openai-edge';
 import { limitFree } from '@/utils';
-import { Configuration, CreateChatCompletionRequest, OpenAIApi } from 'openai-edge';
+import { getConfig } from './config';
 
-const config = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-  basePath: process.env.OPENAI_BASE_URL
-});
-const openai = new OpenAIApi(config);
+const openai = new OpenAIApi(getConfig()!);
 
 export const runtime = 'edge';
 
