@@ -79,7 +79,7 @@ export function InlineTools(props: { editor: Editor }) {
       name: 'italic',
       isActive: () => props.editor.isActive('italic'),
       command: () => props.editor.chain().focus().toggleItalic().run(),
-      icon: <FontItalicIcon />
+      icon: <FontItalicIcon className="w-[14px] h-[14px]" />
     },
     {
       name: 'strike',

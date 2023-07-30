@@ -9,7 +9,7 @@ export const runtime = 'edge';
 
 export async function POST(req: Request): Promise<Response> {
   const body = (await req.json()) as CreateChatCompletionRequest;
-  const { messages, stream } = body;
+  const { messages, stream = true } = body;
 
   const ip = req.headers.get('x-forwarded-for');
 
@@ -29,12 +29,7 @@ export async function POST(req: Request): Promise<Response> {
   const response = await openai.createChatCompletion({
     model: 'gpt-3.5-turbo',
     messages: messages,
-    temperature: 0.7,
-    top_p: 1,
-    frequency_penalty: 0,
-    presence_penalty: 0,
-    stream,
-    n: 1
+    stream
   });
 
   const aiStream = OpenAIStream(response);

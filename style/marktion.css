@@ -2,6 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* @radix-ui/colors violet */
+  --mp-1: hsl(255, 65.0%, 99.4%);
+  --mp-2: hsl(252, 100%, 99.0%);
+  --mp-3: hsl(252, 96.9%, 97.4%);
+  --mp-4: hsl(252, 91.5%, 95.5%);
+  --mp-5: hsl(252, 85.1%, 93.0%);
+  --mp-6: hsl(252, 77.8%, 89.4%);
+  --mp-7: hsl(252, 71.0%, 83.7%);
+  --mp-8: hsl(252, 68.6%, 76.3%);
+  --mp-9: hsl(252, 56.0%, 57.5%);
+  --mp-10: hsl(251, 48.1%, 53.5%);
+  --mp-11: hsl(250, 43.0%, 48.0%);
+  --mp-12: hsl(254, 60.0%, 18.5%);
+  
+  --mp: var(--mp-9);
+  --mp-foreground: var(--mp-9);
+  --mp-background: var(--mp-1);
+}
+
+.dark {
+  /* @radix-ui/colors violetDark */
+  --mp-1: hsl(250, 20.0%, 10.2%);
+  --mp-2: hsl(255, 30.3%, 12.9%);
+  --mp-3: hsl(253, 37.0%, 18.4%);
+  --mp-4: hsl(252, 40.1%, 22.5%);
+  --mp-5: hsl(252, 42.2%, 26.2%);
+  --mp-6: hsl(251, 44.3%, 31.1%);
+  --mp-7: hsl(250, 46.8%, 38.9%);
+  --mp-8: hsl(250, 51.8%, 51.2%);
+  --mp-9: hsl(252, 56.0%, 57.5%);
+  --mp-10: hsl(251, 63.2%, 63.2%);
+  --mp-11: hsl(250, 95.0%, 76.8%);
+  --mp-12: hsl(252, 87.0%, 96.4%);
+}
+
 .marktion {
   @apply rounded-md relative shadow-lg border pt-[48px];
 }

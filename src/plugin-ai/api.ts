@@ -50,6 +50,8 @@ export async function gpt(content: string, options?: GptOptions) {
       onError: reject,
       onProgress: message => {
         if (message === '[DONE]') {
+          result.choices[0].finish_reason = 'done';
+
           return resolve(result);
         }
 
@@ -60,10 +62,13 @@ export async function gpt(content: string, options?: GptOptions) {
         if (!result) {
           result = event;
         } else {
+          const content = result.choices[0].delta?.content || '';
           const delta = event.choices[0].delta?.content;
 
+          result.choices[0].finish_reason = event.choices[0].finish_reason;
+
           if (delta) {
-            result.choices[0].delta.content += delta;
+            result.choices[0].delta.content = content + delta;
           }
         }
       }

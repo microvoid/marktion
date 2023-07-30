@@ -85,9 +85,9 @@ export const AIPlugin = createIntergrateExtension((options: AIOptions) => {
     const [gptConfig, setGptConfig] = useState<GptOptions['config']>();
 
     const setRect = (rect: DOMRect | null) => {
-      const rootElRect = rootEl.current!.getBoundingClientRect();
+      const rootElRect = rootEl.current?.getBoundingClientRect();
 
-      if (rect && triggerElRef.current) {
+      if (rect && triggerElRef.current && rootElRect) {
         triggerElRef.current.style.top = `${rect.top - rootElRect.top}px`;
         triggerElRef.current.style.left = `${rect.left - rootElRect.left}px`;
         triggerElRef.current.style.width = `${rect.width}px`;

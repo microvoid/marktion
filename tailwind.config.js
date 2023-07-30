@@ -1,4 +1,4 @@
-import { gray, grayDark, blackA, blueDarkA } from '@radix-ui/colors';
+import { gray, grayDark, blackA, blueDarkA, violet, violetDark } from '@radix-ui/colors';
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -7,10 +7,29 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        mp: {
+          DEFAULT: 'var(--mp-10)',
+          1: 'var(--mp-1)',
+          2: 'var(--mp-2)',
+          3: 'var(--mp-3)',
+          4: 'var(--mp-4)',
+          5: 'var(--mp-5)',
+          6: 'var(--mp-6)',
+          7: 'var(--mp-7)',
+          8: 'var(--mp-8)',
+          9: 'var(--mp-9)',
+          10: 'var(--mp-10)',
+          11: 'var(--mp-11)',
+          12: 'var(--mp-12)',
+          foreground: 'var(--mp-10)',
+          background: 'var(--mp-1)'
+        },
         ...gray,
         ...grayDark,
         ...blackA,
-        ...blueDarkA
+        ...blueDarkA,
+        ...violet,
+        ...violetDark
       },
 
       backgroundImage: {

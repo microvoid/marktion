@@ -1,21 +1,6 @@
 import { useCallback, useState } from 'react';
 import { nanoid } from 'nanoid';
-import { GptOptions, limitGpt, CreateChatCompletionDeltaResponse, Role } from './api';
-
-export interface Question {
-  id: string;
-  created: number;
-  choices: [
-    {
-      delta: {
-        role: Role;
-        content?: string;
-      };
-    }
-  ];
-}
-
-export type Message = CreateChatCompletionDeltaResponse | Question;
+import { GptOptions, CreateChatCompletionDeltaResponse, Role, gpt } from './api';
 
 export function useChat(config: GptOptions['config']) {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -44,43 +29,45 @@ export function useChat(config: GptOptions['config']) {
       setLoading(true);
 
       try {
-        const result = await limitGpt(input, {
+        let temp: CreateChatCompletionDeltaResponse;
+        let deltaContent = '';
+
+        const result = await gpt(input, {
           config,
           onProgress(message) {
-            console.log(message);
+            deltaContent = deltaContent + (message.choices[0].delta.content || '');
 
-            pushOrUpdateMessage(message);
+            if (!temp) {
+              temp = message;
+              return;
+            }
+
+            temp.choices[0].delta.content = deltaContent;
+
+            upsertMessage(temp);
           }
         });
 
+        upsertMessage(result);
         setLoading(false);
-
-        setMessages(messages => {
-          const last = messages.pop();
-
-          if (!last || last.id === question.id) {
-            return [...messages, result];
-          } else {
-            return [...messages, last, result];
-          }
-        });
       } catch (err) {
         setLoading(false);
 
         throw err;
       }
 
-      function pushOrUpdateMessage(message: CreateChatCompletionDeltaResponse) {
+      function upsertMessage(message: CreateChatCompletionDeltaResponse) {
         setMessages(messages => {
-          const finded = messages.find(item => item.id === question.id);
-          const deltaContent = message.choices[0].delta.content;
-          if (finded && deltaContent) {
-            const content = finded.choices[0].delta.content || '';
-            finded.choices[0].delta.content = content + deltaContent;
+          const index = messages.findIndex(item => item.id === message.id);
+
+          if (index > -1) {
+            messages[index] = message;
 
             return [...messages];
           } else {
-            return [...messages, message];
+            messages.push(message);
+
+            return [...messages];
           }
         });
       }
@@ -94,3 +81,23 @@ export function useChat(config: GptOptions['config']) {
     submit
   };
 }
+
+export interface Question {
+  id: string;
+  created: number;
+  choices: [
+    {
+      delta: {
+        role: Role;
+        content?: string;
+      };
+    }
+  ];
+}
+
+export type Message = CreateChatCompletionDeltaResponse | Question;
+
+export const isAssistant = (message: Message): message is CreateChatCompletionDeltaResponse =>
+  message.choices[0].delta.role === 'assistant';
+export const isQuestion = (message: Message): message is Question =>
+  message.choices[0].delta.role === 'user';
