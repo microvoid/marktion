@@ -1,11 +1,4 @@
-import { Configuration, CreateChatCompletionRequest, OpenAIApi } from 'openai-edge';
-
-const AZURE_OPENAI_API_INSTANCE_NAME = process.env.AZURE_OPENAI_API_INSTANCE_NAME;
-const AZURE_OPENAI_API_DEPLOYMENT_NAME = process.env.AZURE_OPENAI_API_DEPLOYMENT_NAME;
-const AZURE_OPENAI_API_KEY = process.env.AZURE_OPENAI_API_KEY;
-const AZURE_OPENAI_API_VERSION = process.env.AZURE_OPENAI_API_VERSION;
-
-const endpoint = `https://${AZURE_OPENAI_API_INSTANCE_NAME}.openai.azure.com`;
+import { Configuration } from 'openai-edge';
 
 export function getConfig() {
   return getOpenAIConfig() || getAzureConfig();
@@ -25,6 +18,12 @@ export function getOpenAIConfig() {
 }
 
 export function getAzureConfig() {
+  const AZURE_OPENAI_API_INSTANCE_NAME = process.env.AZURE_OPENAI_API_INSTANCE_NAME;
+  const AZURE_OPENAI_API_DEPLOYMENT_NAME = process.env.AZURE_OPENAI_API_DEPLOYMENT_NAME;
+  const AZURE_OPENAI_API_KEY = process.env.AZURE_OPENAI_API_KEY;
+  const AZURE_OPENAI_API_VERSION = process.env.AZURE_OPENAI_API_VERSION;
+  const endpoint = `https://${AZURE_OPENAI_API_INSTANCE_NAME}.openai.azure.com`;
+
   if (!AZURE_OPENAI_API_VERSION || !AZURE_OPENAI_API_DEPLOYMENT_NAME) {
     return null;
   }

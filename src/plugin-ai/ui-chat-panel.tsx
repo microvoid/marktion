@@ -123,8 +123,6 @@ export function ChatPanel({ children, gptConfig, ...popoverProps }: ChatPanelPro
 }
 
 function ChatMessages({ messages }: { messages: Message[] }) {
-  console.log('ChatMessages', messages);
-
   const root = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
