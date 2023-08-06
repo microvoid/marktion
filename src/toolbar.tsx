@@ -14,10 +14,10 @@ export function Toolbar(props: ToolbarProps) {
   const [isAffixed, setIsAffixed] = useState<Boolean>();
 
   return (
-    <div className="absolute top-2 left-0 w-full overscroll-x-auto">
+    <div className="absolute top-0 left-0 w-full overscroll-x-auto">
       <Affix offsetTop={top} onChange={setIsAffixed}>
         <div
-          className={`bg-white dark:bg-black px-2 py-1 flex items-center justify-between ${
+          className={`bg-white dark:bg-black px-2 py-2 flex items-center rounded-md justify-between ${
             isAffixed ? 'border-b h-[60px]' : ''
           }`}
         >

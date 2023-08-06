@@ -39,7 +39,7 @@
 }
 
 .marktion {
-  @apply rounded-md relative shadow-lg border pt-[48px];
+  @apply rounded-md relative shadow-lg border pt-[48px] bg-mp-2;
 }
 
 .marktion .ProseMirror {
