@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FloatButton, Segmented } from 'antd';
-import { Marktion, MarktionSSR, MarktionProps, MarktionRef, ChatPanel } from '../../../dist';
+import { Marktion, MarktionSSR, MarktionProps, MarktionRef } from '../../../dist';
 import { Header } from './header';
 import { getPlugins } from './plugins';
 import { useDarkMode } from './hooks';
