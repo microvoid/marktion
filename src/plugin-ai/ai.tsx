@@ -83,6 +83,7 @@ export const AIPlugin = createIntergrateExtension((options: AIOptions) => {
     const editor = useEditor();
     const triggerElRef = useRef<HTMLDivElement>(null);
     const [gptConfig, setGptConfig] = useState<GptOptions['config']>();
+    const containerElRef = useRef<HTMLDivElement>(null);
 
     const setRect = (rect: DOMRect | null) => {
       const rootElRect = rootEl.current?.getBoundingClientRect();
@@ -112,16 +113,23 @@ export const AIPlugin = createIntergrateExtension((options: AIOptions) => {
     }, []);
 
     return (
-      <ChatPanel open={open} onOpenChange={onOpenChange} gptConfig={gptConfig}>
-        <div
-          data-role="ai-chatpanel-trigger"
-          ref={triggerElRef}
-          style={{
-            display: open ? 'block' : 'none',
-            position: 'absolute'
-          }}
-        ></div>
-      </ChatPanel>
+      <div ref={containerElRef}>
+        <ChatPanel
+          open={open}
+          onOpenChange={onOpenChange}
+          gptConfig={gptConfig}
+          getPopupContainer={() => containerElRef.current || document.body}
+        >
+          <div
+            data-role="ai-chatpanel-trigger"
+            ref={triggerElRef}
+            style={{
+              display: open ? 'block' : 'none',
+              position: 'absolute'
+            }}
+          />
+        </ChatPanel>
+      </div>
     );
   }
 

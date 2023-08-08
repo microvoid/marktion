@@ -40,6 +40,16 @@
 
 .marktion {
   @apply rounded-md relative shadow-lg border pt-[48px] bg-mp-2;
+
+  .lucide {
+    @apply w-[18px] h-[18px];
+  }
+  
+  .ant-btn-icon {
+    .lucide {
+      margin-top: 1px;
+    }
+  }
 }
 
 .marktion .ProseMirror {

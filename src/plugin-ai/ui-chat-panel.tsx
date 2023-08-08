@@ -1,6 +1,5 @@
 import { PopoverProps, Popover, Input, InputRef, Button, List, Avatar } from 'antd';
-import { BotIcon, SparklesIcon, User2Icon } from 'lucide-react';
-import { PaperPlaneIcon } from '@radix-ui/react-icons';
+import { BotIcon, SparklesIcon, User2Icon, SendHorizonalIcon } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useChat, Message } from 'ai/react';
 import { GptOptions } from './api';
@@ -65,11 +64,7 @@ export function ChatPanel({ children, gptConfig, ...popoverProps }: ChatPanelPro
       ref={inputRef}
       prefix={<SparklesIcon className="w-[14px] h-[14px] text-purple-600 mr-2" />}
       suffix={
-        <Button
-          loading={isLoading}
-          icon={<PaperPlaneIcon className="inline-block mt-[-2px]" />}
-          onClick={onSubmit}
-        />
+        <Button loading={isLoading} icon={<SendHorizonalIcon fontSize={14} />} onClick={onSubmit} />
       }
       placeholder="OpenAI GPT-3 Playground"
       bordered={false}
@@ -141,6 +136,9 @@ function ChatMessages({ messages }: { messages: Message[] }) {
             return (
               <List.Item key={item.id} id={item.id}>
                 <List.Item.Meta
+                  style={{
+                    alignItems: 'center'
+                  }}
                   avatar={
                     <Avatar
                       size="small"
