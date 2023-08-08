@@ -4,184 +4,82 @@
 
 :root {
   /* @radix-ui/colors violet */
-  --mp-1: hsl(255, 65.0%, 99.4%);
-  --mp-2: hsl(252, 100%, 99.0%);
+  --mp-1: hsl(255, 65%, 99.4%);
+  --mp-2: hsl(252, 100%, 99%);
   --mp-3: hsl(252, 96.9%, 97.4%);
   --mp-4: hsl(252, 91.5%, 95.5%);
-  --mp-5: hsl(252, 85.1%, 93.0%);
+  --mp-5: hsl(252, 85.1%, 93%);
   --mp-6: hsl(252, 77.8%, 89.4%);
-  --mp-7: hsl(252, 71.0%, 83.7%);
+  --mp-7: hsl(252, 71%, 83.7%);
   --mp-8: hsl(252, 68.6%, 76.3%);
-  --mp-9: hsl(252, 56.0%, 57.5%);
+  --mp-9: hsl(252, 56%, 57.5%);
   --mp-10: hsl(251, 48.1%, 53.5%);
-  --mp-11: hsl(250, 43.0%, 48.0%);
-  --mp-12: hsl(254, 60.0%, 18.5%);
-  
+  --mp-11: hsl(250, 43%, 48%);
+  --mp-12: hsl(254, 60%, 18.5%);
+
+  --mp-gray-1: hsl(0, 0%, 99%);
+  --mp-gray-2: hsl(0, 0%, 97.3%);
+  --mp-gray-3: hsl(0, 0%, 95.1%);
+  --mp-gray-4: hsl(0, 0%, 93%);
+  --mp-gray-5: hsl(0, 0%, 90.9%);
+  --mp-gray-6: hsl(0, 0%, 88.7%);
+  --mp-gray-7: hsl(0, 0%, 85.8%);
+  --mp-gray-8: hsl(0, 0%, 78%);
+  --mp-gray-9: hsl(0, 0%, 56.1%);
+  --mp-gray-10: hsl(0, 0%, 52.3%);
+  --mp-gray-11: hsl(0, 0%, 43.5%);
+  --mp-gray-12: hsl(0, 0%, 9%);
+
   --mp: var(--mp-9);
+
   --mp-foreground: var(--mp-9);
   --mp-background: var(--mp-1);
 }
 
 .dark {
   /* @radix-ui/colors violetDark */
-  --mp-1: hsl(250, 20.0%, 10.2%);
+  --mp-1: hsl(250, 20%, 10.2%);
   --mp-2: hsl(255, 30.3%, 12.9%);
-  --mp-3: hsl(253, 37.0%, 18.4%);
+  --mp-3: hsl(253, 37%, 18.4%);
   --mp-4: hsl(252, 40.1%, 22.5%);
   --mp-5: hsl(252, 42.2%, 26.2%);
   --mp-6: hsl(251, 44.3%, 31.1%);
   --mp-7: hsl(250, 46.8%, 38.9%);
   --mp-8: hsl(250, 51.8%, 51.2%);
-  --mp-9: hsl(252, 56.0%, 57.5%);
+  --mp-9: hsl(252, 56%, 57.5%);
   --mp-10: hsl(251, 63.2%, 63.2%);
-  --mp-11: hsl(250, 95.0%, 76.8%);
-  --mp-12: hsl(252, 87.0%, 96.4%);
+  --mp-11: hsl(250, 95%, 76.8%);
+  --mp-12: hsl(252, 87%, 96.4%);
+
+  --mp-gray-1: hsl(0, 0%, 8.5%);
+  --mp-gray-2: hsl(0, 0%, 11%);
+  --mp-gray-3: hsl(0, 0%, 13.6%);
+  --mp-gray-4: hsl(0, 0%, 15.8%);
+  --mp-gray-5: hsl(0, 0%, 17.9%);
+  --mp-gray-6: hsl(0, 0%, 20.5%);
+  --mp-gray-7: hsl(0, 0%, 24.3%);
+  --mp-gray-8: hsl(0, 0%, 31.2%);
+  --mp-gray-9: hsl(0, 0%, 43.9%);
+  --mp-gray-10: hsl(0, 0%, 49.4%);
+  --mp-gray-11: hsl(0, 0%, 62.8%);
+  --mp-gray-12: hsl(0, 0%, 93%);
 }
 
 .marktion {
-  @apply rounded-md relative shadow-lg border pt-[48px] bg-mp-2;
-
-  .lucide {
-    @apply w-[18px] h-[18px];
-  }
-  
-  .ant-btn-icon {
-    .lucide {
-      margin-top: 1px;
-    }
-  }
-}
-
-.marktion .ProseMirror {
-  --marktion-black: rgb(0 0 0);
-  --marktion-white: rgb(255 255 255);
-
-  --gray-1: hsl(0, 0%, 99.0%);
-  --gray-2: hsl(0, 0%, 97.3%);
-  --gray-3: hsl(0, 0%, 95.1%);
-  --gray-4: hsl(0, 0%, 93.0%);
-  --gray-5: hsl(0, 0%, 90.9%);
-  --gray-6: hsl(0, 0%, 88.7%);
-  --gray-7: hsl(0, 0%, 85.8%);
-  --gray-8: hsl(0, 0%, 78.0%);
-  --gray-9: hsl(0, 0%, 56.1%);
-  --gray-10: hsl(0, 0%, 52.3%);
-  --gray-11: hsl(0, 0%, 43.5%);
-  --gray-12: hsl(0, 0%, 9.0%);
-  
-  @apply prose relative dark:prose-invert px-6 max-w-none outline-none pb-12 first:mt-[20px] whitespace-normal;
-
-  & > p {
-    @apply my-5;
-  }
-}
-
-.dark .ProseMirror {
-  --marktion-black: rgb(255 255 255);
-  --marktion-white: rgb(25 25 25);
-
-  --gray-1: hsl(0, 0%, 8.5%);
-  --gray-2: hsl(0, 0%, 11.0%);
-  --gray-3: hsl(0, 0%, 13.6%);
-  --gray-4: hsl(0, 0%, 15.8%);
-  --gray-5: hsl(0, 0%, 17.9%);
-  --gray-6: hsl(0, 0%, 20.5%);
-  --gray-7: hsl(0, 0%, 24.3%);
-  --gray-8: hsl(0, 0%, 31.2%);
-  --gray-9: hsl(0, 0%, 43.9%);
-  --gray-10: hsl(0, 0%, 49.4%);
-  --gray-11: hsl(0, 0%, 62.8%);
-  --gray-12: hsl(0, 0%, 93.0%);
-}
-
-
-.ProseMirror .is-editor-empty:first-child::before {
-  content: attr(data-placeholder);
-  float: left;
-  color: var(--gray-8);
-  pointer-events: none;
-  height: 0;
-}
-.ProseMirror .is-empty::before {
-  content: attr(data-placeholder);
-  float: left;
-  color: var(--gray-8);
-  pointer-events: none;
-  height: 0;
-}
-
-/* Custom TODO list checkboxes – shoutout to this awesome tutorial: https://github.com/steven-tey/novel/blob/main/styles/prosemirror.css */
-.ProseMirror ul.contains-task-list {
-  @apply pl-0;
-}
-
-.ProseMirror .task-list-item {
-  @apply flex items-start my-4 pl-0;
-}
-
-.ProseMirror ul.contains-task-list .task-list-item > label {
-  margin-right: 0.2rem;
-  user-select: none;
-}
-
-@media screen and (max-width: 768px) {
-  .ProseMirror ul.contains-task-list .task-list-item > label {
-    margin-right: 0.5rem;
-  }
-}
-
-.ProseMirror ul.contains-task-list .task-list-item > label input[type="checkbox"] {
-  -webkit-appearance: none;
-  appearance: none;
-  background-color: var(--marktion-white);
-  margin: 0;
-  cursor: pointer;
-  width: 1.2em;
-  height: 1.2em;
   position: relative;
-  top: 5px;
-  border: 2px solid var(--marktion-black);
-  margin-right: 0.3rem;
-  display: inline-block;
-  place-content: center;
-
-  &::before {
-    content: "";
-    width: 0.65em;
-    height: 0.65em;
-    transform: scale(0);
-    transition: 120ms transform ease-in-out;
-    box-shadow: inset 1em 1em;
-    transform-origin: center;
-    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
-  }
-
-  &:checked::before {
-    transform: scale(1);
-  }
+  border-radius: 0.375rem;
+  border-width: 1px;
+  background-color: var(--mp-2);
+  padding-top: 48px;
+  --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color),
+    0 4px 6px -4px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+    var(--tw-shadow);
 }
 
-.ProseMirror ul.contains-task-list .task-list-item[data-checked] > div {
-  display: inline-block;
-}
-
-.ProseMirror ul.contains-task-list .task-list-item[data-checked] > div {
-  color: var(--marktion-black);
-  text-decoration: line-through;
-  text-decoration-thickness: 2px;
-}
-
-.ProseMirror ul.contains-task-list .task-list-item[data-checked="false"] > div {
-  color: inherit;
-  text-decoration: none;
-}
-
-.ProseMirror .code-block {
-  position: relative;
-}
-
-.ProseMirror .code-block .code-block-lang-select {
-  position: absolute;
-  top: -32px;
-  right: 0;
+.marktion .ant-btn-icon .lucide {
+  height: 18px;
+  width: 18px;
+  margin-top: 1px;
 }
