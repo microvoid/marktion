@@ -1,6 +1,5 @@
 import { Editor } from '@tiptap/core';
-import { Divider } from 'antd';
-import { useState } from 'react';
+import { Divider, theme } from 'antd';
 import { InlineTools } from './plugin-bubble-menu';
 
 export type ToolbarProps = React.PropsWithChildren<{
@@ -10,22 +9,22 @@ export type ToolbarProps = React.PropsWithChildren<{
 }>;
 
 export function Toolbar(props: ToolbarProps) {
-  // const [top] = useState(0);
-  const [
-    isAffixed
-    // setIsAffixed
-  ] = useState<Boolean>(false);
+  const { token } = theme.useToken();
 
   return (
-    <div className="absolute top-0 left-0 w-full overscroll-x-auto">
-      {/* <Affix offsetTop={top} onChange={setIsAffixed}> */}
+    <div className="marktion-toolbar">
       <div
-        className={`bg-white dark:bg-black px-2 py-2 flex items-center rounded-md justify-between ${
-          isAffixed ? 'border-b h-[60px]' : ''
-        }`}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          borderRadius: token.borderRadius,
+          padding: token.paddingXS,
+          backgroundColor: token.colorBgElevated
+        }}
       >
-        <div className="flex items-center">
-          <div className="sm:inline-block">
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div className="toolbar-inline-tools">
             <InlineTools editor={props.editor} />
             {props.addonLeft && <Divider type="vertical" />}
           </div>
@@ -34,7 +33,6 @@ export function Toolbar(props: ToolbarProps) {
         </div>
         {props.addonRight}
       </div>
-      {/* </Affix> */}
     </div>
   );
 }

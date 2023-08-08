@@ -2,4 +2,5 @@
 @import '@radix-ui/colors/gray.css';
 @import '@radix-ui/colors/gray-dark.css';
 @import './marktion.css';
+@import './toolbar.css';
 @import './prose-mirror.css';

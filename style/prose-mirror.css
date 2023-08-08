@@ -38,6 +38,7 @@
   --tw-prose-invert-pre-bg: rgb(0 0 0 / 50%);
   --tw-prose-invert-th-borders: #4b5563;
   --tw-prose-invert-td-borders: #374151;
+  
   font-size: 1rem;
   line-height: 1.75;
 }
@@ -49,15 +50,24 @@
   padding-left: 1.5rem;
   padding-right: 1.5rem;
   padding-bottom: 3rem;
-  outline: 2px solid transparent;
   outline-offset: 2px;
 }
 
-.marktion .ProseMirror > p {
-  margin-top:1.25rem;
-  margin-bottom:1.25rem
+.marktion .ProseMirror.inline-style {
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 0;
 }
 
+.marktion .ProseMirror > p {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.marktion .ProseMirror.inline-style > p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
 
 :is(.dark .marktion .ProseMirror) {
   --tw-prose-body: var(--tw-prose-invert-body);
@@ -82,6 +92,10 @@
   margin-top: 20px;
 }
 
+.marktion .ProseMirror.inline-style:first-child {
+  margin-top: 0;
+}
+
 /* Marktion Task List Style */
 
 /* shoutout to this awesome tutorial: https://github.com/steven-tey/novel/blob/main/styles/prosemirror.css */
@@ -104,7 +118,7 @@
   }
 }
 
-.ProseMirror ul.contains-task-list .task-list-item > label input[type="checkbox"] {
+.ProseMirror ul.contains-task-list .task-list-item > label input[type='checkbox'] {
   appearance: none;
   margin: 0;
   cursor: pointer;
@@ -120,7 +134,7 @@
   align-items: center;
 
   &::before {
-    content: "";
+    content: '';
     width: 0.65em;
     height: 0.65em;
     transform: scale(0);
@@ -142,13 +156,12 @@
   text-decoration-thickness: 2px;
 }
 
-.ProseMirror ul.contains-task-list .task-list-item[data-checked="false"] > div {
+.ProseMirror ul.contains-task-list .task-list-item[data-checked='false'] > div {
   color: inherit;
   text-decoration: none;
 }
 
 /* Marktion Task List Style */
-
 
 .ProseMirror .is-editor-empty:first-child::before {
   content: attr(data-placeholder);

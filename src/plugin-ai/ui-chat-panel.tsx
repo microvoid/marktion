@@ -1,4 +1,4 @@
-import { PopoverProps, Popover, Input, InputRef, Button, List, Avatar } from 'antd';
+import { PopoverProps, Popover, Input, InputRef, Button, List, Avatar, theme } from 'antd';
 import { BotIcon, SparklesIcon, User2Icon, SendHorizonalIcon } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useChat, Message } from 'ai/react';
@@ -9,6 +9,8 @@ type ChatPanelProps = PopoverProps & { gptConfig: GptOptions['config'] };
 
 export function ChatPanel({ children, gptConfig, ...popoverProps }: ChatPanelProps) {
   const inputRef = useRef<InputRef>(null);
+  const { token } = theme.useToken();
+
   const { messages, input, isLoading, handleInputChange, handleSubmit } = useChat({
     api: `${gptConfig?.basePath}/chat/completions`,
     body: {
@@ -62,7 +64,14 @@ export function ChatPanel({ children, gptConfig, ...popoverProps }: ChatPanelPro
       value={input}
       disabled={isLoading}
       ref={inputRef}
-      prefix={<SparklesIcon className="w-[14px] h-[14px] text-purple-600 mr-2" />}
+      prefix={
+        <SparklesIcon
+          style={{
+            marginRight: token.marginXS,
+            color: token.purple
+          }}
+        />
+      }
       suffix={
         <Button loading={isLoading} icon={<SendHorizonalIcon fontSize={14} />} onClick={onSubmit} />
       }
@@ -76,23 +85,25 @@ export function ChatPanel({ children, gptConfig, ...popoverProps }: ChatPanelPro
   );
 
   const renderInputMode = () => {
-    return <div className="p-2">{inputEl}</div>;
+    return <div style={{ padding: token.paddingXS }}>{inputEl}</div>;
   };
 
   const renderChatMode = () => {
     return (
       <>
-        <div className="border-b">
+        <div style={{ borderBottom: `1px solid ${token.colorBorderSecondary}` }}>
           <ChatMessages messages={messages} />
         </div>
-        <div className="p-2">{inputEl}</div>
+        <div style={{ padding: token.paddingXS }}>{inputEl}</div>
       </>
     );
   };
 
   const content = (
     <div
-      className="w-[450px]"
+      style={{
+        width: 450
+      }}
       onWheel={e => {
         e.stopPropagation();
       }}
@@ -119,6 +130,7 @@ export function ChatPanel({ children, gptConfig, ...popoverProps }: ChatPanelPro
 
 function ChatMessages({ messages }: { messages: Message[] }) {
   const root = useRef<HTMLDivElement>(null);
+  const { token } = theme.useToken();
 
   useEffect(() => {
     root.current?.scrollTo({
@@ -127,7 +139,14 @@ function ChatMessages({ messages }: { messages: Message[] }) {
   }, [messages]);
 
   return (
-    <div className="max-h-[300px] p-2 overflow-auto" ref={root}>
+    <div
+      style={{
+        maxHeight: 300,
+        padding: token.paddingXS,
+        overflow: 'auto'
+      }}
+      ref={root}
+    >
       <List
         itemLayout="horizontal"
         dataSource={messages}
@@ -143,7 +162,7 @@ function ChatMessages({ messages }: { messages: Message[] }) {
                     <Avatar
                       size="small"
                       style={{ backgroundColor: 'var(--mp-foreground)', color: '#FFFFFF' }}
-                      icon={<BotIcon className="w-full h-full" />}
+                      icon={<BotIcon style={{ width: '100%', height: '100%' }} />}
                     />
                   }
                   description={renderContent(item.content)}

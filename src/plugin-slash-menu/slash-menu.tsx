@@ -195,6 +195,7 @@ function SlashDropdown(props: SlashDropdownProps) {
   }, [open, items, selectedIndex, setSelectedIndex, onSelectItem]);
 
   const menuProps: MenuProps = {
+    className: 'marktion-slash-menu',
     onClick: ({ key }) => {
       const index = items.findIndex(item => item.title === key);
       onSelectItem(index);

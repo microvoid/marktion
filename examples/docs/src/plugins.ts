@@ -6,7 +6,7 @@ export const getPlugins = () => {
     SlashMenuPlugin(),
     AIPlugin({
       openai: {
-        basePath: import.meta.env.VITE_OPENAI_PROXY_URL,
+        basePath: import.meta.env.VITE_OPENAI_BASE_URL,
         apiKey: import.meta.env.VITE_OPENAI_TOKEN
       }
     })
