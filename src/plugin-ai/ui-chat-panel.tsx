@@ -102,7 +102,7 @@ export function ChatPanel({ children, gptConfig, ...popoverProps }: ChatPanelPro
   const content = (
     <div
       style={{
-        width: 450
+        width: 600
       }}
       onWheel={e => {
         e.stopPropagation();

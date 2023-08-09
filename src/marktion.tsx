@@ -2,69 +2,13 @@ import React, { useMemo, useImperativeHandle } from 'react';
 import { ConfigProvider, theme } from 'antd';
 import { StyleProvider } from '@ant-design/cssinjs';
 import { EditorContent, EditorOptions, useEditor, Editor } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-
-import TiptapImage from '@tiptap/extension-image';
-import TiptapTaskItem from '@tiptap/extension-task-item';
-import TiptapTaskList from '@tiptap/extension-task-list';
-import Link from '@tiptap/extension-link';
-import Highlight from '@tiptap/extension-highlight';
-import Typography from '@tiptap/extension-typography';
-import Table from '@tiptap/extension-table';
-import TableCell from '@tiptap/extension-table-cell';
-import TableHeader from '@tiptap/extension-table-header';
-import TableRow from '@tiptap/extension-table-row';
-import Placeholder from '@tiptap/extension-placeholder';
 
 import { Plugin, PluginType } from './plugins';
-import { MarkdownExtension, parse, serialize } from './plugin-markdown';
+import { parse, serialize } from './plugin-markdown';
 import { UploadImageHandler } from './handler';
-import { FenseExtension } from './plugin-fense';
 import { EditorContext, RootElContext } from './hooks';
 import { Toolbar, ToolbarProps } from './toolbar';
-
-const TaskList = TiptapTaskList.extend({
-  parseHTML() {
-    return [
-      {
-        tag: `ul[data-type="${this.name}"]`,
-        priority: 51
-      },
-      {
-        tag: 'ul.contains-task-list',
-        priority: 51
-      }
-    ];
-  }
-});
-
-const TaskItem = TiptapTaskItem.extend({
-  addAttributes() {
-    return {
-      checked: {
-        default: false,
-        parseHTML: element =>
-          element.querySelector('input[type="checkbox"]')?.hasAttribute('checked'),
-        renderHTML: attributes => ({
-          'data-checked': attributes.checked
-        })
-      }
-    };
-  },
-
-  parseHTML() {
-    return [
-      {
-        tag: `li[data-type="${this.name}"]`,
-        priority: 51
-      },
-      {
-        tag: `li.task-list-item`,
-        priority: 51
-      }
-    ];
-  }
-});
+import { defaultTiptapExtensions } from './tiptap';
 
 export type MarktionProps = React.PropsWithChildren<
   Partial<EditorOptions> & {
@@ -82,44 +26,6 @@ export type MarktionRef = {
   getMarkdown: () => string;
   editor: Editor;
 };
-
-const Image = TiptapImage.configure({
-  allowBase64: true
-});
-
-export const defaultTiptapExtensions = [
-  MarkdownExtension,
-  StarterKit,
-  Highlight,
-  Typography,
-  TaskList.configure({
-    HTMLAttributes: {
-      class: 'not-prose contains-task-list'
-    }
-  }),
-  TaskItem.configure({
-    HTMLAttributes: {
-      class: 'task-list-item'
-    },
-    nested: true
-  }),
-  Placeholder.configure({
-    placeholder: ({ node }) => {
-      if (node.type.name === 'heading') {
-        return `Heading ${node.attrs.level}`;
-      }
-      return "Press '/' for commands, '++' for AI autocomplete, '??' for AI question...";
-    },
-    includeChildren: true
-  }),
-  Image,
-  Link,
-  Table,
-  TableHeader,
-  TableRow,
-  TableCell,
-  FenseExtension
-];
 
 export const Marktion = React.forwardRef<MarktionRef, MarktionProps>((props, ref) => {
   const rootElRef = React.useRef<HTMLDivElement | null>(null);
