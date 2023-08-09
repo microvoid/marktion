@@ -3,7 +3,7 @@ import { BotIcon, SparklesIcon, User2Icon, SendHorizonalIcon } from 'lucide-reac
 import { useEffect, useRef, useState } from 'react';
 import { useChat, Message } from 'ai/react';
 import { GptOptions } from './api';
-import { parse } from '../plugin-markdown';
+import { MarktionSSR } from '..';
 
 type ChatPanelProps = PopoverProps & { gptConfig: GptOptions['config'] };
 
@@ -198,7 +198,5 @@ function ChatMessages({ messages }: { messages: Message[] }) {
 }
 
 function renderContent(str: string) {
-  const html = parse(str);
-
-  return <div className="ProseMirror" dangerouslySetInnerHTML={{ __html: html }}></div>;
+  return <MarktionSSR markdown={str} className="inline-style" />;
 }

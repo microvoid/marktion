@@ -79,6 +79,8 @@
 
 .marktion.inline-style {
   padding-top: 0;
+  box-shadow: none;
+  background-color: transparent;
 }
 
 .marktion .lucide {

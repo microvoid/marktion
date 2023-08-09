@@ -88,19 +88,21 @@ export function App() {
           />
         </div>
 
-        {ssr === 0 && (
-          <Marktion
-            ref={marktionRef}
-            darkMode={isDarkMode}
-            markdown={INIT_MARKDOWN[lang]}
-            onUploadImage={onUploadImage}
-            plugins={plugins}
-          >
-            <FloatButton tooltip="Export markdwon file" onClick={onExport} />
-          </Marktion>
-        )}
+        <div className="mt-10 mb-20">
+          {ssr === 0 && (
+            <Marktion
+              ref={marktionRef}
+              darkMode={isDarkMode}
+              markdown={INIT_MARKDOWN[lang]}
+              onUploadImage={onUploadImage}
+              plugins={plugins}
+            >
+              <FloatButton tooltip="Export markdwon file" onClick={onExport} />
+            </Marktion>
+          )}
 
-        {ssr === 1 && <MarktionSSR markdown={ssrContent} />}
+          {ssr === 1 && <MarktionSSR markdown={ssrContent} />}
+        </div>
       </div>
     </>
   );
