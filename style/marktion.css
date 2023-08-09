@@ -77,6 +77,10 @@
     var(--tw-shadow);
 }
 
+.marktion.inline-style {
+  padding-top: 0;
+}
+
 .marktion .lucide {
   height: 14px;
   width: 14px;
