@@ -1,3 +1,5 @@
+@tailwind base;
+
 :root {
   /* @radix-ui/colors violet */
   --mp-1: hsl(255, 65%, 99.4%);
