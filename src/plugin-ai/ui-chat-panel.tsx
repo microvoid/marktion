@@ -1,5 +1,15 @@
-import { PopoverProps, Popover, Input, InputRef, Button, List, Avatar, theme } from 'antd';
-import { BotIcon, SparklesIcon, User2Icon, SendHorizonalIcon } from 'lucide-react';
+import {
+  PopoverProps,
+  Popover,
+  Input,
+  InputRef,
+  Button,
+  List,
+  Avatar,
+  theme,
+  Dropdown
+} from 'antd';
+import { SparklesIcon, User2Icon, SendHorizonalIcon } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useChat, Message } from 'ai/react';
 import { GptOptions } from './api';
@@ -12,26 +22,32 @@ export function ChatPanel({ children, gptConfig, ...popoverProps }: ChatPanelPro
   const inputRef = useRef<InputRef>(null);
   const { token } = theme.useToken();
 
-  const { messages, input, isLoading, handleInputChange, handleSubmit } = useChat({
-    api: `${gptConfig?.basePath}/chat/completions`,
-    body: {
-      temperature: 0.7,
-      top_p: 1,
-      frequency_penalty: 0,
-      presence_penalty: 0,
-      stream: true,
-      n: 1,
-      model: 'gpt-3.5-turbo'
-    },
-    headers: {
-      Authorization: `Bearer ${gptConfig?.apiKey}`
-    }
-  });
+  const { messages, input, isLoading, handleInputChange, handleSubmit, setMessages, stop } =
+    useChat({
+      api: `${gptConfig?.basePath}/chat/completions`,
+      body: {
+        temperature: 0.7,
+        top_p: 1,
+        frequency_penalty: 0,
+        presence_penalty: 0,
+        stream: true,
+        n: 1,
+        model: 'gpt-3.5-turbo'
+      },
+      headers: {
+        Authorization: `Bearer ${gptConfig?.apiKey}`
+      }
+    });
 
   const [isComposingInput, setIsComposingInput] = useState(false);
 
   useEffect(() => {
     inputRef.current?.focus();
+
+    if (!popoverProps.open) {
+      setMessages([]);
+      stop();
+    }
   }, [popoverProps.open]);
 
   useEffect(() => {
@@ -65,14 +81,7 @@ export function ChatPanel({ children, gptConfig, ...popoverProps }: ChatPanelPro
       value={input}
       disabled={isLoading}
       ref={inputRef}
-      prefix={
-        <SparklesIcon
-          style={{
-            marginRight: token.marginXS,
-            color: token.purple
-          }}
-        />
-      }
+      prefix={<ChatMenu />}
       suffix={
         <Button loading={isLoading} icon={<SendHorizonalIcon fontSize={14} />} onClick={onSubmit} />
       }
@@ -126,6 +135,30 @@ export function ChatPanel({ children, gptConfig, ...popoverProps }: ChatPanelPro
     >
       {children}
     </Popover>
+  );
+}
+
+function ChatMenu() {
+  const { token } = theme.useToken();
+
+  return (
+    <Dropdown
+      menu={{
+        items: [
+          {
+            key: '1',
+            label: '插入正文'
+          }
+        ]
+      }}
+    >
+      <SparklesIcon
+        style={{
+          marginRight: token.marginXS,
+          color: token.purple
+        }}
+      />
+    </Dropdown>
   );
 }
 
