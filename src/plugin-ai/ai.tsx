@@ -1,12 +1,13 @@
 import { Extension } from '@tiptap/react';
-import { Editor, posToDOMRect } from '@tiptap/core';
-import { DEFAULT_CONTINUE_WRITING } from './constants';
+import { Editor, posToDOMRect, getTextContentFromNodes } from '@tiptap/core';
+import { DEFAULT_CONTINUE_WRITING, DEFAULT_GPT_PROMPT } from './constants';
 import { createIntergrateExtension } from '../plugins';
 import { GptOptions, limitGpt } from './api';
 import { AIOptions, AIStorage } from './interface';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ChatPanel } from './ui-chat-panel';
 import { useEditor, useRootElRef } from '../hooks';
+import { Plugin, PluginKey } from '@tiptap/pm/state';
 
 export const AIPlugin = createIntergrateExtension((options: AIOptions) => {
   const isAIContinueWriting = segments('+', 2);
@@ -17,6 +18,9 @@ export const AIPlugin = createIntergrateExtension((options: AIOptions) => {
 
     addOptions() {
       return {
+        enableAIChat: true,
+        enableQuickQuestion: false,
+        enableQuickContinueWriting: false,
         openai: options.openai
       };
     },
@@ -29,7 +33,13 @@ export const AIPlugin = createIntergrateExtension((options: AIOptions) => {
             systemMessage: DEFAULT_CONTINUE_WRITING
           });
         },
-        AIAsking: (editor: Editor) => {
+        AIAsking: (editor: Editor, message) => {
+          dispathAICommand(editor, message, {
+            config: this.options.openai,
+            systemMessage: DEFAULT_GPT_PROMPT
+          });
+        },
+        AIChat: (editor: Editor) => {
           const view = editor.view;
           const selection = editor.state.selection;
 
@@ -45,25 +55,62 @@ export const AIPlugin = createIntergrateExtension((options: AIOptions) => {
     },
 
     onTransaction({ transaction }) {
-      if (!transaction.docChanged) {
+      const editor = this.editor;
+      const active = editor.isEditable;
+
+      if (!transaction.docChanged || !active) {
         return;
       }
 
-      const editor = this.editor;
       const storage = editor.storage.ai as AIStorage;
-      const text = getPrevText(editor, { chars: 2 });
 
-      if (isAIContinueWriting(text[1]) && text === '++') {
-        const question = getPrevText(editor, {
-          chars: 5000
-        });
-        storage.AIContinueWriting(editor, question);
-      } else if (isAIAsking(text[1]) && text === '??') {
-        const question = getPrevText(editor, {
-          chars: 5000
-        });
-        storage.AIAsking(editor, question);
+      if (this.options.enableQuickContinueWriting) {
+        const text = getPrevText(editor, { chars: 2 });
+
+        if (isAIContinueWriting(text[1]) && text === '++') {
+          const question = getPrevText(editor, {
+            chars: 5000
+          });
+          storage.AIContinueWriting(editor, question);
+        }
       }
+
+      if (this.options.enableQuickQuestion) {
+        const text = getPrevText(editor, { chars: 2 });
+
+        if (isAIAsking(text[1]) && text === '??') {
+          const question = getPrevText(editor, {
+            chars: 5000
+          });
+          storage.AIAsking(editor, question);
+        }
+      }
+    },
+
+    addProseMirrorPlugins() {
+      const editor = this.editor;
+      const { enableAIChat } = this.options;
+
+      return [
+        new Plugin({
+          key: new PluginKey('ai-event-handler'),
+          props: {
+            handleKeyDown(_, event) {
+              if (enableAIChat && event.code === 'Space') {
+                const nodeText = getTextContentFromNodes(editor.state.selection.$from);
+
+                if (nodeText.length === 0) {
+                  const storage = editor.storage.ai as AIStorage;
+                  storage.AIChat(editor);
+                  return true;
+                }
+
+                return false;
+              }
+            }
+          }
+        })
+      ];
     }
   });
 
