@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useChat, Message } from 'ai/react';
 import { GptOptions } from './api';
 import { MarktionSSR } from '..';
+import { OpenAIIcon } from './icon-openai';
 
 type ChatPanelProps = PopoverProps & { gptConfig: GptOptions['config'] };
 
@@ -161,8 +162,8 @@ function ChatMessages({ messages }: { messages: Message[] }) {
                   avatar={
                     <Avatar
                       size="small"
-                      style={{ backgroundColor: 'var(--mp-foreground)', color: '#FFFFFF' }}
-                      icon={<BotIcon style={{ width: '100%', height: '100%' }} />}
+                      style={{ backgroundColor: 'transparent', fill: token.colorText }}
+                      icon={<OpenAIIcon style={{ width: '100%', height: '100%' }} />}
                     />
                   }
                   description={renderContent(item.content)}
