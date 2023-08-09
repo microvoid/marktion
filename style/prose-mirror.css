@@ -50,7 +50,7 @@
   padding-left: 1.5rem;
   padding-right: 1.5rem;
   padding-bottom: 3rem;
-  outline-offset: 2px;
+  outline: none;
 }
 
 .marktion .ProseMirror.inline-style {

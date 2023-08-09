@@ -173,7 +173,19 @@ function ChatMessages({ messages }: { messages: Message[] }) {
             return (
               <List.Item key={item.id}>
                 <List.Item.Meta
-                  avatar={<Avatar size="small" icon={<User2Icon className="w-full h-full" />} />}
+                  avatar={
+                    <Avatar
+                      size="small"
+                      icon={
+                        <User2Icon
+                          style={{
+                            width: '100%',
+                            height: '100%'
+                          }}
+                        />
+                      }
+                    />
+                  }
                   description={item.content}
                 />
               </List.Item>

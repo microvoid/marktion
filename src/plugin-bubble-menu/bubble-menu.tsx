@@ -1,5 +1,5 @@
 import { Code } from 'lucide-react';
-import { Button, Divider, Input, Popover, InputRef } from 'antd';
+import { Button, Divider, Input, Popover, InputRef, theme } from 'antd';
 import { BubbleMenu, BubbleMenuProps } from '@tiptap/react';
 import {
   FontBoldIcon,
@@ -30,6 +30,8 @@ export interface BubbleMenuItem {
 }
 
 function EditorBubbleMenu(props: EditorBubbleMenuProps) {
+  const { token } = theme.useToken();
+
   const bubbleMenuProps: EditorBubbleMenuProps = {
     ...props,
     shouldShow: ({ editor }) => {
@@ -51,7 +53,16 @@ function EditorBubbleMenu(props: EditorBubbleMenuProps) {
   return (
     <BubbleMenu {...bubbleMenuProps}>
       <div
-        className="flex items-center px-2 py-1 rounded-md relative shadow-lg border bg-white dark:bg-black"
+        className="marktion-plugin-bubble-menu"
+        style={{
+          paddingTop: token.paddingXS,
+          paddingBottom: token.paddingXS,
+          paddingLeft: token.paddingSM,
+          paddingRight: token.paddingSM,
+          borderRadius: token.borderRadius,
+          boxShadow: token.boxShadow,
+          backgroundColor: token.colorBgElevated
+        }}
         onMouseDown={e => {
           e.stopPropagation();
           e.preventDefault();
@@ -73,13 +84,13 @@ export function InlineTools(props: { editor: Editor }) {
       name: 'bold',
       isActive: () => props.editor.isActive('bold'),
       command: () => props.editor.chain().focus().toggleBold().run(),
-      icon: <FontBoldIcon className="w-[14px] h-[14px]" />
+      icon: <FontBoldIcon style={{ width: 14, height: 14 }} />
     },
     {
       name: 'italic',
       isActive: () => props.editor.isActive('italic'),
       command: () => props.editor.chain().focus().toggleItalic().run(),
-      icon: <FontItalicIcon className="w-[14px] h-[14px]" />
+      icon: <FontItalicIcon style={{ width: 14, height: 14 }} />
     },
     {
       name: 'strike',
@@ -91,7 +102,7 @@ export function InlineTools(props: { editor: Editor }) {
       name: 'code',
       isActive: () => props.editor.isActive('code'),
       command: () => props.editor.chain().focus().toggleCode().run(),
-      icon: <Code className="w-[14px] h-[14px]" />
+      icon: <Code style={{ width: 14, height: 14 }} />
     }
   ];
 
@@ -99,7 +110,7 @@ export function InlineTools(props: { editor: Editor }) {
     name: 'link',
     isActive: () => props.editor.isActive('link'),
     command: (href: string) => props.editor.chain().focus().setLink({ href }).run(),
-    icon: <Link1Icon className="w-[14px] h-[14px]" />
+    icon: <Link1Icon style={{ width: 14, height: 14 }} />
   };
 
   const linkInput = (
@@ -117,7 +128,9 @@ export function InlineTools(props: { editor: Editor }) {
       }}
       addonAfter={
         <TrashIcon
-          className="cursor-pointer"
+          style={{
+            cursor: 'pointer'
+          }}
           onClick={() => {
             props.editor.chain().focus().unsetLink().run();
             setLinkInputOpen(false);
@@ -153,7 +166,7 @@ export function InlineTools(props: { editor: Editor }) {
       >
         <Popover
           arrow={false}
-          content={<div className="min-w-[240px]">{linkInput}</div>}
+          content={<div style={{ minWidth: 240 }}>{linkInput}</div>}
           placement="bottom"
           open={linkInputOpen}
           onOpenChange={setLinkInputOpen}

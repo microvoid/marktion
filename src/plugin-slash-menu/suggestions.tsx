@@ -205,7 +205,7 @@ const getTableSuggestions = (): SuggestionItem[] => {
       command: ({ editor }) => {
         editor.chain().focus().addRowAfter().run();
       },
-      icon: <BorderBottomIcon className="w-[14px] h-[14px]" />
+      icon: <BorderBottomIcon style={{ width: 14, height: 14 }} />
     },
     {
       title: 'add row before',
@@ -214,7 +214,7 @@ const getTableSuggestions = (): SuggestionItem[] => {
       command: ({ editor }) => {
         editor.chain().focus().addRowBefore().run();
       },
-      icon: <BorderTopIcon className="w-[14px] h-[14px]" />
+      icon: <BorderTopIcon style={{ width: 14, height: 14 }} />
     },
     {
       title: 'add col after',
@@ -223,7 +223,7 @@ const getTableSuggestions = (): SuggestionItem[] => {
       command: ({ editor }) => {
         editor.chain().focus().addColumnAfter().run();
       },
-      icon: <BorderRightIcon className="w-[14px] h-[14px]" />
+      icon: <BorderRightIcon style={{ width: 14, height: 14 }} />
     },
     {
       title: 'add col before',
@@ -232,7 +232,7 @@ const getTableSuggestions = (): SuggestionItem[] => {
       command: ({ editor }) => {
         editor.chain().focus().addColumnBefore().run();
       },
-      icon: <BorderLeftIcon className="w-[14px] h-[14px]" />
+      icon: <BorderLeftIcon style={{ width: 14, height: 14 }} />
     },
     {
       title: 'delete row',
@@ -241,7 +241,7 @@ const getTableSuggestions = (): SuggestionItem[] => {
       command: ({ editor }) => {
         editor.chain().focus().deleteRow().run();
       },
-      icon: <DividerHorizontalIcon className="w-[14px] h-[14px]" />
+      icon: <DividerHorizontalIcon style={{ width: 14, height: 14 }} />
     },
     {
       title: 'delete col',
@@ -250,7 +250,7 @@ const getTableSuggestions = (): SuggestionItem[] => {
       command: ({ editor }) => {
         editor.chain().focus().deleteColumn().run();
       },
-      icon: <DividerVerticalIcon className="w-[14px] h-[14px]" />
+      icon: <DividerVerticalIcon style={{ width: 14, height: 14 }} />
     }
   ];
 };
