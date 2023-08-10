@@ -64,10 +64,10 @@ export function ChatPanel({ children, gptConfig, ...popoverProps }: ChatPanelPro
       return;
     }
 
-    if (messages.length > 0) {
+    if (messages.length >= 2) {
       setChatMenuOpen(true);
     }
-  }, [messages.length > 0, popoverProps.open, isLoading]);
+  }, [messages.length >= 2, popoverProps.open, isLoading]);
 
   useEffect(() => {
     if (!isLoading) {
@@ -127,7 +127,7 @@ export function ChatPanel({ children, gptConfig, ...popoverProps }: ChatPanelPro
         <Button
           loading={isLoading}
           icon={<SendHorizonalIcon fontSize={14} />}
-          onClick={() => onSubmit()}
+          onClick={onSubmit as any}
         />
       }
       placeholder="OpenAI GPT-3 Playground"
