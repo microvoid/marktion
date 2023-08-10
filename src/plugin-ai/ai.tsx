@@ -183,9 +183,9 @@ function ViewWrapper({ editor, wrapperRef }: ViewWrapperProps) {
     <div ref={containerElRef}>
       <ChatPanel
         open={open}
-        onOpenChange={onOpenChange}
         gptConfig={gptConfig}
         getPopupContainer={() => containerElRef.current || document.body}
+        onOpenChange={onOpenChange}
       >
         <div
           data-role="ai-chatpanel-trigger"

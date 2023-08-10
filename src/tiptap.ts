@@ -98,7 +98,7 @@ export const defaultTiptapExtensions = [
       if (node.type.name === 'heading') {
         return `Heading ${node.attrs.level}`;
       }
-      return "Press '/' for commands, '++' for AI autocomplete, '??' for AI question...";
+      return "Press '/' for commands, 'Space' for AI ...";
     },
     includeChildren: true
   }),

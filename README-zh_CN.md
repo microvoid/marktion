@@ -2,11 +2,6 @@
 
 Marktion 是一个基于 [tiptap](https://tiptap.dev/) 的所见即所得 Markdown 编辑器。它提供了一种直观的方式来编辑和预览 Markdown 文本，使用户能够创建具有视觉吸引力的文档。
 
-## Features
-
-- [x] AI
-- [ ] Auto Link Share
-
 ---
 
 - **所见即所得编辑**：实时预览 Markdown 渲染结果，提供直观的编辑体验。

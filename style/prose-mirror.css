@@ -163,14 +163,7 @@
 
 /* Marktion Task List Style */
 
-.ProseMirror .is-editor-empty:first-child::before {
-  content: attr(data-placeholder);
-  float: left;
-  color: var(--mp-gray-8);
-  pointer-events: none;
-  height: 0;
-}
-.ProseMirror .is-empty::before {
+.marktion .ProseMirror .is-editor-empty:first-child::before {
   content: attr(data-placeholder);
   float: left;
   color: var(--mp-gray-8);
@@ -178,7 +171,15 @@
   height: 0;
 }
 
-.ProseMirror .code-block {
+.marktion .ProseMirror .is-empty::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: var(--mp-gray-8);
+  pointer-events: none;
+  height: 0;
+}
+
+.marktion .ProseMirror .code-block {
   position: relative;
 }
 
@@ -300,7 +301,7 @@
 }
 
 .marktion .ProseMirror :where(blockquote):not(:where([class~='not-prose'] *)) {
-  font-weight: 500;
+  font-weight: 400;
   font-style: italic;
   color: var(--tw-prose-quotes);
   border-left-width: 0.25rem;
