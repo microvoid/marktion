@@ -1,2 +1,4 @@
-pnpm run site
-pnpm exec gh-pages -d dist-site
+cd examples/docs 
+
+pnpm run build
+pnpm exec gh-pages -d dist

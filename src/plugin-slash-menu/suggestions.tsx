@@ -1,19 +1,25 @@
 import { Range, Editor } from '@tiptap/react';
 import {
-  CodeIcon,
-  ListBulletIcon,
-  QuoteIcon,
-  TextIcon,
-  ImageIcon,
   BorderTopIcon,
   BorderBottomIcon,
   BorderLeftIcon,
   DividerVerticalIcon,
   DividerHorizontalIcon,
-  BorderRightIcon,
-  TableIcon
+  BorderRightIcon
 } from '@radix-ui/react-icons';
-import { Heading1, Heading2, Heading3, ListChecksIcon, ListOrderedIcon } from 'lucide-react';
+import {
+  Heading1,
+  Heading2,
+  Heading3,
+  ListIcon,
+  ListChecksIcon,
+  ListOrderedIcon,
+  TextIcon,
+  Code2Icon,
+  QuoteIcon,
+  ImageIcon,
+  TableIcon
+} from 'lucide-react';
 import { UploadImageHandler } from '../handler';
 import { EditorModifier } from '../modifier';
 import { SuggestionOptions } from '@tiptap/suggestion';
@@ -61,7 +67,7 @@ const getDefaultSuggestions = (): SuggestionItem[] => {
       title: 'Text',
       description: 'Just start typing with plain text.',
       searchTerms: ['p', 'paragraph'],
-      icon: <TextIcon className="w-[14px] h-[14px]" />,
+      icon: <TextIcon />,
       command: ({ editor, range }: CommandProps) => {
         editor.chain().focus().deleteRange(range).toggleNode('paragraph', 'paragraph').run();
       }
@@ -70,7 +76,7 @@ const getDefaultSuggestions = (): SuggestionItem[] => {
       title: 'To-do List',
       description: 'Track tasks with a to-do list.',
       searchTerms: ['todo', 'task', 'list', 'check', 'checkbox'],
-      icon: <ListChecksIcon className="w-[14px] h-[14px]" />,
+      icon: <ListChecksIcon />,
       command: ({ editor, range }: CommandProps) => {
         editor.chain().focus().deleteRange(range).toggleTaskList().run();
       }
@@ -79,7 +85,7 @@ const getDefaultSuggestions = (): SuggestionItem[] => {
       title: 'Heading 1',
       description: 'Big section heading.',
       searchTerms: ['title', 'big', 'large'],
-      icon: <Heading1 className="w-[14px] h-[14px]" />,
+      icon: <Heading1 />,
       command: ({ editor, range }: CommandProps) => {
         editor.chain().focus().deleteRange(range).setNode('heading', { level: 1 }).run();
       }
@@ -88,7 +94,7 @@ const getDefaultSuggestions = (): SuggestionItem[] => {
       title: 'Heading 2',
       description: 'Medium section heading.',
       searchTerms: ['subtitle', 'medium'],
-      icon: <Heading2 className="w-[14px] h-[14px]" />,
+      icon: <Heading2 />,
       command: ({ editor, range }: CommandProps) => {
         editor.chain().focus().deleteRange(range).setNode('heading', { level: 2 }).run();
       }
@@ -97,7 +103,7 @@ const getDefaultSuggestions = (): SuggestionItem[] => {
       title: 'Heading 3',
       description: 'Small section heading.',
       searchTerms: ['subtitle', 'small'],
-      icon: <Heading3 className="w-[14px] h-[14px]" />,
+      icon: <Heading3 />,
       command: ({ editor, range }: CommandProps) => {
         editor.chain().focus().deleteRange(range).setNode('heading', { level: 3 }).run();
       }
@@ -106,7 +112,7 @@ const getDefaultSuggestions = (): SuggestionItem[] => {
       title: 'Bullet List',
       description: 'Create a simple bullet list.',
       searchTerms: ['unordered', 'point'],
-      icon: <ListBulletIcon className="w-[14px] h-[14px]" />,
+      icon: <ListIcon />,
       command: ({ editor, range }: CommandProps) => {
         editor.chain().focus().deleteRange(range).toggleBulletList().run();
       }
@@ -115,7 +121,7 @@ const getDefaultSuggestions = (): SuggestionItem[] => {
       title: 'Numbered List',
       description: 'Create a list with numbering.',
       searchTerms: ['ordered'],
-      icon: <ListOrderedIcon className="w-[14px] h-[14px]" />,
+      icon: <ListOrderedIcon />,
       command: ({ editor, range }: CommandProps) => {
         editor.chain().focus().deleteRange(range).toggleOrderedList().run();
       }
@@ -124,7 +130,7 @@ const getDefaultSuggestions = (): SuggestionItem[] => {
       title: 'Quote',
       description: 'Capture a quote.',
       searchTerms: ['blockquote'],
-      icon: <QuoteIcon className="w-[14px] h-[14px]" />,
+      icon: <QuoteIcon />,
       command: ({ editor, range }: CommandProps) =>
         editor
           .chain()
@@ -138,7 +144,7 @@ const getDefaultSuggestions = (): SuggestionItem[] => {
       title: 'Code',
       description: 'Capture a code snippet.',
       searchTerms: ['codeblock'],
-      icon: <CodeIcon className="w-[14px] h-[14px]" />,
+      icon: <Code2Icon />,
       command: ({ editor, range }: CommandProps) =>
         editor.chain().focus().deleteRange(range).toggleCodeBlock().run()
     },
@@ -146,7 +152,7 @@ const getDefaultSuggestions = (): SuggestionItem[] => {
       title: 'Image',
       description: 'Upload an image from your computer.',
       searchTerms: ['photo', 'picture', 'media'],
-      icon: <ImageIcon className="w-[14px] h-[14px]" />,
+      icon: <ImageIcon />,
       command: ({ editor, range }: CommandProps) => {
         editor.chain().focus().deleteRange(range).run();
 
@@ -178,7 +184,7 @@ const getDefaultSuggestions = (): SuggestionItem[] => {
       title: 'Table',
       description: 'Simple powerfull table.',
       searchTerms: ['table'],
-      icon: <TableIcon className="w-[14px] h-[14px]" />,
+      icon: <TableIcon />,
       command: ({ editor, range }: CommandProps) =>
         editor
           .chain()
@@ -199,7 +205,7 @@ const getTableSuggestions = (): SuggestionItem[] => {
       command: ({ editor }) => {
         editor.chain().focus().addRowAfter().run();
       },
-      icon: <BorderBottomIcon className="w-[14px] h-[14px]" />
+      icon: <BorderBottomIcon style={{ width: 14, height: 14 }} />
     },
     {
       title: 'add row before',
@@ -208,7 +214,7 @@ const getTableSuggestions = (): SuggestionItem[] => {
       command: ({ editor }) => {
         editor.chain().focus().addRowBefore().run();
       },
-      icon: <BorderTopIcon className="w-[14px] h-[14px]" />
+      icon: <BorderTopIcon style={{ width: 14, height: 14 }} />
     },
     {
       title: 'add col after',
@@ -217,7 +223,7 @@ const getTableSuggestions = (): SuggestionItem[] => {
       command: ({ editor }) => {
         editor.chain().focus().addColumnAfter().run();
       },
-      icon: <BorderRightIcon className="w-[14px] h-[14px]" />
+      icon: <BorderRightIcon style={{ width: 14, height: 14 }} />
     },
     {
       title: 'add col before',
@@ -226,7 +232,7 @@ const getTableSuggestions = (): SuggestionItem[] => {
       command: ({ editor }) => {
         editor.chain().focus().addColumnBefore().run();
       },
-      icon: <BorderLeftIcon className="w-[14px] h-[14px]" />
+      icon: <BorderLeftIcon style={{ width: 14, height: 14 }} />
     },
     {
       title: 'delete row',
@@ -235,7 +241,7 @@ const getTableSuggestions = (): SuggestionItem[] => {
       command: ({ editor }) => {
         editor.chain().focus().deleteRow().run();
       },
-      icon: <DividerHorizontalIcon className="w-[14px] h-[14px]" />
+      icon: <DividerHorizontalIcon style={{ width: 14, height: 14 }} />
     },
     {
       title: 'delete col',
@@ -244,7 +250,7 @@ const getTableSuggestions = (): SuggestionItem[] => {
       command: ({ editor }) => {
         editor.chain().focus().deleteColumn().run();
       },
-      icon: <DividerVerticalIcon className="w-[14px] h-[14px]" />
+      icon: <DividerVerticalIcon style={{ width: 14, height: 14 }} />
     }
   ];
 };

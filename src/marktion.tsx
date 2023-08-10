@@ -2,34 +2,21 @@ import React, { useMemo, useImperativeHandle } from 'react';
 import { ConfigProvider, theme } from 'antd';
 import { StyleProvider } from '@ant-design/cssinjs';
 import { EditorContent, EditorOptions, useEditor, Editor } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
 
-import TiptapImage from '@tiptap/extension-image';
-import Link from '@tiptap/extension-link';
-import Highlight from '@tiptap/extension-highlight';
-import Typography from '@tiptap/extension-typography';
-import TaskItem from '@tiptap/extension-task-item';
-import TaskList from '@tiptap/extension-task-list';
-import Table from '@tiptap/extension-table';
-import TableCell from '@tiptap/extension-table-cell';
-import TableHeader from '@tiptap/extension-table-header';
-import TableRow from '@tiptap/extension-table-row';
-
-import { EditorBubbleMenuPlugin } from './plugin-bubble-menu';
-import { SlashMenuPlugin } from './plugin-slash-menu';
-import { PluginCreator, PluginType } from './plugins';
-import { MarkdownExtension, parse, serialize } from './plugin-markdown';
+import { Plugin, PluginType } from './plugins';
+import { parse, serialize } from './plugin-markdown';
 import { UploadImageHandler } from './handler';
-import { RootElContext } from './hooks';
-
-import './marktion.css';
-import { FenseExtension } from './plugin-fense';
+import { EditorContext, RootElContext } from './hooks';
+import { Toolbar, ToolbarProps } from './toolbar';
+import { defaultTiptapExtensions } from './tiptap';
 
 export type MarktionProps = React.PropsWithChildren<
   Partial<EditorOptions> & {
     markdown?: string;
     darkMode?: boolean;
-    plugins?: PluginCreator[];
+    plugins?: Plugin[];
+
+    toolbarProps?: Omit<ToolbarProps, 'editor'>;
 
     onUploadImage?: (file: File, editor: Editor) => Promise<string>;
   }
@@ -40,54 +27,32 @@ export type MarktionRef = {
   editor: Editor;
 };
 
-const Image = TiptapImage.configure({
-  allowBase64: true
-});
-
 export const Marktion = React.forwardRef<MarktionRef, MarktionProps>((props, ref) => {
   const rootElRef = React.useRef<HTMLDivElement | null>(null);
   const {
     darkMode = false,
-    plugins = [EditorBubbleMenuPlugin, SlashMenuPlugin],
+    plugins = [],
     onUploadImage,
     content: propsContent,
     markdown,
     children,
+    toolbarProps,
+    extensions = defaultTiptapExtensions,
     ...editorProps
   } = props;
 
   const content = useMemo(() => propsContent || parse(markdown || ''), [propsContent, markdown]);
 
   const intergrates = useMemo(() => {
-    return plugins
-      .filter(plugin => plugin.type === PluginType.intergrate)
-      .map(plugin => ({
-        plugin: plugin.install(),
-        id: plugin.id
-      }));
+    return plugins.filter(plugin => plugin.type === PluginType.intergrate);
   }, []);
 
-  const intergratePlugins = intergrates
-    .filter(item => Boolean(item.plugin.extension))
-    .map(item => item.plugin.extension!);
+  const intergrateExtensions = intergrates
+    .filter(item => Boolean(item.extension))
+    .map(item => item.extension!);
 
   const editor = useEditor({
-    extensions: [
-      MarkdownExtension,
-      StarterKit,
-      Highlight,
-      Typography,
-      TaskItem,
-      TaskList,
-      Image,
-      Link,
-      Table,
-      TableHeader,
-      TableRow,
-      TableCell,
-      FenseExtension,
-      ...intergratePlugins
-    ],
+    extensions: [...extensions, ...intergrateExtensions],
     content,
     ...editorProps
   });
@@ -114,21 +79,30 @@ export const Marktion = React.forwardRef<MarktionRef, MarktionProps>((props, ref
       }}
     >
       <StyleProvider hashPriority="high">
-        <RootElContext.Provider value={rootElRef.current}>
-          <div className="marktion" ref={rootElRef}>
-            <EditorContent className="marktion-editor" editor={editor} />
+        <EditorContext.Provider value={editor}>
+          <RootElContext.Provider value={rootElRef}>
+            <div className="marktion" ref={rootElRef}>
+              <Toolbar editor={editor} {...toolbarProps} />
 
-            {intergrates.map(item => (
-              <React.Fragment key={item.id}>
-                {item.plugin.view({
-                  editor: editor
-                })}
-              </React.Fragment>
-            ))}
+              <EditorContent
+                className="marktion-editor"
+                data-mode={darkMode ? 'dark' : null}
+                editor={editor}
+              />
 
-            {children}
-          </div>
-        </RootElContext.Provider>
+              {intergrates.map(item => (
+                <React.Fragment key={item.id}>
+                  {item.view &&
+                    item.view({
+                      editor: editor
+                    })}
+                </React.Fragment>
+              ))}
+
+              {children}
+            </div>
+          </RootElContext.Provider>
+        </EditorContext.Provider>
       </StyleProvider>
     </ConfigProvider>
   );

@@ -1,0 +1,627 @@
+/* Marktion ProseMirror Style */
+
+.marktion .ProseMirror {
+  color: var(--tw-prose-body);
+  max-width: 65ch;
+}
+
+.marktion .ProseMirror {
+  --tw-prose-body: #374151;
+  --tw-prose-headings: #111827;
+  --tw-prose-lead: #4b5563;
+  --tw-prose-links: #111827;
+  --tw-prose-bold: #111827;
+  --tw-prose-counters: #6b7280;
+  --tw-prose-bullets: #d1d5db;
+  --tw-prose-hr: #e5e7eb;
+  --tw-prose-quotes: #111827;
+  --tw-prose-quote-borders: #e5e7eb;
+  --tw-prose-captions: #6b7280;
+  --tw-prose-code: #111827;
+  --tw-prose-pre-code: #e5e7eb;
+  --tw-prose-pre-bg: #1f2937;
+  --tw-prose-th-borders: #d1d5db;
+  --tw-prose-td-borders: #e5e7eb;
+  --tw-prose-invert-body: #d1d5db;
+  --tw-prose-invert-headings: #fff;
+  --tw-prose-invert-lead: #9ca3af;
+  --tw-prose-invert-links: #fff;
+  --tw-prose-invert-bold: #fff;
+  --tw-prose-invert-counters: #9ca3af;
+  --tw-prose-invert-bullets: #4b5563;
+  --tw-prose-invert-hr: #374151;
+  --tw-prose-invert-quotes: #f3f4f6;
+  --tw-prose-invert-quote-borders: #374151;
+  --tw-prose-invert-captions: #9ca3af;
+  --tw-prose-invert-code: #fff;
+  --tw-prose-invert-pre-code: #d1d5db;
+  --tw-prose-invert-pre-bg: rgb(0 0 0 / 50%);
+  --tw-prose-invert-th-borders: #4b5563;
+  --tw-prose-invert-td-borders: #374151;
+  
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+.marktion .ProseMirror {
+  position: relative;
+  max-width: none;
+  white-space: normal;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-bottom: 3rem;
+  outline: none;
+}
+
+.marktion.inline-style .ProseMirror {
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+}
+
+.marktion .ProseMirror > p {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.marktion.inline-style .ProseMirror > p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+:is(.dark .marktion .ProseMirror) {
+  --tw-prose-body: var(--tw-prose-invert-body);
+  --tw-prose-headings: var(--tw-prose-invert-headings);
+  --tw-prose-lead: var(--tw-prose-invert-lead);
+  --tw-prose-links: var(--tw-prose-invert-links);
+  --tw-prose-bold: var(--tw-prose-invert-bold);
+  --tw-prose-counters: var(--tw-prose-invert-counters);
+  --tw-prose-bullets: var(--tw-prose-invert-bullets);
+  --tw-prose-hr: var(--tw-prose-invert-hr);
+  --tw-prose-quotes: var(--tw-prose-invert-quotes);
+  --tw-prose-quote-borders: var(--tw-prose-invert-quote-borders);
+  --tw-prose-captions: var(--tw-prose-invert-captions);
+  --tw-prose-code: var(--tw-prose-invert-code);
+  --tw-prose-pre-code: var(--tw-prose-invert-pre-code);
+  --tw-prose-pre-bg: var(--tw-prose-invert-pre-bg);
+  --tw-prose-th-borders: var(--tw-prose-invert-th-borders);
+  --tw-prose-td-borders: var(--tw-prose-invert-td-borders);
+}
+
+.marktion .ProseMirror:first-child {
+  margin-top: 20px;
+}
+
+.marktion.inline-style .ProseMirror:first-child {
+  margin-top: 0;
+}
+
+/* Marktion Task List Style */
+
+/* shoutout to this awesome tutorial: https://github.com/steven-tey/novel/blob/main/styles/prosemirror.css */
+.ProseMirror ul.contains-task-list {
+  @apply pl-0;
+}
+
+.ProseMirror .task-list-item {
+  @apply flex items-start my-4 pl-0;
+}
+
+.ProseMirror ul.contains-task-list .task-list-item > label {
+  margin-right: 0.2rem;
+  user-select: none;
+}
+
+@media screen and (max-width: 768px) {
+  .ProseMirror ul.contains-task-list .task-list-item > label {
+    margin-right: 0.5rem;
+  }
+}
+
+.ProseMirror ul.contains-task-list .task-list-item > label input[type='checkbox'] {
+  appearance: none;
+  margin: 0;
+  cursor: pointer;
+  width: 1.2em;
+  height: 1.2em;
+  position: relative;
+  top: 5px;
+  background-color: var(--mp-gray-1);
+  border: 2px solid var(--mp-gray-12);
+  margin-right: 0.3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &::before {
+    content: '';
+    width: 0.65em;
+    height: 0.65em;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em;
+    transform-origin: center;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  }
+
+  &:checked::before {
+    transform: scale(1);
+  }
+}
+
+.ProseMirror ul.contains-task-list .task-list-item[data-checked] > div {
+  display: inline-block;
+  color: var(--mp-gray-11);
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+}
+
+.ProseMirror ul.contains-task-list .task-list-item[data-checked='false'] > div {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Marktion Task List Style */
+
+.marktion .ProseMirror .is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: var(--mp-gray-8);
+  pointer-events: none;
+  height: 0;
+}
+
+.marktion .ProseMirror .is-empty::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: var(--mp-gray-8);
+  pointer-events: none;
+  height: 0;
+}
+
+.marktion .ProseMirror .code-block {
+  position: relative;
+}
+
+.ProseMirror .code-block .code-block-lang-select {
+  position: absolute;
+  top: -32px;
+  right: 0;
+}
+
+.marktion .ProseMirror :where(p):not(:where([class~='not-prose'] *)) {
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
+  margin: 0;
+}
+
+.marktion .ProseMirror :where(p):not(:where([class~='not-prose'] *)):first-of-type::before {
+  content: none;
+}
+
+.marktion .ProseMirror :where(p):not(:where([class~='not-prose'] *)):last-of-type::after {
+  content: none;
+}
+
+.marktion .ProseMirror :where([class~='lead']):not(:where([class~='not-prose'] *)) {
+  color: var(--tw-prose-lead);
+  font-size: 1.25em;
+  line-height: 1.6;
+  margin-top: 1.2em;
+  margin-bottom: 1.2em;
+}
+
+.marktion .ProseMirror :where(a):not(:where([class~='not-prose'] *)) {
+  color: var(--tw-prose-links);
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.marktion .ProseMirror :where(strong):not(:where([class~='not-prose'] *)) {
+  color: var(--tw-prose-bold);
+  font-weight: 600;
+}
+
+.marktion .ProseMirror :where(a strong):not(:where([class~='not-prose'] *)) {
+  color: inherit;
+}
+
+.marktion .ProseMirror :where(blockquote strong):not(:where([class~='not-prose'] *)) {
+  color: inherit;
+}
+
+.marktion .ProseMirror :where(thead th strong):not(:where([class~='not-prose'] *)) {
+  color: inherit;
+}
+
+.marktion .ProseMirror :where(ol):not(:where([class~='not-prose'] *)) {
+  list-style-type: decimal;
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
+  padding-left: 1.625em;
+}
+
+.marktion .ProseMirror :where(ol[type='A']):not(:where([class~='not-prose'] *)) {
+  list-style-type: upper-alpha;
+}
+
+.marktion .ProseMirror :where(ol[type='a']):not(:where([class~='not-prose'] *)) {
+  list-style-type: lower-alpha;
+}
+
+.marktion .ProseMirror :where(ol[type='A' s]):not(:where([class~='not-prose'] *)) {
+  list-style-type: upper-alpha;
+}
+
+.marktion .ProseMirror :where(ol[type='a' s]):not(:where([class~='not-prose'] *)) {
+  list-style-type: lower-alpha;
+}
+
+.marktion .ProseMirror :where(ol[type='I']):not(:where([class~='not-prose'] *)) {
+  list-style-type: upper-roman;
+}
+
+.marktion .ProseMirror :where(ol[type='i']):not(:where([class~='not-prose'] *)) {
+  list-style-type: lower-roman;
+}
+
+.marktion .ProseMirror :where(ol[type='I' s]):not(:where([class~='not-prose'] *)) {
+  list-style-type: upper-roman;
+}
+
+.marktion .ProseMirror :where(ol[type='i' s]):not(:where([class~='not-prose'] *)) {
+  list-style-type: lower-roman;
+}
+
+.marktion .ProseMirror :where(ol[type='1']):not(:where([class~='not-prose'] *)) {
+  list-style-type: decimal;
+}
+
+.marktion .ProseMirror :where(ul):not(:where([class~='not-prose'] *)) {
+  list-style-type: disc;
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
+  padding-left: 1.625em;
+}
+
+.marktion .ProseMirror :where(ol > li):not(:where([class~='not-prose'] *))::marker {
+  font-weight: 400;
+  color: var(--tw-prose-counters);
+}
+
+.marktion .ProseMirror :where(ul > li):not(:where([class~='not-prose'] *))::marker {
+  color: var(--tw-prose-bullets);
+}
+
+.marktion .ProseMirror :where(hr):not(:where([class~='not-prose'] *)) {
+  border-color: var(--tw-prose-hr);
+  border-top-width: 1px;
+  margin-top: 3em;
+  margin-bottom: 3em;
+}
+
+.marktion .ProseMirror :where(blockquote):not(:where([class~='not-prose'] *)) {
+  font-weight: 400;
+  font-style: italic;
+  color: var(--tw-prose-quotes);
+  border-left-width: 0.25rem;
+  border-left-color: var(--tw-prose-quote-borders);
+  quotes: '\201C' '\201D' '\2018' '\2019';
+  margin-top: 1.6em;
+  margin-bottom: 1.6em;
+  padding-left: 1em;
+}
+
+.marktion
+  .ProseMirror
+  :where(blockquote p:first-of-type):not(:where([class~='not-prose'] *))::before {
+  content: open-quote;
+}
+
+.marktion
+  .ProseMirror
+  :where(blockquote p:last-of-type):not(:where([class~='not-prose'] *))::after {
+  content: close-quote;
+}
+
+.marktion .ProseMirror :where(h1):not(:where([class~='not-prose'] *)) {
+  color: var(--tw-prose-headings);
+  font-weight: 800;
+  font-size: 2.25em;
+  margin-top: 0;
+  margin-bottom: 0.8888889em;
+  line-height: 1.1111111;
+}
+
+.marktion .ProseMirror :where(h1 strong):not(:where([class~='not-prose'] *)) {
+  font-weight: 900;
+  color: inherit;
+}
+
+.marktion .ProseMirror :where(h2):not(:where([class~='not-prose'] *)) {
+  color: var(--tw-prose-headings);
+  font-weight: 700;
+  font-size: 1.5em;
+  margin-top: 2em;
+  margin-bottom: 1em;
+  line-height: 1.3333333;
+}
+
+.marktion .ProseMirror :where(h2 strong):not(:where([class~='not-prose'] *)) {
+  font-weight: 800;
+  color: inherit;
+}
+
+.marktion .ProseMirror :where(h3):not(:where([class~='not-prose'] *)) {
+  color: var(--tw-prose-headings);
+  font-weight: 600;
+  font-size: 1.25em;
+  margin-top: 1.6em;
+  margin-bottom: 0.6em;
+  line-height: 1.6;
+}
+
+.marktion .ProseMirror :where(h3 strong):not(:where([class~='not-prose'] *)) {
+  font-weight: 700;
+  color: inherit;
+}
+
+.marktion .ProseMirror :where(h4):not(:where([class~='not-prose'] *)) {
+  color: var(--tw-prose-headings);
+  font-weight: 600;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  line-height: 1.5;
+}
+
+.marktion .ProseMirror :where(h4 strong):not(:where([class~='not-prose'] *)) {
+  font-weight: 700;
+  color: inherit;
+}
+
+.marktion .ProseMirror :where(img):not(:where([class~='not-prose'] *)) {
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+.marktion .ProseMirror :where(figure > *):not(:where([class~='not-prose'] *)) {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.marktion .ProseMirror :where(figcaption):not(:where([class~='not-prose'] *)) {
+  color: var(--tw-prose-captions);
+  font-size: 0.875em;
+  line-height: 1.4285714;
+  margin-top: 0.8571429em;
+}
+
+.marktion .ProseMirror :where(code):not(:where([class~='not-prose'] *)) {
+  color: var(--tw-prose-code);
+  font-weight: 600;
+  font-size: 0.875em;
+}
+
+.marktion .ProseMirror :where(code):not(:where([class~='not-prose'] *))::before {
+  content: '`';
+}
+
+.marktion .ProseMirror :where(code):not(:where([class~='not-prose'] *))::after {
+  content: '`';
+}
+
+.marktion .ProseMirror :where(a code):not(:where([class~='not-prose'] *)) {
+  color: inherit;
+}
+
+.marktion .ProseMirror :where(h1 code):not(:where([class~='not-prose'] *)) {
+  color: inherit;
+}
+
+.marktion .ProseMirror :where(h2 code):not(:where([class~='not-prose'] *)) {
+  color: inherit;
+  font-size: 0.875em;
+}
+
+.marktion .ProseMirror :where(h3 code):not(:where([class~='not-prose'] *)) {
+  color: inherit;
+  font-size: 0.9em;
+}
+
+.marktion .ProseMirror :where(h4 code):not(:where([class~='not-prose'] *)) {
+  color: inherit;
+}
+
+.marktion .ProseMirror :where(blockquote code):not(:where([class~='not-prose'] *)) {
+  color: inherit;
+}
+
+.marktion .ProseMirror :where(thead th code):not(:where([class~='not-prose'] *)) {
+  color: inherit;
+}
+
+.marktion .ProseMirror :where(pre):not(:where([class~='not-prose'] *)) {
+  color: var(--tw-prose-pre-code);
+  background-color: var(--tw-prose-pre-bg);
+  overflow-x: auto;
+  font-weight: 400;
+  font-size: 0.875em;
+  line-height: 1.7142857;
+  margin-top: 1.7142857em;
+  margin-bottom: 1.7142857em;
+  border-radius: 0.375rem;
+  padding-top: 0.8571429em;
+  padding-right: 1.1428571em;
+  padding-bottom: 0.8571429em;
+  padding-left: 1.1428571em;
+}
+
+.marktion .ProseMirror :where(pre code):not(:where([class~='not-prose'] *)) {
+  background-color: transparent;
+  border-width: 0;
+  border-radius: 0;
+  padding: 0;
+  font-weight: inherit;
+  color: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  line-height: inherit;
+}
+
+.marktion .ProseMirror :where(pre code):not(:where([class~='not-prose'] *))::before {
+  content: none;
+}
+
+.marktion .ProseMirror :where(pre code):not(:where([class~='not-prose'] *))::after {
+  content: none;
+}
+
+.marktion .ProseMirror :where(table):not(:where([class~='not-prose'] *)) {
+  width: 100%;
+  table-layout: auto;
+  text-align: left;
+  margin-top: 2em;
+  margin-bottom: 2em;
+  font-size: 0.875em;
+  line-height: 1.7142857;
+}
+
+.marktion .ProseMirror :where(thead):not(:where([class~='not-prose'] *)) {
+  border-bottom-width: 1px;
+  border-bottom-color: var(--tw-prose-th-borders);
+}
+
+.marktion .ProseMirror :where(thead th):not(:where([class~='not-prose'] *)) {
+  color: var(--tw-prose-headings);
+  font-weight: 600;
+  vertical-align: bottom;
+  padding-right: 0.5714286em;
+  padding-bottom: 0.5714286em;
+  padding-left: 0.5714286em;
+}
+
+.marktion .ProseMirror :where(tbody tr):not(:where([class~='not-prose'] *)) {
+  border-bottom-width: 1px;
+  border-bottom-color: var(--tw-prose-td-borders);
+}
+
+.marktion .ProseMirror :where(tbody tr:last-child):not(:where([class~='not-prose'] *)) {
+  border-bottom-width: 0;
+}
+
+.marktion .ProseMirror :where(tbody td):not(:where([class~='not-prose'] *)) {
+  vertical-align: baseline;
+}
+
+.marktion .ProseMirror :where(tfoot):not(:where([class~='not-prose'] *)) {
+  border-top-width: 1px;
+  border-top-color: var(--tw-prose-th-borders);
+}
+
+.marktion .ProseMirror :where(tfoot td):not(:where([class~='not-prose'] *)) {
+  vertical-align: top;
+}
+
+.marktion .ProseMirror :where(video):not(:where([class~='not-prose'] *)) {
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+.marktion .ProseMirror :where(figure):not(:where([class~='not-prose'] *)) {
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+.marktion .ProseMirror :where(li):not(:where([class~='not-prose'] *)) {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.marktion .ProseMirror :where(ol > li):not(:where([class~='not-prose'] *)) {
+  padding-left: 0.375em;
+}
+
+.marktion .ProseMirror :where(ul > li):not(:where([class~='not-prose'] *)) {
+  padding-left: 0.375em;
+}
+
+.marktion .ProseMirror :where(.prose > ul > li p):not(:where([class~='not-prose'] *)) {
+  margin-top: 0.75em;
+  margin-bottom: 0.75em;
+}
+
+.marktion
+  .ProseMirror
+  :where(.prose > ul > li > *:first-child):not(:where([class~='not-prose'] *)) {
+  margin-top: 1.25em;
+}
+
+.marktion .ProseMirror :where(.prose > ul > li > *:last-child):not(:where([class~='not-prose'] *)) {
+  margin-bottom: 1.25em;
+}
+
+.marktion
+  .ProseMirror
+  :where(.prose > ol > li > *:first-child):not(:where([class~='not-prose'] *)) {
+  margin-top: 1.25em;
+}
+
+.marktion .ProseMirror :where(.prose > ol > li > *:last-child):not(:where([class~='not-prose'] *)) {
+  margin-bottom: 1.25em;
+}
+
+.marktion .ProseMirror :where(ul ul, ul ol, ol ul, ol ol):not(:where([class~='not-prose'] *)) {
+  margin-top: 0.75em;
+  margin-bottom: 0.75em;
+}
+
+.marktion .ProseMirror :where(hr + *):not(:where([class~='not-prose'] *)) {
+  margin-top: 0;
+}
+
+.marktion .ProseMirror :where(h2 + *):not(:where([class~='not-prose'] *)) {
+  margin-top: 0;
+}
+
+.marktion .ProseMirror :where(h3 + *):not(:where([class~='not-prose'] *)) {
+  margin-top: 0;
+}
+
+.marktion .ProseMirror :where(h4 + *):not(:where([class~='not-prose'] *)) {
+  margin-top: 0;
+}
+
+.marktion .ProseMirror :where(thead th:first-child):not(:where([class~='not-prose'] *)) {
+  padding-left: 0;
+}
+
+.marktion .ProseMirror :where(thead th:last-child):not(:where([class~='not-prose'] *)) {
+  padding-right: 0;
+}
+
+.marktion .ProseMirror :where(tbody td, tfoot td):not(:where([class~='not-prose'] *)) {
+  padding-top: 0.5714286em;
+  padding-right: 0.5714286em;
+  padding-bottom: 0.5714286em;
+  padding-left: 0.5714286em;
+}
+
+.marktion
+  .ProseMirror
+  :where(tbody td:first-child, tfoot td:first-child):not(:where([class~='not-prose'] *)) {
+  padding-left: 0;
+}
+
+.marktion
+  .ProseMirror
+  :where(tbody td:last-child, tfoot td:last-child):not(:where([class~='not-prose'] *)) {
+  padding-right: 0;
+}
+
+.marktion .ProseMirror :where(.prose > :first-child):not(:where([class~='not-prose'] *)) {
+  margin-top: 0;
+}
+
+.marktion .ProseMirror :where(.prose > :last-child):not(:where([class~='not-prose'] *)) {
+  margin-bottom: 0;
+}

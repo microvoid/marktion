@@ -2,7 +2,8 @@
 
 Marktion 是一个基于 [tiptap](https://tiptap.dev/) 的所见即所得 Markdown 编辑器。它提供了一种直观的方式来编辑和预览 Markdown 文本，使用户能够创建具有视觉吸引力的文档。
 
-## Features
+- **[NEW] ✨ AI 集成**：准备好使用 AI 辅助编写 Markdown 了吗？内置 AI 对话界面，支持 AI 插件扩展；
+- **[NEW]支持 SSR**：支持服务端高性能渲染
 
 - **所见即所得编辑**：实时预览 Markdown 渲染结果，提供直观的编辑体验。
 - **Slash 菜单**和 **Bubble 菜单**：通过 Slash 命令菜单和 Bubble 菜单访问常用的格式化选项和命令，灵感来自 Notion 的编辑器。
@@ -12,7 +13,7 @@ Marktion 是一个基于 [tiptap](https://tiptap.dev/) 的所见即所得 Markdo
 
 1. 安装依赖项。
 
-```shell
+```bash
 npm intall marktion
 ```
 
@@ -72,6 +73,23 @@ function App() {
 }
 ```
 
+## Plugins
+
+### AI Plugin
+
+> AI Plugin 是基于 vercel ai 实现的，在开始之前，你需要先创建一个 AI router，[参考文档](https://sdk.vercel.ai/docs/getting-started)
+
+使用示例:
+
+```tsx
+AIPlugin({
+  openai: {
+    basePath: 'https://api.openai.com/v1',
+    apiKey: 'KEY'
+  }
+})
+```
+
 ## 贡献
 
 感谢您考虑为 Marktion 做出贡献！如果您希望参与项目，请按照以下步骤：
@@ -79,14 +97,14 @@ function App() {
 1. 将仓库 Fork 到您的 GitHub 账户。
 2. 将 Fork 的仓库克隆到本地机器。
 
-```shell
+```bash
 git clone https://github.com/yourusername/marktion.git
 cd marktion
 ```
 
 3. 安装依赖项。
 
-```shell
+```bash
 pnpm i
 ```
 

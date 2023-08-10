@@ -1,4 +1,4 @@
-import { Extension } from '@tiptap/core';
+import { Extension, createDocument } from '@tiptap/core';
 import { MarkdownClipboardExtension } from './clipboard';
 import { MarkdownOptions, MarkdownStorage } from './interface';
 import { parse, serialize } from './encoding';
@@ -28,11 +28,19 @@ export const MarkdownExtension = Extension.create<MarkdownOptions, MarkdownStora
       },
 
       insertMarkdownAt(range, content, options) {
-        return ({ commands, editor }) => {
+        return ({ editor, tr, dispatch }) => {
           const storage = editor.storage.markdown as MarkdownStorage;
           const parsed = storage.parse(content);
+          const document = createDocument(parsed, editor.schema, options?.parseOptions);
 
-          return commands.insertContentAt(range, parsed, options);
+          if (dispatch) {
+            const from = typeof range === 'number' ? range : range.from;
+            const to = typeof range === 'number' ? range : range.to;
+
+            tr.replaceWith(from, to, document);
+          }
+
+          return true;
         };
       }
     };
