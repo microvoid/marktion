@@ -10,6 +10,9 @@ See our website [marktion.io](https://marktion.io) in action.
 
 ## Features
 
+- [NEW] ✨ AI Integration: Ready to use AI to assist in writing Markdown? Built-in AI Chat Panel UI, supports AI plugin extensions;
+- [NEW] SSR: Supports server-side high-performance rendering."
+
 - **WYSIWYG Editing**: Real-time preview of Markdown rendering for a more intuitive editing experience.
 - **Slash Menu** & **Bubble Menu**: Access commonly used formatting options and commands using a slash command menu, inspired by Notion's editor.
 - **Dark Mode Support**: Enable Dark Mode to provide a visually comfortable editing experience in low-light environments.
@@ -77,6 +80,23 @@ function App() {
   );
 }
 ```
+
+## Plugins
+
+### AI Plugin
+
+> The AI Plugin is based on Vercel AI. Before you start, you need to create an AI router. Please refer to the documentation for more information: [Getting Started](https://sdk.vercel.ai/docs/getting-started).
+
+Example usage:
+
+```tsx
+AIPlugin({
+  openai: {
+    basePath: 'https://api.openai.com/v1',
+    apiKey: 'KEY'
+  }
+})
+``
 
 ## Contributing
 
