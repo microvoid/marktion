@@ -6,7 +6,7 @@ import { GptOptions, limitGpt } from './api';
 import { AIOptions, AIStorage } from './interface';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ChatPanel } from './ui-chat-panel';
-import { useEditor, useRootElRef } from '../hooks';
+import { useRootElRef } from '../hooks';
 import { Plugin, PluginKey } from '@tiptap/pm/state';
 
 export const AIPlugin = createIntergrateExtension((options: AIOptions) => {
@@ -114,79 +114,91 @@ export const AIPlugin = createIntergrateExtension((options: AIOptions) => {
     }
   });
 
-  const wrapperElRef: {
+  const wrapperElRef: ViewWrapperProps['wrapperRef'] = {
+    update: () => {}
+  };
+
+  return {
+    extension: AIExtensions,
+    view({ editor }) {
+      return <ViewWrapper editor={editor} wrapperRef={wrapperElRef} />;
+    }
+  };
+});
+
+type ViewWrapperProps = {
+  wrapperRef: {
     update: (options: {
       open?: boolean;
       rect: DOMRect | null;
       config: GptOptions['config'];
     }) => void;
-  } = {
-    update: () => {}
   };
+  editor: Editor;
+};
 
-  function ViewWrapper() {
-    const rootEl = useRootElRef();
-    const [open, setOpen] = useState(false);
-    const editor = useEditor();
-    const triggerElRef = useRef<HTMLDivElement>(null);
-    const [gptConfig, setGptConfig] = useState<GptOptions['config']>();
-    const containerElRef = useRef<HTMLDivElement>(null);
+function ViewWrapper({ editor, wrapperRef }: ViewWrapperProps) {
+  const rootEl = useRootElRef();
+  const [open, setOpen] = useState(false);
+  const triggerElRef = useRef<HTMLDivElement>(null);
+  const [gptConfig, setGptConfig] = useState<GptOptions['config']>();
+  const containerElRef = useRef<HTMLDivElement>(null);
 
-    const setRect = (rect: DOMRect | null) => {
-      const rootElRect = rootEl.current?.getBoundingClientRect();
+  const setRect = (rect: DOMRect | null) => {
+    const rootElRect = rootEl.current?.getBoundingClientRect();
 
-      if (rect && triggerElRef.current && rootElRect) {
-        triggerElRef.current.style.top = `${rect.top - rootElRect.top}px`;
-        triggerElRef.current.style.left = `${rect.left - rootElRect.left}px`;
-        triggerElRef.current.style.width = `${rect.width}px`;
-        triggerElRef.current.style.height = `${rect.height}px`;
-      }
-    };
-
-    useEffect(() => {
-      wrapperElRef.update = ({ open, rect, config }) => {
-        setRect(rect);
-        setOpen(open || false);
-        setGptConfig(config);
-      };
-    }, [rootEl]);
-
-    const onOpenChange = useCallback((open: boolean) => {
-      setOpen(open);
-
-      if (!open) {
-        editor.commands.focus();
-      }
-    }, []);
-
-    return (
-      <div ref={containerElRef}>
-        <ChatPanel
-          open={open}
-          onOpenChange={onOpenChange}
-          gptConfig={gptConfig}
-          getPopupContainer={() => containerElRef.current || document.body}
-        >
-          <div
-            data-role="ai-chatpanel-trigger"
-            ref={triggerElRef}
-            style={{
-              display: open ? 'block' : 'none',
-              position: 'absolute'
-            }}
-          />
-        </ChatPanel>
-      </div>
-    );
-  }
-
-  return {
-    extension: AIExtensions,
-    view() {
-      return <ViewWrapper />;
+    if (rect && triggerElRef.current && rootElRect) {
+      triggerElRef.current.style.top = `${rect.top - rootElRect.top}px`;
+      triggerElRef.current.style.left = `${rect.left - rootElRect.left}px`;
+      triggerElRef.current.style.width = `${rect.width}px`;
+      triggerElRef.current.style.height = `${rect.height}px`;
     }
   };
-});
+
+  useEffect(() => {
+    wrapperRef.update = ({ open, rect, config }) => {
+      setRect(rect);
+      setOpen(open || false);
+      setGptConfig(config);
+    };
+  }, [rootEl]);
+
+  const curOpen = open;
+
+  const onOpenChange = useCallback(
+    (open: boolean) => {
+      setOpen(open);
+
+      /**
+       * fix: onOpenChange will be called even if the popup is closed
+       */
+      if (curOpen && !open) {
+        editor.commands.focus();
+      }
+    },
+    [rootEl, curOpen]
+  );
+
+  return (
+    <div ref={containerElRef}>
+      <ChatPanel
+        open={open}
+        onOpenChange={onOpenChange}
+        gptConfig={gptConfig}
+        getPopupContainer={() => containerElRef.current || document.body}
+      >
+        <div
+          data-role="ai-chatpanel-trigger"
+          ref={triggerElRef}
+          style={{
+            display: open ? 'block' : 'none',
+            position: 'absolute'
+          }}
+        />
+      </ChatPanel>
+    </div>
+  );
+}
 
 function dispathAICommand(editor: Editor, question: string, options?: GptOptions) {
   editor.commands.deleteRange({

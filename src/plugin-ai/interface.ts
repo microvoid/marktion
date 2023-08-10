@@ -9,7 +9,7 @@ export interface AIStorage {
 
 export interface AIOptions {
   openai: ConfigurationParameters;
-  enableAIChat: boolean;
-  enableQuickQuestion: boolean;
-  enableQuickContinueWriting: boolean;
+  enableAIChat?: boolean;
+  enableQuickQuestion?: boolean;
+  enableQuickContinueWriting?: boolean;
 }
