@@ -96,7 +96,7 @@ AIPlugin({
     apiKey: 'KEY'
   }
 })
-``
+```
 
 ## Contributing
 
