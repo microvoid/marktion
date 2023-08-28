@@ -1,4 +1,4 @@
-import MonacoEditor, { MonacoEditorProps } from 'react-monaco-editor';
+import { MonacoEditor, MonacoEditorProps } from './monaco';
 import { MarktionSourceToolbar, MarktionSourceToolbarProps } from './toolbar';
 
 export type MarktionSourceProps = MonacoEditorProps & {

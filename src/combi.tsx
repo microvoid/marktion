@@ -1,9 +1,9 @@
-import { Button } from 'antd';
+import { Button, Tooltip } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import cls from 'classnames';
 import { PencilIcon, CodeIcon } from 'lucide-react';
 import { Marktion, MarktionProps, MarktionRef } from '.';
-import { MarktionSource } from './source';
+import { MarktionSource, MarktionSourceProps } from './source';
 
 export type MarktionCombiProps = React.PropsWithChildren<{
   value: string;
@@ -11,14 +11,22 @@ export type MarktionCombiProps = React.PropsWithChildren<{
   marktionProps?: MarktionProps & {
     ref?: React.RefObject<MarktionRef>;
   };
+  sourceProps?: MarktionSourceProps;
 }>;
 
 export function MarktionCombi(props: MarktionCombiProps) {
-  const { mode: propsMode = 'source', marktionProps, value: propsValue } = props;
+  const {
+    mode: propsMode = 'source',
+    value: propsValue,
+    marktionProps,
+    sourceProps,
+    children
+  } = props;
 
   const _ref = useRef<MarktionRef>(null);
   const [mode, setMode] = useState(propsMode);
   const [markdown, setMarkdown] = useState(propsValue);
+  const [tooltipOpen, setTooltipOpen] = useState(false);
 
   const marktionRef = marktionProps?.ref || _ref;
   const isSourceMode = mode === 'source';
@@ -29,10 +37,24 @@ export function MarktionCombi(props: MarktionCombiProps) {
     }
   }, [propsValue]);
 
+  useEffect(() => {
+    const onKeydown = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.key === '/') {
+        setMode(mode => (mode === 'source' ? 'visual' : 'source'));
+      }
+    };
+
+    window.addEventListener('keydown', onKeydown);
+    return () => {
+      window.removeEventListener('keydown', onKeydown);
+    };
+  }, []);
+
   const onChangeMode = () => {
     const mode = isSourceMode ? 'visual' : 'source';
 
     setMode(mode);
+    setTooltipOpen(false);
 
     if (mode === 'visual') {
       marktionRef.current?.editor.commands.setMarkdwon(markdown);
@@ -43,12 +65,17 @@ export function MarktionCombi(props: MarktionCombiProps) {
 
   const toolbarRight = (
     <div>
-      <Button
-        title={isSourceMode ? 'Change to Visual mode' : 'Change to Source mode'}
-        type="text"
-        onClick={onChangeMode}
-        icon={isSourceMode ? <PencilIcon /> : <CodeIcon />}
-      />
+      <Tooltip
+        open={tooltipOpen}
+        onOpenChange={setTooltipOpen}
+        title={isSourceMode ? 'Visual Mode(cmd+/)' : 'Source Mode(cmd+/)'}
+      >
+        <Button
+          type="text"
+          onClick={onChangeMode}
+          icon={isSourceMode ? <PencilIcon /> : <CodeIcon />}
+        />
+      </Tooltip>
       {props.marktionProps?.toolbarProps?.addonRight}
     </div>
   );
@@ -63,7 +90,9 @@ export function MarktionCombi(props: MarktionCombiProps) {
           ...marktionProps?.toolbarProps,
           addonRight: toolbarRight
         }}
-      />
+      >
+        {children}
+      </Marktion>
 
       {mode === 'source' && (
         <MarktionSource
@@ -73,6 +102,7 @@ export function MarktionCombi(props: MarktionCombiProps) {
           }}
           onChange={setMarkdown}
           theme={marktionProps?.darkMode ? 'vs-dark' : 'vs-light'}
+          {...sourceProps}
         />
       )}
     </div>
