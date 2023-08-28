@@ -16,7 +16,7 @@ export type MarktionCombiProps = React.PropsWithChildren<{
 
 export function MarktionCombi(props: MarktionCombiProps) {
   const {
-    mode: propsMode = 'source',
+    mode: propsMode = 'visial',
     value: propsValue,
     marktionProps,
     sourceProps,

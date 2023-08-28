@@ -5,7 +5,7 @@ import { noop, processSize } from './utils';
 
 // https://github.com/microsoft/monaco-editor/blob/main/docs/integrate-esm.md#using-vite
 self.MonacoEnvironment = {
-  getWorker: function (workerId, label) {
+  getWorker: function (_, label) {
     const getWorkerModule = (moduleUrl: string, label: string) => {
       // @ts-ignore
       return new Worker(self.MonacoEnvironment.getWorkerUrl(moduleUrl), {
