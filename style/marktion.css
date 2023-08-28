@@ -63,7 +63,7 @@
   --mp-gray-12: hsl(0, 0%, 93%);
 }
 
-.marktion {
+.marktion, .marktion-source {
   --tw-shadow: 0 6px 15px 3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color),
     0 4px 6px -4px var(--tw-shadow-color);
@@ -83,13 +83,13 @@
   background-color: transparent;
 }
 
-.marktion .lucide {
+.marktion .lucide, .marktion-source .lucide {
   height: 14px;
   width: 14px;
   margin-top: 1px;
 }
 
-.marktion .ant-btn-icon .lucide {
+.marktion .ant-btn-icon .lucide, .marktion-source .ant-btn-icon .lucide {
   margin-top: 4px;
 }
 
@@ -97,3 +97,16 @@
   height: 14px;
   width: 14px;
 }
+
+.marktion-source {
+  overflow: hidden;
+}
+
+/* combi */
+.marktion-combi[data-mode="visual"] .marktion-source {
+  display: none;
+}
+.marktion-combi[data-mode="source"] .marktion {
+  display: none;
+}
+/* combi */
