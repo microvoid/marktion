@@ -142,10 +142,11 @@ export function InlineTools(props: { editor: Editor; showAI?: boolean }) {
         return (
           <Button
             key={item.name}
-            icon={item.icon}
             type={item.isActive() ? 'primary' : 'text'}
             onClick={item.command}
-          />
+          >
+            {item.icon}
+          </Button>
         );
       })}
 
