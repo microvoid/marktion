@@ -9,6 +9,8 @@ import { UploadImageHandler } from './handler';
 import { EditorContext, RootElContext } from './hooks';
 import { Toolbar, ToolbarProps } from './toolbar';
 import { defaultTiptapExtensions } from './tiptap';
+import { handleDrop } from './handlers';
+import { EditorProps } from '@tiptap/pm/view';
 
 export type MarktionProps = React.PropsWithChildren<
   Partial<EditorOptions> & {
@@ -25,6 +27,10 @@ export type MarktionProps = React.PropsWithChildren<
 export type MarktionRef = {
   getMarkdown: () => string;
   editor: Editor;
+};
+
+const defaultEditorProps: EditorProps = {
+  handleDrop: handleDrop
 };
 
 export const Marktion = React.forwardRef<MarktionRef, MarktionProps>((props, ref) => {
@@ -52,6 +58,7 @@ export const Marktion = React.forwardRef<MarktionRef, MarktionProps>((props, ref
     .map(item => item.extension!);
 
   const editor = useEditor({
+    editorProps: defaultEditorProps,
     extensions: [...extensions, ...intergrateExtensions],
     content,
     ...editorProps

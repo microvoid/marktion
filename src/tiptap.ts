@@ -1,6 +1,3 @@
-import TiptapImage from '@tiptap/extension-image';
-import { mergeAttributes } from '@tiptap/core';
-
 import TiptapTaskItem from '@tiptap/extension-task-item';
 import TiptapTaskList from '@tiptap/extension-task-list';
 import Link from '@tiptap/extension-link';
@@ -32,6 +29,7 @@ import { Text } from '@tiptap/extension-text';
 
 import { FenseExtension } from './plugin-fense';
 import { MarkdownExtension } from './plugin-markdown';
+import { ImageExtension } from './plugin-image';
 
 const TaskList = TiptapTaskList.extend({
   parseHTML() {
@@ -76,20 +74,6 @@ const TaskItem = TiptapTaskItem.extend({
   }
 });
 
-const Image = TiptapImage.extend({
-  renderHTML({ HTMLAttributes }) {
-    return [
-      'p',
-      {
-        role: 'image-wrapper'
-      },
-      ['img', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)]
-    ];
-  }
-}).configure({
-  allowBase64: true
-});
-
 export const defaultTiptapExtensions = [
   MarkdownExtension,
   Highlight,
@@ -114,7 +98,7 @@ export const defaultTiptapExtensions = [
     },
     includeChildren: true
   }),
-  Image,
+  ImageExtension,
   Link,
   Table,
   TableHeader,

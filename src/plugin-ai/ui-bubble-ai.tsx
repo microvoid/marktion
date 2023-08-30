@@ -1,6 +1,5 @@
 import { theme, Button, Dropdown, MenuProps } from 'antd';
 import { SparklesIcon } from 'lucide-react';
-import { useRef } from 'react';
 import { MarktionAIEnum } from './constants';
 
 const AIMenuItems: MenuProps['items'] = [
