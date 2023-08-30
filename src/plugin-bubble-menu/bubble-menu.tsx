@@ -1,16 +1,10 @@
-import { Code } from 'lucide-react';
+import { Code, BoldIcon, ItalicIcon, StrikethroughIcon, LinkIcon, TrashIcon } from 'lucide-react';
 import { Button, Divider, Input, Popover, InputRef, theme } from 'antd';
-import { BubbleMenu, BubbleMenuProps } from '@tiptap/react';
-import {
-  FontBoldIcon,
-  FontItalicIcon,
-  StrikethroughIcon,
-  Link1Icon,
-  TrashIcon
-} from '@radix-ui/react-icons';
-import { createIntergrateExtension } from '../plugins';
-import { useRef, useState } from 'react';
 import { Editor } from '@tiptap/core';
+import { BubbleMenu, BubbleMenuProps } from '@tiptap/react';
+import { useRef, useState } from 'react';
+import { BubbleAI } from '../plugin-ai/ui-bubble-ai';
+import { createIntergrateExtension } from '../plugins';
 
 export const EditorBubbleMenuPlugin = createIntergrateExtension(() => {
   return {
@@ -68,13 +62,13 @@ function EditorBubbleMenu(props: EditorBubbleMenuProps) {
           e.preventDefault();
         }}
       >
-        <InlineTools editor={props.editor} />
+        <InlineTools editor={props.editor} showAI={true} />
       </div>
     </BubbleMenu>
   );
 }
 
-export function InlineTools(props: { editor: Editor }) {
+export function InlineTools(props: { editor: Editor; showAI?: boolean }) {
   const linkInputRef = useRef<InputRef>(null);
   const [linkInputOpen, setLinkInputOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -84,13 +78,13 @@ export function InlineTools(props: { editor: Editor }) {
       name: 'bold',
       isActive: () => props.editor.isActive('bold'),
       command: () => props.editor.chain().focus().toggleBold().run(),
-      icon: <FontBoldIcon style={{ width: 14, height: 14 }} />
+      icon: <BoldIcon style={{ width: 14, height: 14 }} />
     },
     {
       name: 'italic',
       isActive: () => props.editor.isActive('italic'),
       command: () => props.editor.chain().focus().toggleItalic().run(),
-      icon: <FontItalicIcon style={{ width: 14, height: 14 }} />
+      icon: <ItalicIcon style={{ width: 14, height: 14 }} />
     },
     {
       name: 'strike',
@@ -110,7 +104,7 @@ export function InlineTools(props: { editor: Editor }) {
     name: 'link',
     isActive: () => props.editor.isActive('link'),
     command: (href: string) => props.editor.chain().focus().setLink({ href }).run(),
-    icon: <Link1Icon style={{ width: 14, height: 14 }} />
+    icon: <LinkIcon style={{ width: 14, height: 14 }} />
   };
 
   const linkInput = (
@@ -142,15 +136,16 @@ export function InlineTools(props: { editor: Editor }) {
 
   return (
     <>
+      {/* {props.showAI && <BubbleAI />} */}
+
       {items.map(item => {
         return (
           <Button
             key={item.name}
+            icon={item.icon}
             type={item.isActive() ? 'primary' : 'text'}
             onClick={item.command}
-          >
-            {item.icon}
-          </Button>
+          />
         );
       })}
 

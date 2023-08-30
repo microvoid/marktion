@@ -1,7 +1,7 @@
-import { Button, Tooltip } from 'antd';
+import { Button, Segmented, Tooltip } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import cls from 'classnames';
-import { PencilIcon, CodeIcon } from 'lucide-react';
+import { PencilIcon, Code2Icon } from 'lucide-react';
 import { Marktion, MarktionProps, MarktionRef } from '.';
 import { MarktionSource, MarktionSourceProps } from './source';
 
@@ -16,7 +16,7 @@ export type MarktionCombiProps = React.PropsWithChildren<{
 
 export function MarktionCombi(props: MarktionCombiProps) {
   const {
-    mode: propsMode = 'visial',
+    mode: propsMode = 'visual',
     value: propsValue,
     marktionProps,
     sourceProps,
@@ -26,7 +26,6 @@ export function MarktionCombi(props: MarktionCombiProps) {
   const _ref = useRef<MarktionRef>(null);
   const [mode, setMode] = useState(propsMode);
   const [markdown, setMarkdown] = useState(propsValue);
-  const [tooltipOpen, setTooltipOpen] = useState(false);
 
   const marktionRef = marktionProps?.ref || _ref;
   const isSourceMode = mode === 'source';
@@ -54,7 +53,6 @@ export function MarktionCombi(props: MarktionCombiProps) {
     const mode = isSourceMode ? 'visual' : 'source';
 
     setMode(mode);
-    setTooltipOpen(false);
 
     if (mode === 'visual') {
       marktionRef.current?.editor.commands.setMarkdwon(markdown);
@@ -65,15 +63,21 @@ export function MarktionCombi(props: MarktionCombiProps) {
 
   const toolbarRight = (
     <div>
-      <Tooltip
-        open={tooltipOpen}
-        onOpenChange={setTooltipOpen}
-        title={isSourceMode ? 'Visual Mode(cmd+/)' : 'Source Mode(cmd+/)'}
-      >
-        <Button
-          type="text"
-          onClick={onChangeMode}
-          icon={isSourceMode ? <PencilIcon /> : <CodeIcon />}
+      <Tooltip title={'Change editor mode(ctrl+/)'}>
+        <Segmented
+          size="small"
+          options={[
+            {
+              label: 'Visual Mode',
+              value: 'visual'
+            },
+            {
+              label: 'Source Mode',
+              value: 'source'
+            }
+          ]}
+          onChange={onChangeMode}
+          value={mode}
         />
       </Tooltip>
       {props.marktionProps?.toolbarProps?.addonRight}
