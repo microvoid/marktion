@@ -200,7 +200,9 @@ function ViewWrapper({ editor, wrapperRef }: ViewWrapperProps) {
   );
 }
 
-function dispathAICommand(editor: Editor, question: string, options?: GptOptions) {}
+function dispathAICommand(editor: Editor, question: string, options?: GptOptions) {
+  // TODO
+}
 
 const segments = (token: string, count: number) => {
   let s = '';

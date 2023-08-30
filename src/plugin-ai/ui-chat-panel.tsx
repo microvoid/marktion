@@ -13,7 +13,7 @@ import {
 import { SparklesIcon, User2Icon, SendHorizonalIcon } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useChat, Message } from 'ai/react';
-import { GptOptions } from './api';
+import { GptOptions } from './type';
 import { MarktionSSR } from '..';
 import { OpenAIIcon } from './icon-openai';
 import { useEditor } from '../hooks';
