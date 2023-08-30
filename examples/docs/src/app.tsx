@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FloatButton, Segmented } from 'antd';
 import { useDarkMode } from 'usehooks-ts';
-import { Marktion, MarktionSSR, MarktionProps, MarktionRef } from '../../../dist';
+import { MarktionSSR, MarktionProps, MarktionRef, MarktionCombi } from '../../../dist';
 import { Header } from './header';
 import { getPlugins } from './plugins';
 
@@ -90,15 +90,17 @@ export function App() {
 
         <div className="mt-10 mb-20">
           {ssr === 0 && (
-            <Marktion
-              ref={marktionRef}
-              darkMode={isDarkMode}
-              markdown={INIT_MARKDOWN[lang]}
-              onUploadImage={onUploadImage}
-              plugins={plugins}
+            <MarktionCombi
+              value={INIT_MARKDOWN[lang]}
+              marktionProps={{
+                ref: marktionRef,
+                darkMode: isDarkMode,
+                onUploadImage: onUploadImage,
+                plugins: plugins
+              }}
             >
               <FloatButton tooltip="Export markdwon file" onClick={onExport} />
-            </Marktion>
+            </MarktionCombi>
           )}
 
           {ssr === 1 && <MarktionSSR markdown={ssrContent} />}

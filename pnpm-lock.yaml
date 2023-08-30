@@ -143,6 +143,9 @@ importers:
       lucide-react:
         specifier: ^0.264.0
         version: 0.264.0(react@18.2.0)
+      monaco-editor:
+        specifier: ^0.41.0
+        version: 0.41.0
       nanoid:
         specifier: ^4.0.2
         version: 4.0.2
@@ -5013,6 +5016,10 @@ packages:
     dependencies:
       brace-expansion: 2.0.1
     dev: true
+
+  /monaco-editor@0.41.0:
+    resolution: {integrity: sha512-1o4olnZJsiLmv5pwLEAmzHTE/5geLKQ07BrGxlF4Ri/AXAc2yyDGZwHjiTqD8D/ROKUZmwMA28A+yEowLNOEcA==}
+    dev: false
 
   /mri@1.2.0:
     resolution: {integrity: sha512-tzzskb3bG8LvYGFF/mDTpq3jpI6Q9wc3LEmBaghu+DdCssd1FakN7Bc0hVNmEyGq1bq3RgfkCb3cmQLpNPOroA==}

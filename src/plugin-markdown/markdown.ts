@@ -12,7 +12,7 @@ export const MarkdownExtension = Extension.create<MarkdownOptions, MarkdownStora
       bulletListMarker: '-',
       linkify: false,
       breaks: false,
-      transformPastedText: false,
+      transformPastedText: true,
       transformCopiedText: false
     };
   },

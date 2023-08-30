@@ -1,13 +1,13 @@
 import { Extension } from '@tiptap/react';
+import { Plugin, PluginKey } from '@tiptap/pm/state';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Editor, posToDOMRect, getTextContentFromNodes } from '@tiptap/core';
 import { DEFAULT_CONTINUE_WRITING, DEFAULT_GPT_PROMPT } from './constants';
 import { createIntergrateExtension } from '../plugins';
-import { GptOptions, limitGpt } from './api';
 import { AIOptions, AIStorage } from './interface';
-import { useCallback, useEffect, useRef, useState } from 'react';
 import { ChatPanel } from './ui-chat-panel';
 import { useRootElRef } from '../hooks';
-import { Plugin, PluginKey } from '@tiptap/pm/state';
+import { GptOptions } from './type';
 
 export const AIPlugin = createIntergrateExtension((options: AIOptions) => {
   const isAIContinueWriting = segments('+', 2);
@@ -201,25 +201,7 @@ function ViewWrapper({ editor, wrapperRef }: ViewWrapperProps) {
 }
 
 function dispathAICommand(editor: Editor, question: string, options?: GptOptions) {
-  editor.commands.deleteRange({
-    from: editor.state.selection.from - 2,
-    to: editor.state.selection.from
-  });
-
-  limitGpt(question, {
-    ...options,
-    onProgress(event) {
-      const delta = event.choices[0].delta.content || '';
-      editor.commands.insertContent(delta);
-    }
-  }).then(res => {
-    const content = res.choices[0].delta.content || '';
-
-    editor.commands.setTextSelection({
-      from: editor.state.selection.from - content.length,
-      to: editor.state.selection.from
-    });
-  });
+  // TODO
 }
 
 const segments = (token: string, count: number) => {
