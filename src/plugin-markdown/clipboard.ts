@@ -1,6 +1,7 @@
-import { Extension } from '@tiptap/core';
+import { Extension, getHTMLFromFragment } from '@tiptap/core';
 import { Plugin, PluginKey } from '@tiptap/pm/state';
 import { DOMParser, Slice } from '@tiptap/pm/model';
+import { MarkdownStorage } from './interface';
 
 export const MarkdownClipboardExtension = Extension.create({
   name: 'markdownClipboard',
@@ -21,20 +22,22 @@ export const MarkdownClipboardExtension = Extension.create({
               return Slice.empty;
             }
 
-            const parsed = this.editor.storage.markdown.parser.parse(text, { inline: true });
+            const storage = this.editor.storage.markdown as MarkdownStorage;
+            const parsed = storage.parse(text);
 
             return DOMParser.fromSchema(this.editor.schema).parseSlice(elementFromString(parsed), {
               preserveWhitespace: true
             });
           },
-          /**
-           * @param {import('prosemirror-model').Slice} slice
-           */
           clipboardTextSerializer: slice => {
             if (!this.options.transformCopiedText) {
-              return null;
+              return '';
             }
-            return this.editor.storage.markdown.serializer.serialize(slice.content);
+
+            const storage = this.editor.storage.markdown as MarkdownStorage;
+            const html = getHTMLFromFragment(slice.content, this.editor.schema);
+
+            return storage.serialize(html) || '';
           }
         }
       })
