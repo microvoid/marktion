@@ -1,4 +1,6 @@
 import TiptapImage from '@tiptap/extension-image';
+import { mergeAttributes } from '@tiptap/core';
+
 import TiptapTaskItem from '@tiptap/extension-task-item';
 import TiptapTaskList from '@tiptap/extension-task-list';
 import Link from '@tiptap/extension-link';
@@ -74,7 +76,17 @@ const TaskItem = TiptapTaskItem.extend({
   }
 });
 
-const Image = TiptapImage.configure({
+const Image = TiptapImage.extend({
+  renderHTML({ HTMLAttributes }) {
+    return [
+      'p',
+      {
+        role: 'image-wrapper'
+      },
+      ['img', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)]
+    ];
+  }
+}).configure({
   allowBase64: true
 });
 

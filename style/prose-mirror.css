@@ -379,9 +379,17 @@
   color: inherit;
 }
 
-.marktion .ProseMirror :where(img):not(:where([class~='not-prose'] *)) {
+/* .marktion .ProseMirror :where(img):not(:where([class~='not-prose'] *)) {
   margin-top: 2em;
   margin-bottom: 2em;
+} */
+
+.marktion .ProseMirror p[role="image-wrapper"] {
+  border: 1px solid transparent;
+}
+
+.marktion .ProseMirror p[role="image-wrapper"].ProseMirror-selectednode {
+  border: 1px solid var(--mp-gray-12);
 }
 
 .marktion .ProseMirror :where(figure > *):not(:where([class~='not-prose'] *)) {

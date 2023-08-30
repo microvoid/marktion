@@ -188,9 +188,13 @@ function SlashDropdown(props: SlashDropdownProps) {
       }
     };
 
-    document.addEventListener('keydown', onKeyDown);
+    document.addEventListener('keydown', onKeyDown, {
+      capture: true
+    });
     return () => {
-      document.removeEventListener('keydown', onKeyDown);
+      document.removeEventListener('keydown', onKeyDown, {
+        capture: true
+      });
     };
   }, [open, items, selectedIndex, setSelectedIndex, onSelectItem]);
 

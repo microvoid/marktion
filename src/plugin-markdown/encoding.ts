@@ -34,7 +34,7 @@ export function markdownToHtml(
     .use(remarkGfm)
     .use(remarkRehype)
     .use(() => (mdast: Root) => {
-      visit(mdast, 'element', function (node, _) {
+      visit(mdast, 'element', function (node, _, parent: any) {
         if (node['tagName'] === 'li') {
           const classes = node['properties']['className'] as string[];
 
@@ -59,6 +59,11 @@ export function markdownToHtml(
             // @ts-ignore
             node['properties']['data-checked'] = input['properties']['checked'];
           }
+        }
+
+        // fix: tiptap places p>img by default within a paragraph, which is not what was expected.
+        if (node['tagName'] === 'img') {
+          parent['tagName'] = 'div';
         }
       });
     });
