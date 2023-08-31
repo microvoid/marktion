@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useLayoutEffect, useMemo, useState } from 'react';
 import { ConfigProvider, theme } from 'antd';
 import { StyleProvider } from '@ant-design/cssinjs';
 
@@ -24,11 +24,9 @@ export function MarktionCtxProvider({
   const [markdown, setMarkdown] = useState(props.markdown || '');
   const [mode, setMode] = useState(props.mode || 'visual');
 
-  useEffect(() => {
-    setDarkMode(props.darkMode!);
-    setMarkdown(props.markdown!);
-    setMode(props.mode!);
-  }, [props]);
+  useLayoutEffect(() => setDarkMode(props.darkMode!), [props.darkMode]);
+  useLayoutEffect(() => setMarkdown(props.markdown!), [props.markdown]);
+  useLayoutEffect(() => setMode(props.mode!), [props.mode]);
 
   return (
     <MarktionCtx.Provider

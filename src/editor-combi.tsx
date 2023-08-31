@@ -20,6 +20,7 @@ export function EditorCombi(props: EditorCombiProps) {
   const [mode, setMode] = useState(propsMode);
   const markdown = useMarktionCtx(ctx => ctx.markdown);
   const setMarkdown = useMarktionCtx(ctx => ctx.setMarkdown);
+
   const visualEditorRef = visualProps?.ref || _ref;
   const isSourceMode = mode === 'source';
 
