@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FloatButton, Segmented } from 'antd';
 import { useDarkMode } from 'usehooks-ts';
-import { MarktionSSR, MarktionProps, MarktionRef, MarktionCombi } from '../../../dist';
+import { MarktionSSR, EditorVisualProps, EditorVisualRef, MarktionCombi } from '../../../dist';
 import { Header } from './header';
 import { getPlugins } from './plugins';
 
 const INIT_MARKDOWN = [import.meta.env.VITE_README_ZH, import.meta.env.VITE_README_EN];
 
 export function App() {
-  const marktionRef = useRef<MarktionRef>(null);
+  const visualRef = useRef<EditorVisualRef>(null);
   const { isDarkMode } = useDarkMode();
   const [lang, setLang] = useState(0);
   const [ssr, setSSR] = useState(0);
@@ -17,10 +17,10 @@ export function App() {
 
   useEffect(() => {
     // @ts-ignore
-    window['marktion'] = marktionRef;
+    window['marktion'] = visualRef;
   }, []);
 
-  const onUploadImage = useCallback<NonNullable<MarktionProps['onUploadImage']>>(file => {
+  const onUploadImage = useCallback<NonNullable<EditorVisualProps['onUploadImage']>>(file => {
     return new Promise(resolve => {
       const reader = new FileReader();
       reader.onload = e => {
@@ -31,7 +31,7 @@ export function App() {
   }, []);
 
   const onExport = () => {
-    const content = marktionRef.current?.getMarkdown();
+    const content = visualRef.current?.getMarkdown();
 
     if (content) {
       const filename = getMarktionTitle(content) || 'marktion';
@@ -62,7 +62,7 @@ export function App() {
               const index = Number(value);
 
               // @ts-ignore
-              marktionRef.current?.editor.commands.setMarkdwon(INIT_MARKDOWN[index]);
+              visualRef.current?.editor.commands.setMarkdwon(INIT_MARKDOWN[index]);
               setLang(index);
             }}
           />
@@ -80,7 +80,7 @@ export function App() {
             ]}
             value={ssr}
             onChange={value => {
-              const content = marktionRef.current?.getMarkdown();
+              const content = visualRef.current?.getMarkdown();
 
               setSSRContent(content);
               setSSR(Number(value));
@@ -91,10 +91,10 @@ export function App() {
         <div className="mt-10 mb-20">
           {ssr === 0 && (
             <MarktionCombi
-              value={INIT_MARKDOWN[lang]}
-              marktionProps={{
-                ref: marktionRef,
-                darkMode: isDarkMode,
+              markdown={INIT_MARKDOWN[lang]}
+              darkMode={isDarkMode}
+              visualProps={{
+                ref: visualRef,
                 onUploadImage: onUploadImage,
                 plugins: plugins
               }}

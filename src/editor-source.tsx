@@ -1,11 +1,14 @@
-import { MonacoEditor, MonacoEditorProps } from './monaco';
 import { MarktionSourceToolbar, MarktionSourceToolbarProps } from './toolbar';
+import { MonacoEditor, MonacoEditorProps } from './monaco';
+import { useMarktionCtx } from './provider';
 
-export type MarktionSourceProps = MonacoEditorProps & {
+export type EditorSourceProps = MonacoEditorProps & {
   toolbarProps?: MarktionSourceToolbarProps;
 };
 
-export function MarktionSource({ toolbarProps, ...monacoProps }: MarktionSourceProps) {
+export function EditorSource({ toolbarProps, ...monacoProps }: EditorSourceProps) {
+  const darkMode = useMarktionCtx(ctx => ctx.darkMode);
+
   return (
     <div className="marktion-source">
       <MarktionSourceToolbar {...toolbarProps} />
@@ -20,6 +23,7 @@ export function MarktionSource({ toolbarProps, ...monacoProps }: MarktionSourceP
           cursorStyle: 'line',
           automaticLayout: false
         }}
+        theme={darkMode ? 'vs-dark' : 'vs-light'}
         {...monacoProps}
       />
     </div>
