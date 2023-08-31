@@ -68,11 +68,11 @@ export function MarktionCombi(props: MarktionCombiProps) {
           size="small"
           options={[
             {
-              label: 'Visual Mode',
+              label: 'Visual',
               value: 'visual'
             },
             {
-              label: 'Source Mode',
+              label: 'Source',
               value: 'source'
             }
           ]}
