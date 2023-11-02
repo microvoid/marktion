@@ -6,11 +6,13 @@ import { App } from './app';
 
 import './main.css';
 import '../../../dist/style.css';
+import { MarktionV2App } from './marktion';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <StyleProvider>
-      <App />
+      {/* <App /> */}
+      <MarktionV2App />
     </StyleProvider>
   </React.StrictMode>
 );
