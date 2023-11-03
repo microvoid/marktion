@@ -309,6 +309,9 @@ importers:
       prettier:
         specifier: ^3.0.0
         version: 3.0.0
+      prosemirror-test-builder:
+        specifier: ^1.1.1
+        version: 1.1.1
       tailwindcss:
         specifier: 3.3.2
         version: 3.3.2

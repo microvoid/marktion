@@ -14,6 +14,8 @@ import { strong } from './strong';
 import { link } from './link';
 import { code } from './code';
 import { table } from './table';
+import { task_item } from './task_item';
+import { task_list } from './task_list';
 
 export const nodes = {
   doc: {
@@ -28,6 +30,9 @@ export const nodes = {
 
   heading,
   code_block,
+
+  task_item,
+  task_list,
 
   ordered_list,
   bullet_list,
@@ -53,3 +58,7 @@ export const schema = new Schema({
   nodes,
   marks
 });
+
+export type MarkdownSchema = typeof schema;
+export type MarkdownMark = MarkdownSchema extends Schema<infer N, infer M> ? M : never;
+export type MarkdownNode = MarkdownSchema extends Schema<infer N, infer M> ? N : never;

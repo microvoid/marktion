@@ -11,6 +11,7 @@ import { InputRulesPlugin } from './plugin-input-rules';
 import { KeymapPlugin } from './plugin-keymap';
 import { HistoryPlugin } from './plugin-history';
 import { codeblock } from './node-codeblock';
+import { parse } from './core';
 
 const defaultNodeViews: EditorProps['nodeViews'] = {
   code_block: codeblock
@@ -25,7 +26,7 @@ export class ProseMirrorRenderer {
   ) {
     this.view = new EditorView(root, {
       state: EditorState.create({
-        doc: defaultMarkdownParser.parse(editor.options.content)!,
+        doc: parse(editor.options.content)!,
         plugins: [
           InputRulesPlugin(schema),
           KeymapPlugin(schema),

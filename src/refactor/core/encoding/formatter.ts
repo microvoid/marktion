@@ -1,26 +1,66 @@
-import type { Attrs, Node as ProseMirrorNode, Schema } from 'prosemirror-model';
-import { Paragraph, Link, Text, Root, PhrasingContent, Node as MdastNode } from 'mdast';
-import { schema, nodes, marks } from '../schemas';
+import type { MarkdownMark, MarkdownNode, MarkdownSchema } from '../schemas';
+import type { Node as ProseMirrorNode, Mark } from 'prosemirror-model';
+import { Root, Node, RootContent, PhrasingContent } from 'mdast';
+import { createProseMirrorNode } from './utils';
 
-export type UnistNode = Paragraph | Link | Text | Root;
-export type UnistNodeType = UnistNode['type'];
+export type FormatMdNode = Root | RootContent | PhrasingContent;
+export type FormatContext = Partial<{
+  definitions: Record<string, { url: string; title: string | null | undefined }>;
+  imageReference: Record<string, ProseMirrorNode>;
+  linkReference: Record<string, Mark>;
+}>;
 
-type ProseMirrorNodeType = keyof typeof nodes;
-type ProseMirrorMark = keyof typeof marks;
-
-type FormatterImpl<T extends UnistNodeType, Node = Extract<UnistNode, { type: T }>> = {
-  parse: (node: Node, schema: Schema, children: ProseMirrorNode[]) => ProseMirrorNode[];
-  serialize: (node: ProseMirrorNode, children: PhrasingContent[]) => Node[];
+export type FormatterImpl<T extends Node> = {
+  parse: (
+    node: T,
+    schema: MarkdownSchema,
+    children: ProseMirrorNode[],
+    context: FormatContext
+  ) => ProseMirrorNode[];
+  serialize: (node: ProseMirrorNode, children: Extract<T, { children: any }>['children']) => T[];
 };
 
-const FormatterMap = new Map<UnistNode['type'], FormatterImpl<'paragraph'>>();
+export type GetMdAstNode<T> = Extract<FormatMdNode, { type: T }>;
+
+export const SchemaToMdAst: Record<MarkdownNode | MarkdownMark, string> = {
+  // node
+  doc: 'root',
+  paragraph: 'paragraph',
+  blockquote: 'blockquote',
+  hard_break: 'break',
+  code_block: 'code',
+  heading: 'heading',
+  horizontal_rule: 'thematicBreak',
+  image: 'image',
+
+  task_list: 'list',
+  task_item: 'listItem',
+
+  list_item: 'listItem',
+  ordered_list: 'list',
+  bullet_list: 'list',
+
+  table: 'table',
+  table_row: 'tableRow',
+  table_cell: 'tableCell',
+  table_header: 'tableHeader',
+  // mark
+  text: 'text',
+  strong: 'strong',
+  code: 'inlineCode',
+  em: 'emphasis',
+  link: 'link'
+};
+
+const FormatterMap = new Map<Node['type'], FormatterImpl<Root>>();
 
 export const Formatter = {
-  impl<T extends UnistNodeType>(type: T, impl: FormatterImpl<T>) {
+  impl<T extends FormatMdNode['type']>(type: T, impl: FormatterImpl<GetMdAstNode<T>>) {
     FormatterMap.set(type, impl as any);
   },
-  get<T extends UnistNodeType>(type: T) {
-    return FormatterMap.get(type) as unknown as FormatterImpl<T>;
+
+  get<T extends Node['type']>(type: T) {
+    return FormatterMap.get(type) as unknown as FormatterImpl<GetMdAstNode<T>>;
   }
 };
 
@@ -34,7 +74,235 @@ Formatter.impl('root', {
   }
 });
 
-// text
+Formatter.impl('paragraph', {
+  parse(_, schema, children) {
+    return createProseMirrorNode(schema.nodes.paragraph.name, schema, children);
+  },
+  serialize(_, children) {
+    return [{ type: 'paragraph', children: children }];
+  }
+});
+
+Formatter.impl('blockquote', {
+  parse(node, schema, children) {
+    return createProseMirrorNode(schema.nodes.blockquote.name, schema, children);
+  },
+  serialize(node, children) {
+    return [
+      {
+        type: 'blockquote',
+        children: children
+      }
+    ];
+  }
+});
+
+Formatter.impl('break', {
+  parse(node, schema, children) {
+    return createProseMirrorNode(schema.nodes.hard_break.name, schema, children);
+  },
+  serialize() {
+    return [{ type: 'break' }];
+  }
+});
+
+Formatter.impl('code', {
+  parse(node, schema) {
+    // TODO: language
+    return createProseMirrorNode(schema.nodes.code_block.name, schema, [schema.text(node.value)]);
+  },
+  serialize(node, children) {
+    // TODO
+    return [
+      {
+        type: 'code',
+        value: children
+      }
+    ];
+  }
+});
+
+Formatter.impl('definition', {
+  parse(node, schema, children, context) {
+    if (context.definitions === undefined) {
+      context.definitions = {};
+    }
+
+    context.definitions[node.identifier] = {
+      title: node.title,
+      url: node.url
+    };
+
+    return [];
+  },
+  serialize() {
+    return [];
+  }
+});
+
+Formatter.impl('heading', {
+  parse(node, schema, children) {
+    return createProseMirrorNode(schema.nodes.heading.name, schema, children, {
+      level: node.depth
+    });
+  },
+  serialize(node, children) {
+    return [
+      {
+        type: 'heading',
+        depth: node.attrs.level as 1 | 2 | 3 | 4 | 5 | 6,
+        children
+      }
+    ];
+  }
+});
+
+Formatter.impl('thematicBreak', {
+  parse(node, schema, children, context) {
+    return createProseMirrorNode(schema.nodes.horizontal_rule.name, schema, children);
+  },
+  serialize() {
+    return [
+      {
+        type: 'thematicBreak'
+      }
+    ];
+  }
+});
+
+Formatter.impl('image', {
+  parse(node, schema, children, context) {
+    return createProseMirrorNode(schema.nodes.image.name, schema, children, {
+      src: node.url,
+      alt: node.alt,
+      title: node.title
+    });
+  },
+  serialize(node) {
+    return [
+      {
+        type: 'image',
+        url: node.attrs.src as string,
+        ...(node.attrs.alt !== null && { alt: node.attrs.alt as string }),
+        ...(node.attrs.title !== null && { title: node.attrs.title as string })
+      }
+    ];
+  }
+});
+
+Formatter.impl('imageReference', {
+  parse(node, schema, children, context) {
+    const proseMirrorNode = schema.nodes.image.createAndFill(
+      { src: '', alt: node.alt, title: node.label },
+      children
+    );
+
+    if (proseMirrorNode === null) return [];
+
+    if (context.imageReference === undefined) {
+      context.imageReference = {};
+    }
+
+    context.imageReference[node.identifier] = proseMirrorNode;
+
+    return [proseMirrorNode];
+  },
+  serialize(node, children) {
+    return [];
+  }
+});
+
+Formatter.impl('listItem', {
+  parse(node, schema, children, context) {
+    if (node.checked !== null) {
+      return createProseMirrorNode(schema.nodes.task_item.name, schema, children, {
+        checked: node.checked
+      });
+    }
+
+    return createProseMirrorNode(schema.nodes.list_item.name, schema, children);
+  },
+  serialize(node, children) {
+    return [
+      {
+        type: 'listItem',
+        children
+      }
+    ];
+  }
+});
+
+Formatter.impl('list', {
+  parse(node, schema, children, context) {
+    const first = children[0];
+
+    if (first && first.type.name === schema.nodes.task_item.name) {
+      return createProseMirrorNode(schema.nodes.task_list.name, schema, children, {
+        spread: node.spread,
+        start: node.start ?? 1
+      });
+    }
+
+    if (node.ordered) {
+      return createProseMirrorNode(schema.nodes.ordered_list.name, schema, children, {
+        spread: node.spread,
+        start: node.start ?? 1
+      });
+    }
+
+    return createProseMirrorNode(schema.nodes.bullet_list.name, schema, children, {
+      spread: node.spread,
+      start: node.start ?? 1
+    });
+  },
+  serialize(node, children) {
+    const spread = node.attrs.spread as boolean;
+    return [
+      {
+        type: 'list',
+        ordered: true,
+        spread,
+        start: node.attrs.start as number,
+        children: children.map(child => {
+          child.spread = spread;
+          return child;
+        })
+      }
+    ];
+  }
+});
+
+Formatter.impl('table', {
+  parse(node, schema, children, context) {
+    return createProseMirrorNode(schema.nodes.table.name, schema, children);
+  },
+  serialize(node, children) {
+    return [];
+  }
+});
+
+Formatter.impl('tableRow', {
+  parse(node, schema, children, context) {
+    return createProseMirrorNode(schema.nodes.table_row.name, schema, children);
+  },
+  serialize(node, children) {
+    return [];
+  }
+});
+
+Formatter.impl('tableCell', {
+  parse(node, schema, children) {
+    return createProseMirrorNode(
+      schema.nodes.table_cell.name,
+      schema,
+      children.map(node => schema.nodes.paragraph.createAndFill({}, node)!)
+    );
+  },
+  serialize(node, children) {
+    return [];
+  }
+});
+
 Formatter.impl('text', {
   parse: (node, schema) => {
     return [schema.text(node.value)];
@@ -44,37 +312,71 @@ Formatter.impl('text', {
   }
 });
 
-// paragraph
-Formatter.impl('paragraph', {
-  parse(_, schema, children) {
-    return createProseMirrorNode('paragraph', schema, children);
+Formatter.impl('strong', {
+  parse(node, schema, children) {
+    return children.map(child => child.mark(child.marks.concat([schema.marks.strong.create()])));
   },
-  serialize(_, children) {
-    return [{ type: 'paragraph', children: children }];
+  serialize(node, children) {
+    return [{ type: 'strong', children }];
   }
 });
-// UnistConverter.impl('paragraph', (node, schema, children) => {
-//   return createProseMirrorNode('paragraph', schema, children);
-// });
-// ProseMirrorConverter.impl('paragraph', (node, children) => {
-//   return [{ type: 'paragraph', children: children }];
-// });
 
-/**
- * @public
- */
-export function createProseMirrorNode(
-  nodeName: string | null,
-  schema: Schema<string, string>,
-  children: Array<ProseMirrorNode>,
-  attrs: Attrs = {}
-): Array<ProseMirrorNode> {
-  if (nodeName === null) {
+Formatter.impl('inlineCode', {
+  parse(node, schema) {
+    return [schema.text(node.value).mark([schema.marks.code.create()])];
+  },
+  serialize(node) {
+    // TODO: Confirm
+    return [{ type: 'inlineCode', value: node.text || '' }];
+  }
+});
+
+Formatter.impl('emphasis', {
+  parse(node, schema, children, context) {
+    return children.map(child => child.mark(child.marks.concat([schema.marks.em.create()])));
+  },
+  serialize(node, children) {
+    // TODO: Confirm
+    return [{ type: 'emphasis', children }];
+  }
+});
+
+Formatter.impl('link', {
+  parse(node, schema, children) {
+    return children.map(child =>
+      child.mark(
+        child.marks.concat([
+          schema.marks.link.create({
+            href: node.url,
+            title: node.title
+          })
+        ])
+      )
+    );
+  },
+  serialize(node, children) {
+    // TODO: Confirm
     return [];
   }
-  const proseMirrorNode = schema.nodes[nodeName].createAndFill(attrs, children);
-  if (proseMirrorNode === null) {
+});
+
+Formatter.impl('linkReference', {
+  parse(node, schema, children, context) {
+    const mark = schema.marks.link.create({
+      href: null,
+      title: null
+    });
+
+    if (context.linkReference === undefined) {
+      context.linkReference = {};
+    }
+
+    context.linkReference[node.identifier] = mark;
+
+    return children.map(child => child.mark(child.marks.concat([mark])));
+  },
+  serialize(node, children) {
+    // TODO: Confirm
     return [];
   }
-  return [proseMirrorNode];
-}
+});

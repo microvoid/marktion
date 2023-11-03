@@ -130,6 +130,7 @@
     "postcss": "8.4.24",
     "postcss-import": "^15.1.0",
     "prettier": "^3.0.0",
+    "prosemirror-test-builder": "^1.1.1",
     "tailwindcss": "3.3.2",
     "typescript": "^5.0.2",
     "vite": "^4.3.9",
