@@ -14,11 +14,11 @@ import { wrapInList, splitListItem, liftListItem, sinkListItem } from 'prosemirr
 import { undo, redo } from 'prosemirror-history';
 import { undoInputRule } from 'prosemirror-inputrules';
 import { Command } from 'prosemirror-state';
-import { Schema } from 'prosemirror-model';
+import { MarkdownSchema } from '../core';
 
 const mac = typeof navigator != 'undefined' ? /Mac|iP(hone|[oa]d)/.test(navigator.platform) : false;
 
-export function KeymapPlugin(schema: Schema, mapKeys?: { [key: string]: false | string }) {
+export function KeymapPlugin(schema: MarkdownSchema, mapKeys?: { [key: string]: false | string }) {
   return keymap({
     ...buildKeymap(schema, mapKeys)
   });
@@ -52,7 +52,7 @@ export function KeymapPlugin(schema: Schema, mapKeys?: { [key: string]: false | 
 /// argument, which maps key names (say `"Mod-B"` to either `false`, to
 /// remove the binding, or a new key name string.
 
-export function buildKeymap(schema: Schema, mapKeys?: { [key: string]: false | string }) {
+export function buildKeymap(schema: MarkdownSchema, mapKeys?: { [key: string]: false | string }) {
   const KeyMap: { [key: string]: Command } = {};
 
   function bind(key: string, cmd: Command) {
@@ -105,13 +105,18 @@ export function buildKeymap(schema: Schema, mapKeys?: { [key: string]: false | s
     bind('Ctrl-Enter', exitCodeChain);
   }
 
-  const enterList: Command = (state, dispatch) => {
-    return splitListItem(schema.nodes.list_item)(state, dispatch);
-  };
-
-  bind('Enter', enterList);
-  bind('Mod-[', liftListItem(schema.nodes.list_item));
-  bind('Mod-]', sinkListItem(schema.nodes.list_item));
+  bind(
+    'Enter',
+    chainCommands(splitListItem(schema.nodes.list_item), splitListItem(schema.nodes.task_item))
+  );
+  bind(
+    'Mod-[',
+    chainCommands(liftListItem(schema.nodes.list_item), liftListItem(schema.nodes.task_item))
+  );
+  bind(
+    'Mod-]',
+    chainCommands(sinkListItem(schema.nodes.list_item), sinkListItem(schema.nodes.task_item))
+  );
 
   bind('Shift-Ctrl-0', setBlockType(schema.nodes.paragraph));
   bind('Shift-Ctrl-\\', setBlockType(schema.nodes.code_block));
