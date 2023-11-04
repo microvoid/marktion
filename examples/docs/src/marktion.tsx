@@ -4,6 +4,13 @@ import { MarktionV2 } from '../../../dist';
 const INIT_MARKDOWN = [import.meta.env.VITE_README_ZH, import.meta.env.VITE_README_EN];
 
 const TEST = `
+1. 111
+2. 222
+
+123123123
+
+4. 444
+
 | **属性**      | **描述**                   | **类型**                                       | **默认值** |
 | ------------- | -------------------------- | ---------------------------------------------- | ---------- |
 | markdown      | 编辑器的初始 Markdown 内容 | string                                         | -          |
