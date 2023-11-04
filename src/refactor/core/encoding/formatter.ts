@@ -108,8 +108,9 @@ Formatter.impl('break', {
 
 Formatter.impl('code', {
   parse(node, schema) {
-    // TODO: language
-    return createProseMirrorNode(schema.nodes.code_block.name, schema, [schema.text(node.value)]);
+    return createProseMirrorNode(schema.nodes.code_block.name, schema, [schema.text(node.value)], {
+      language: node.lang
+    });
   },
   serialize(node, children) {
     // TODO

@@ -6,7 +6,7 @@ export const code_block: NodeSpec = {
   code: true,
   defining: true,
   marks: '',
-  attrs: { params: { default: '' } },
+  attrs: { language: { default: '' } },
   parseDOM: [
     {
       tag: 'pre',
@@ -15,6 +15,10 @@ export const code_block: NodeSpec = {
     }
   ],
   toDOM(node) {
-    return ['pre', node.attrs.params ? { 'data-params': node.attrs.params } : {}, ['code', 0]];
+    return [
+      'pre',
+      node.attrs.language ? { 'data-language': node.attrs.language } : {},
+      ['code', 0]
+    ];
   }
 };

@@ -1,27 +1,49 @@
-import { EditorView as MirroView } from '@codemirror/view';
-import { NodeViewConstructor, NodeView } from 'prosemirror-view';
+import { NodeViewConstructor } from 'prosemirror-view';
+import { Compartment } from '@codemirror/state';
+import { LanguageDescription } from '@codemirror/language';
+import { languages } from '@codemirror/language-data';
+// import { oneDark } from '@codemirror/theme-one-dark';
 import { syntaxHighlighting, defaultHighlightStyle } from '@codemirror/language';
-
-interface Codeblock extends NodeView {
-  codeEditor: MirroView;
-  node: Parameters<NodeViewConstructor>['0'];
-  view: Parameters<NodeViewConstructor>['1'];
-  getPos: Parameters<NodeViewConstructor>['2'];
-}
+import { basicSetup } from 'codemirror';
+import { CodeMirrorNodeView } from './CodeMirrorNodeView';
 
 export const codeblock: NodeViewConstructor = (node, view, getPos) => {
-  const editor = new MirroView({
-    doc: node.textContent,
-    extensions: [syntaxHighlighting(defaultHighlightStyle)]
-  });
+  const languageConf = new Compartment();
 
-  const codeblock: Codeblock = {
+  const nodeView = new CodeMirrorNodeView({
     node,
     view,
-    getPos,
-    codeEditor: editor,
-    dom: editor.dom
-  };
+    toggleName: 'paragraph',
+    extensions: [languageConf.of([]), basicSetup, syntaxHighlighting(defaultHighlightStyle)],
+    getPos: getPos as () => number,
+    loadLanguage
+  });
 
-  return codeblock;
+  return nodeView;
 };
+
+function loadLanguage(name: string) {
+  const lang = languageMap[name];
+
+  if (!lang) {
+    return;
+  }
+
+  if (lang.support) {
+    return Promise.resolve(lang.support);
+  }
+
+  return lang.load();
+}
+
+const languageMap = (() => {
+  const languageMap: Record<string, LanguageDescription> = {};
+
+  for (const language of languages ?? []) {
+    for (const alias of language.alias) {
+      languageMap[alias] = language;
+    }
+  }
+
+  return languageMap;
+})();

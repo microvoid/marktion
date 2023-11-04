@@ -4,7 +4,7 @@ import remarkParse from 'remark-parse';
 import remarkGfm from 'remark-gfm';
 import remarkStringify from 'remark-stringify';
 import type { Parent, Node as MdastNode } from 'unist';
-import type { Node as ProseMirrorNode, Schema } from 'prosemirror-model';
+import type { Node as ProseMirrorNode } from 'prosemirror-model';
 import { Formatter, FormatMdNode, FormatContext } from './formatter';
 import { schema } from '../schemas';
 
