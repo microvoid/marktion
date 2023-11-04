@@ -1,5 +1,4 @@
 import { keymap } from 'prosemirror-keymap';
-import { baseKeymap } from 'prosemirror-commands';
 import {
   wrapIn,
   setBlockType,
@@ -106,7 +105,11 @@ export function buildKeymap(schema: Schema, mapKeys?: { [key: string]: false | s
     bind('Ctrl-Enter', exitCodeChain);
   }
 
-  bind('Enter', splitListItem(schema.nodes.list_item));
+  const enterList: Command = (state, dispatch) => {
+    return splitListItem(schema.nodes.list_item)(state, dispatch);
+  };
+
+  bind('Enter', enterList);
   bind('Mod-[', liftListItem(schema.nodes.list_item));
   bind('Mod-]', sinkListItem(schema.nodes.list_item));
 

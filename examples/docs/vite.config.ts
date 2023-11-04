@@ -12,5 +12,8 @@ process.env.VITE_README_ZH = fs.readFileSync('../../README-zh_CN.md', {
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()]
+  plugins: [react()],
+  optimizeDeps: {
+    exclude: ['prosemirror-schema-list']
+  }
 });
