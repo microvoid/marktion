@@ -1,6 +1,4 @@
 export const space = `
---scaling: 1;
-
 &:where([data-scaling='90%']) {
   --scaling: 0.9;
 }

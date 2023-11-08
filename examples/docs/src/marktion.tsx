@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { MarktionV2 } from '../../../dist';
+import { MarktionV2 } from 'marktion';
 
 const INIT_MARKDOWN = [import.meta.env.VITE_README_ZH, import.meta.env.VITE_README_EN];
 
@@ -56,9 +56,5 @@ export function MarktionV2App() {
     }
   }, []);
 
-  return (
-    <div className="container max-w-screen-md mt-2">
-      <div ref={rootRef}></div>
-    </div>
-  );
+  return <div ref={rootRef}></div>;
 }

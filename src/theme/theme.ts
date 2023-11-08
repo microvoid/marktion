@@ -2,8 +2,9 @@ import { css } from '@linaria/core';
 
 import { defaultThemeVariables } from './theme-variables';
 import { getThemeVar } from './utils';
-import { typography } from './typography';
+import { typography } from './variables/typography';
 import { space } from './variables/space';
+import { scaling } from './variables/scaling';
 
 /**
  * Create the theme variables from the provided theme.
@@ -22,7 +23,7 @@ export const MarktionTheme = css`
     box-sizing: inherit;
   }
 
-  ${defaultThemeVariables}
+  ${scaling}
   ${space}
   ${typography}
 
@@ -44,11 +45,6 @@ export const MarktionTheme = css`
     border-radius: ${getThemeVar('radius', 'border')};
     outline: none;
 
-    &:active,
-    &:focus {
-      box-shadow: ${getThemeVar('color', 'outline')} 0px 0px 0px 0.2em;
-    }
-
     img,
     video {
       max-width: 100%;
@@ -58,6 +54,22 @@ export const MarktionTheme = css`
     blockquote {
       border-left: var(--space-1) solid var(--rmr-color-border);
       padding-left: var(--space-3);
+    }
+
+    blockquote,
+    dl,
+    dd,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    hr,
+    figure,
+    p,
+    pre {
+      margin: 0;
     }
   }
 `;

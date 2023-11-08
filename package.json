@@ -9,7 +9,7 @@
   "author": "whistleryz@gmail.com",
   "contributors": [],
   "scripts": {
-    "dev": "run-p dev:ts dev:docs",
+    "dev": "pnpm run build && run-p dev:ts dev:docs",
     "dev:ts": "tsc -w",
     "dev:docs": "cd examples/docs && pnpm run dev",
     "test": "vitest",
