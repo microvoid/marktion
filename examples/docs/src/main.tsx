@@ -2,10 +2,8 @@ import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import { useDarkMode } from 'usehooks-ts';
 import { ConfigProvider, theme as AntdTheme } from 'antd';
-import { App } from './app';
 
 import './main.css';
-import '../../../dist/style.css';
 import { MarktionV2App } from './marktion';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(

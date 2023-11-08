@@ -11,6 +11,8 @@ const TEST = `
 
 4. 444
 
+![](/public/recorder.gif)
+
 | **属性**      | **描述**                   | **类型**                                       | **默认值** |
 | ------------- | -------------------------- | ---------------------------------------------- | ---------- |
 | markdown      | 编辑器的初始 Markdown 内容 | string                                         | -          |
@@ -55,8 +57,8 @@ export function MarktionV2App() {
   }, []);
 
   return (
-    <div className="container mt-2">
-      <div className="prose" ref={rootRef}></div>
+    <div className="container max-w-screen-md mt-2">
+      <div ref={rootRef}></div>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import { CodemirrorRenderer } from './codemirror';
 import { ProseMirrorRenderer } from './prosemirror';
+import { MarktionTheme } from './theme';
 
 export type MarktionOptions = {
   root?: HTMLElement;
@@ -24,7 +25,7 @@ export class Marktion {
     const root = this.options.root!;
     const doc = root.ownerDocument;
 
-    root.style.display = 'flex';
+    root.classList.add(MarktionTheme);
 
     if (!this.wysiwyg) {
       const div = doc.createElement('div');
