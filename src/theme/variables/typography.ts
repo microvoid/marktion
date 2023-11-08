@@ -1,6 +1,7 @@
 import { fonts } from '../font';
 
 export const typography = `${fonts}
+
 --font-size-1: calc(12px * var(--scaling));
 --font-size-2: calc(14px * var(--scaling));
 --font-size-3: calc(16px * var(--scaling));

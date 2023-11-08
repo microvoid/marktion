@@ -5,6 +5,12 @@ import { getThemeVar } from './utils';
 import { typography } from './variables/typography';
 import { space } from './variables/space';
 import { scaling } from './variables/scaling';
+import { shadow } from './variables/shadow';
+import { radius } from './variables/radius';
+import { color } from './variables/color';
+import { blockquote } from './components/blockquote';
+import { heading } from './components/heading';
+import { list } from './components/list';
 
 /**
  * Create the theme variables from the provided theme.
@@ -12,7 +18,6 @@ import { scaling } from './variables/scaling';
  */
 export const MarktionTheme = css`
   /* The following makes it easier to measure components within the editor. */
-  box-sizing: border-box;
 
   *,
   *:before,
@@ -23,10 +28,14 @@ export const MarktionTheme = css`
     box-sizing: inherit;
   }
 
+  ${color}
+  ${shadow}
   ${scaling}
   ${space}
   ${typography}
+  ${radius}
 
+  box-sizing: border-box;
   overflow-wrap: break-word;
   font-family: var(--default-font-family);
   font-size: var(--default-font-size);
@@ -39,10 +48,10 @@ export const MarktionTheme = css`
   -moz-osx-font-smoothing: grayscale;
 
   .ProseMirror {
-    min-height: ${getThemeVar('space', 6)};
-    box-shadow: ${getThemeVar('color', 'border')} 0px 0px 0px 0.1em;
-    padding: ${getThemeVar('space', 3)};
-    border-radius: ${getThemeVar('radius', 'border')};
+    min-height: var(--space-6);
+    box-shadow: var(--shadow-6);
+    padding: var(--space-4);
+    border-radius: var(--radius-2);
     outline: none;
 
     img,
@@ -51,25 +60,26 @@ export const MarktionTheme = css`
       height: auto;
     }
 
-    blockquote {
-      border-left: var(--space-1) solid var(--rmr-color-border);
-      padding-left: var(--space-3);
+    ol,
+    ul,
+    menu {
+      list-style: none;
+      margin: 0;
+      padding: 0;
     }
 
     blockquote,
     dl,
     dd,
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6,
     hr,
     figure,
     p,
     pre {
-      margin: 0;
+      margin: var(--space-3) 0;
     }
+
+    ${blockquote}
+    ${heading}
+    ${list}
   }
 `;

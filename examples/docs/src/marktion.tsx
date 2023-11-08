@@ -56,5 +56,5 @@ export function MarktionV2App() {
     }
   }, []);
 
-  return <div ref={rootRef}></div>;
+  return <div className="marktion-themes" data-accent-color="tomato" ref={rootRef}></div>;
 }

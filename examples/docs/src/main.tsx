@@ -8,10 +8,10 @@ import { MarktionV2App } from './marktion';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <StyleProvider>
-      {/* <App /> */}
-      <MarktionV2App />
-    </StyleProvider>
+    <MarktionV2App />
+    {/* <StyleProvider> */}
+    {/* <App /> */}
+    {/* </StyleProvider> */}
   </React.StrictMode>
 );
 
