@@ -21,13 +21,14 @@ export function createCustomMarkListItemNodeView({
 }): NodeView {
   const markContainer = document.createElement('label');
   markContainer.contentEditable = 'false';
-  markContainer.classList.add('LIST_ITEM_MARKER_CONTAINER');
+  markContainer.setAttribute('role', 'task-item-label');
   markContainer.append(mark);
 
   const contentDOM = document.createElement('div');
 
   const dom = document.createElement('li');
-  dom.classList.add('LIST_ITEM_WITH_CUSTOM_MARKER');
+
+  dom.setAttribute('role', 'task-item');
   dom.append(markContainer);
   dom.append(contentDOM);
 

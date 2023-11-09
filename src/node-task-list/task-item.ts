@@ -7,7 +7,7 @@ import { findParentNodeOfType } from '../core/utils';
 export const taskItem: NodeViewConstructor = (node, view, getPos) => {
   const mark = document.createElement('input');
   mark.type = 'checkbox';
-  mark.classList.add('task-item-checkbox');
+  mark.setAttribute('role', 'task-item-checkbox');
   mark.contentEditable = 'false';
   mark.addEventListener('click', (e: MouseEvent) => {
     if (!view.editable) {

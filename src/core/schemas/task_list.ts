@@ -6,6 +6,6 @@ export const task_list: NodeSpec = {
   parseDOM: [{ tag: 'ul[data-task-list]' }],
   // toDOM: node => ['ul', { 'data-task-list': '' }, 0],
   toDOM(node) {
-    return ['ul', { 'data-task-list': '' }, 0];
+    return ['ul', { 'data-task-list': '', role: 'task-list' }, 0];
   }
 };

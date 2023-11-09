@@ -7,14 +7,16 @@ import { keymap } from 'prosemirror-keymap';
 import { defaultMarkdownSerializer } from 'prosemirror-markdown';
 import { baseKeymap } from 'prosemirror-commands';
 import { Marktion } from './marktion';
+import { parse, schema } from './core';
 import { InputRulesPlugin } from './plugin-input-rules';
 import { KeymapPlugin } from './plugin-keymap';
 import { HistoryPlugin } from './plugin-history';
 import { codeblock } from './node-codeblock';
-import { parse, schema } from './core';
+import { taskItem } from './node-task-list/task-item';
 
 const defaultNodeViews: EditorProps['nodeViews'] = {
-  code_block: codeblock
+  code_block: codeblock,
+  task_item: taskItem
 };
 
 export class ProseMirrorRenderer {
