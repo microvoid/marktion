@@ -164,7 +164,7 @@ export function markStrike(markType: MarkType) {
 /// For example, `[marktion](https://marktion.io)` will be marked as link.
 export function insertLinkRule(markType: MarkType) {
   return new InputRule(
-    /\[(?<label>.*?)]\((?<href>.*?)\s*(?="|\))"?(?<title>[^"]+)?"?\)\s$/,
+    /\[(?<label>[^\]]*?)]\((?<href>[^\s]*?)\s*(?="|\))"?(?<title>[^"]+)?"?\)\s$/,
     (state, match, start, end) => {
       const { tr } = state;
       const [matched, label, href = '', title] = match;
