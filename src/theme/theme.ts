@@ -1,7 +1,5 @@
 import { css } from '@linaria/core';
 
-import { defaultThemeVariables } from './theme-variables';
-import { getThemeVar } from './utils';
 import { typography } from './variables/typography';
 import { space } from './variables/space';
 import { scaling } from './variables/scaling';
@@ -11,6 +9,7 @@ import { color } from './variables/color';
 import { blockquote } from './components/blockquote';
 import { heading } from './components/heading';
 import { list } from './components/list';
+import { table } from './components/table';
 
 /**
  * Create the theme variables from the provided theme.
@@ -69,6 +68,9 @@ export const MarktionTheme = css`
     }
 
     blockquote,
+    table,
+    ul,
+    ol,
     dl,
     dd,
     hr,
@@ -81,5 +83,6 @@ export const MarktionTheme = css`
     ${blockquote}
     ${heading}
     ${list}
+    ${table}
   }
 `;
