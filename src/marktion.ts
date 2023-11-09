@@ -38,6 +38,9 @@ export class Marktion {
       const div = doc.createElement('div');
       root.appendChild(div);
 
+      div.classList.add('CodeMirror');
+      div.style.marginTop = '20px';
+
       this.source = new CodemirrorRenderer(this, div);
     }
   }

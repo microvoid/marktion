@@ -47,6 +47,14 @@ export const MarktionTheme = css`
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
+  .CodeMirror {
+    min-height: var(--space-6);
+    box-shadow: var(--shadow-6);
+    padding: var(--space-4);
+    border-radius: var(--radius-2);
+    outline: none;
+  }
+
   .ProseMirror {
     min-height: var(--space-6);
     box-shadow: var(--shadow-6);

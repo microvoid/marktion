@@ -1,4 +1,4 @@
-import { basicSetup } from 'codemirror';
+import { minimalSetup } from 'codemirror';
 import { EditorState } from '@codemirror/state';
 import { EditorView, keymap } from '@codemirror/view';
 import { defaultKeymap } from '@codemirror/commands';
@@ -23,7 +23,7 @@ export class CodemirrorRenderer {
       extensions: [
         keymap.of(DEFAULT_KEYMAP),
         markdown(),
-        basicSetup,
+        minimalSetup,
         syntaxHighlighting(defaultHighlightStyle)
       ]
     });
