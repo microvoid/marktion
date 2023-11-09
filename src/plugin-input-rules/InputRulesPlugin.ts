@@ -82,6 +82,24 @@ export function insertHrInputRule(nodeType: NodeType) {
   });
 }
 
+/// This input rule will insert a image node.
+/// You can input `![alt](src "title")` to insert a image node.
+/// The `title` is optional.
+export function insertImageRule(nodeType: NodeType) {
+  return new InputRule(
+    /!\[(?<alt>.*?)]\((?<filename>.*?)\s*(?="|\))"?(?<title>[^"]+)?"?\)\s$/,
+    (state, match, start, end) => {
+      const [matched, alt, src = '', title] = match;
+
+      if (matched) {
+        return state.tr.replaceWith(start - 1, end, nodeType.create({ src, alt, title }));
+      }
+
+      return null;
+    }
+  );
+}
+
 /// A set of input rules for creating the basic block quotes, lists,
 /// code blocks, and heading.
 export function InputRulesPlugin(schema: MarkdownSchema) {
@@ -93,7 +111,8 @@ export function InputRulesPlugin(schema: MarkdownSchema) {
     codeBlockRule(schema.nodes.code_block),
     headingRule(schema.nodes.heading, 6),
     insertTableInputRule(schema),
-    insertHrInputRule(schema.nodes.horizontal_rule)
+    insertHrInputRule(schema.nodes.horizontal_rule),
+    insertImageRule(schema.nodes.image)
   );
 
   return inputRules({ rules });
