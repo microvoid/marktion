@@ -6,6 +6,7 @@ import {
   InputRule
 } from 'prosemirror-inputrules';
 import { NodeType, MarkType } from 'prosemirror-model';
+import isArray from 'lodash/isArray';
 import { createTable } from './table';
 import { MarkdownSchema } from '../core';
 import { TextSelection } from 'prosemirror-state';
@@ -51,6 +52,22 @@ export function headingRule(nodeType: NodeType, maxLevel: number) {
   return textblockTypeInputRule(new RegExp('^(#{1,' + maxLevel + '})\\s$'), nodeType, match => ({
     level: match[1].length
   }));
+}
+
+/// A input rule for creating task.
+/// For example, `[ ]` or `[x]` will create a task.
+export function insertTaskRule(nodeType: NodeType) {
+  const reg = /^\s*(\[( ?|x|X)]\s)$/;
+
+  return [
+    wrappingInputRule(reg, nodeType, match => {
+      const value = isArray(match) ? match[2] : match;
+
+      return {
+        checked: ['x', 'X'].includes(value || '')
+      };
+    })
+  ];
 }
 
 /// A input rule for creating table.
@@ -152,8 +169,6 @@ export function insertLinkRule(markType: MarkType) {
       const { tr } = state;
       const [matched, label, href = '', title] = match;
 
-      console.log(match);
-
       if (matched) {
         const value = label || href;
         const markEnd = end + (value.length - matched.length) + 1;
@@ -185,6 +200,7 @@ export function InputRulesPlugin(schema: MarkdownSchema) {
     bulletListRule(schema.nodes.bullet_list),
     codeBlockRule(schema.nodes.code_block),
     headingRule(schema.nodes.heading, 6),
+    insertTaskRule(schema.nodes.task_item),
     insertTableInputRule(schema),
     insertHrInputRule(schema.nodes.horizontal_rule),
     insertImageRule(schema.nodes.image),
