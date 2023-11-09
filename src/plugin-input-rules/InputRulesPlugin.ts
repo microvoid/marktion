@@ -91,7 +91,7 @@ export function insertImageRule(nodeType: NodeType) {
       const [matched, alt, src = '', title] = match;
 
       if (matched) {
-        return state.tr.replaceWith(start - 1, end, nodeType.create({ src, alt, title }));
+        return state.tr.replaceWith(start, end, nodeType.create({ src, alt, title }));
       }
 
       return null;
@@ -137,6 +137,39 @@ export function markCode(markType: MarkType) {
   );
 }
 
+/// Input rule to mark link.
+/// For example, `[marktion](https://marktion.io)` will be marked as link.
+export function insertLinkRule(markType: MarkType) {
+  return new InputRule(
+    /\[(?<label>.*?)]\((?<href>.*?)\s*(?="|\))"?(?<title>[^"]+)?"?\)\s$/,
+    (state, match, start, end) => {
+      const { tr } = state;
+      const [matched, label, href = '', title] = match;
+
+      console.log(match);
+
+      if (matched) {
+        const value = label || href;
+        const markEnd = end + (value.length - matched.length) + 1;
+
+        tr.replaceWith(start, end, markType.schema.text(value));
+        tr.addMark(
+          start,
+          markEnd,
+          markType.create({
+            href,
+            title: label
+          })
+        );
+
+        return tr;
+      }
+
+      return null;
+    }
+  );
+}
+
 /// A set of input rules for creating the basic block quotes, lists,
 /// code blocks, and heading.
 export function InputRulesPlugin(schema: MarkdownSchema) {
@@ -151,7 +184,8 @@ export function InputRulesPlugin(schema: MarkdownSchema) {
     insertImageRule(schema.nodes.image),
     markStrong(schema.marks.strong),
     markEm(schema.marks.em),
-    markCode(schema.marks.code)
+    markCode(schema.marks.code),
+    insertLinkRule(schema.marks.link)
   );
 
   return inputRules({ rules });

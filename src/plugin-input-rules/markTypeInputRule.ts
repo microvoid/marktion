@@ -1,25 +1,25 @@
 import { InputRule } from 'prosemirror-inputrules';
-import { MarkType } from 'prosemirror-model';
+import { Attrs, MarkType } from 'prosemirror-model';
 
 export function markTypeInputRule(
   regexp: RegExp,
   markType: MarkType,
-  updateCaptured: UpdateCaptured = a => a
+  updateCaptured: UpdateCaptured = a => a,
+  getAttributes?: (captured: UpdateCaptureTextProps, match: RegExpMatchArray) => Attrs
 ) {
   return new InputRule(regexp, (state, match, start, end) => {
     const { tr } = state;
 
-    let {
-      fullMatch,
-      captureGroup,
-      start: markStart,
-      end: markEnd
-    } = updateCaptured({
+    const captured = updateCaptured({
       fullMatch: match[0],
       captureGroup: match[1],
       start,
       end
     });
+
+    const attrs = getAttributes?.(captured, match);
+
+    let { fullMatch, captureGroup, start: markStart, end: markEnd } = captured;
 
     if (captureGroup) {
       const startSpaces = fullMatch.search(/\S/);
@@ -36,7 +36,7 @@ export function markTypeInputRule(
 
       markEnd = markStart + startSpaces + captureGroup.length;
 
-      return tr.addMark(markStart, markEnd, markType.create());
+      return tr.addMark(markStart, markEnd, markType.create(attrs));
     }
 
     return null;
