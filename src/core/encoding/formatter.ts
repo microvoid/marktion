@@ -49,6 +49,7 @@ export const SchemaToMdAst: Record<MarkdownNode | MarkdownMark, string> = {
   strong: 'strong',
   code: 'inlineCode',
   em: 'emphasis',
+  strike: 'break',
   link: 'link'
 };
 
@@ -339,6 +340,15 @@ Formatter.impl('emphasis', {
   serialize(node, children) {
     // TODO: Confirm
     return [{ type: 'emphasis', children }];
+  }
+});
+
+Formatter.impl('delete', {
+  parse(node, schema, children, context) {
+    return children.map(child => child.mark(child.marks.concat([schema.marks.strike.create()])));
+  },
+  serialize(node, children) {
+    return [{ type: 'delete', children }];
   }
 });
 

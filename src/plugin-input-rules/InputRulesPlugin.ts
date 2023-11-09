@@ -137,6 +137,12 @@ export function markCode(markType: MarkType) {
   );
 }
 
+/// Input rule to mark strike.
+/// For example, `~value~` will be marked as strike.
+export function markStrike(markType: MarkType) {
+  return markTypeInputRule(/~([^~]+)~$/, markType);
+}
+
 /// Input rule to mark link.
 /// For example, `[marktion](https://marktion.io)` will be marked as link.
 export function insertLinkRule(markType: MarkType) {
@@ -185,6 +191,7 @@ export function InputRulesPlugin(schema: MarkdownSchema) {
     markStrong(schema.marks.strong),
     markEm(schema.marks.em),
     markCode(schema.marks.code),
+    markStrike(schema.marks.strike),
     insertLinkRule(schema.marks.link)
   );
 

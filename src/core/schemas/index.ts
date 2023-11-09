@@ -16,6 +16,7 @@ import { code } from './code';
 import { table } from './table';
 import { task_item } from './task_item';
 import { task_list } from './task_list';
+import { strike } from './strike';
 
 export const nodes = {
   doc: {
@@ -50,7 +51,8 @@ export const marks = {
   em,
   strong,
   link,
-  code
+  code,
+  strike
 };
 
 /// Document schema for the data model used by CommonMark.
