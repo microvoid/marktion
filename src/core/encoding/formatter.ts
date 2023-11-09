@@ -1,14 +1,15 @@
 import type { MarkdownMark, MarkdownNode, MarkdownSchema } from '../schemas';
 import type { Node as ProseMirrorNode, Mark } from 'prosemirror-model';
-import { Root, Node, RootContent, PhrasingContent } from 'mdast';
+import { Root, Node, RootContent, PhrasingContent, Table, TableRow } from 'mdast';
 import { createProseMirrorNode } from './utils';
 
 export type FormatMdNode = Root | RootContent | PhrasingContent;
-export type FormatContext = Partial<{
-  definitions: Record<string, { url: string; title: string | null | undefined }>;
-  imageReference: Record<string, ProseMirrorNode>;
-  linkReference: Record<string, Mark>;
-}>;
+export type FormatContext = {
+  paths: FormatMdNode[];
+  definitions?: Record<string, { url: string; title: string | null | undefined }>;
+  imageReference?: Record<string, ProseMirrorNode>;
+  linkReference?: Record<string, Mark>;
+};
 
 export type FormatterImpl<T extends Node> = {
   parse: (
@@ -43,7 +44,7 @@ export const SchemaToMdAst: Record<MarkdownNode | MarkdownMark, string> = {
   table: 'table',
   table_row: 'tableRow',
   table_cell: 'tableCell',
-  table_header: 'tableHeader',
+  table_header: 'tableRow',
   // mark
   text: 'text',
   strong: 'strong',
@@ -293,12 +294,27 @@ Formatter.impl('tableRow', {
 });
 
 Formatter.impl('tableCell', {
-  parse(node, schema, children) {
-    return createProseMirrorNode(
-      schema.nodes.table_cell.name,
-      schema,
-      children.map(node => schema.nodes.paragraph.createAndFill({}, node)!)
-    );
+  parse(node, schema, children, context) {
+    const row = context.paths[context.paths.length - 1] as TableRow;
+    const table = context.paths[context.paths.length - 2] as Table;
+    const isFirstRow = table.children[0] === row;
+
+    const nodes = children.map(node => schema.nodes.paragraph.createAndFill({}, node)!);
+
+    if (isFirstRow) {
+      let attr: Record<string, any> = {};
+
+      if (table.align) {
+        const index = row.children.indexOf(node);
+        attr = {
+          align: table.align[index]
+        };
+      }
+
+      return createProseMirrorNode(schema.nodes.table_header.name, schema, nodes, attr);
+    }
+
+    return createProseMirrorNode(schema.nodes.table_cell.name, schema, nodes);
   },
   serialize(node, children) {
     return [];

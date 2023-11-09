@@ -19,7 +19,10 @@ function unifiedParse(source: string) {
   return process.runSync(process.parse(source));
 }
 
-function toProseMirrorDoc(node: FormatMdNode, context: FormatContext = {}): ProseMirrorNode[] {
+function toProseMirrorDoc(
+  node: FormatMdNode,
+  context: FormatContext = { paths: [] }
+): ProseMirrorNode[] {
   const impl = Formatter.get(node.type);
 
   if (!impl) {
@@ -31,11 +34,19 @@ function toProseMirrorDoc(node: FormatMdNode, context: FormatContext = {}): Pros
     return [];
   }
 
+  if (!context.paths) {
+    context.paths = [];
+  }
+
+  context.paths.push(node);
+
   let children: ProseMirrorNode[] = [];
 
   if (unistNodeIsParent(node)) {
     children = children.concat(...node.children.map(item => toProseMirrorDoc(item, context)));
   }
+
+  context.paths.pop();
 
   return impl.parse(node, schema, children, context);
 }

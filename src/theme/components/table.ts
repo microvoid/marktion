@@ -17,16 +17,20 @@ table {
   /* Makes "height: 100%" work on content inside cells */
   height: 0;
 }
+
 table tbody {
   vertical-align: inherit;
 }
+
 table tr {
   vertical-align: inherit;
   color: var(--gray-12);
 }
-table td {
+
+table td, table th {
+  border: 1px solid var(--gray-a4);
   background-color: var(--table-row-background-color);
-  box-shadow: var(--table-row-box-shadow);
+  border-radius: calc(var(--table-border-radius) - 1px);
   box-sizing: border-box;
   vertical-align: inherit;
   padding: var(--table-cell-padding);

@@ -4,6 +4,11 @@ import { MarktionV2 } from 'marktion';
 const INIT_MARKDOWN = [import.meta.env.VITE_README_ZH, import.meta.env.VITE_README_EN];
 
 const TEST = `
+| Syntax      | Description | Test Text     |
+| :---        |    :----:   |          ---: |
+| Header      | Title       | Here's this   |
+| Paragraph   | Text        | And more      |
+
 1. 111
 2. 222
 
@@ -14,7 +19,7 @@ const TEST = `
 ![](/public/recorder.gif)
 [百度](https://baidu.com "这是百度")
 
-| **属性**      | **描述**                   | **类型**                                       | **默认值** |
+| 属性      | 描述                   | 类型                                       | 默认值 |
 | ------------- | -------------------------- | ---------------------------------------------- | ---------- |
 | markdown      | 编辑器的初始 Markdown 内容 | string                                         | -          |
 | darkmode      | 是否启用 Dark 模式         | boolean                                        | false      |
