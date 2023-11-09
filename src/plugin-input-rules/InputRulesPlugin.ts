@@ -104,7 +104,6 @@ export function insertImageRule(nodeType: NodeType) {
 /// code blocks, and heading.
 export function InputRulesPlugin(schema: MarkdownSchema) {
   const rules = smartQuotes.concat(
-    ellipsis,
     blockQuoteRule(schema.nodes.blockquote),
     orderedListRule(schema.nodes.ordered_list),
     bulletListRule(schema.nodes.bullet_list),
