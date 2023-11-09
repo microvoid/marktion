@@ -36,10 +36,12 @@ export function bulletListRule(nodeType: NodeType) {
   return wrappingInputRule(/^\s*([-+*])\s$/, nodeType);
 }
 
-/// Given a code block node type, returns an input rule that turns a
-/// textblock starting with three backticks into a code block.
+/// A input rule for creating code block.
+/// For example, ` ```javascript ` will create a code block with language javascript.
 export function codeBlockRule(nodeType: NodeType) {
-  return textblockTypeInputRule(/^```$/, nodeType);
+  return textblockTypeInputRule(/^```(?<language>[a-z]*)?[\s\n]$/, nodeType, match => ({
+    language: match.groups?.language ?? ''
+  }));
 }
 
 /// Given a node type and a maximum level, creates an input rule that
