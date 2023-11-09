@@ -70,18 +70,30 @@ export function insertTableInputRule(schema: MarkdownSchema) {
   });
 }
 
+/// Input rule to insert a hr.
+/// For example, `---` will be converted to a hr.
+export function insertHrInputRule(nodeType: NodeType) {
+  return new InputRule(/^(?:---|___)\s$/, (state, match, start, end) => {
+    const { tr } = state;
+
+    if (match[0]) tr.replaceWith(start - 1, end, nodeType.create());
+
+    return tr;
+  });
+}
+
 /// A set of input rules for creating the basic block quotes, lists,
 /// code blocks, and heading.
 export function InputRulesPlugin(schema: MarkdownSchema) {
   const rules = smartQuotes.concat(
     ellipsis,
-    emDash,
     blockQuoteRule(schema.nodes.blockquote),
     orderedListRule(schema.nodes.ordered_list),
     bulletListRule(schema.nodes.bullet_list),
     codeBlockRule(schema.nodes.code_block),
     headingRule(schema.nodes.heading, 6),
-    insertTableInputRule(schema)
+    insertTableInputRule(schema),
+    insertHrInputRule(schema.nodes.horizontal_rule)
   );
 
   return inputRules({ rules });

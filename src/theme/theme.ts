@@ -10,6 +10,7 @@ import { blockquote } from './components/blockquote';
 import { heading } from './components/heading';
 import { list } from './components/list';
 import { table } from './components/table';
+import { hr } from './components/hr';
 
 /**
  * Create the theme variables from the provided theme.
@@ -73,7 +74,6 @@ export const MarktionTheme = css`
     ol,
     dl,
     dd,
-    hr,
     figure,
     p,
     pre {
@@ -84,5 +84,6 @@ export const MarktionTheme = css`
     ${heading}
     ${list}
     ${table}
+    ${hr}
   }
 `;
