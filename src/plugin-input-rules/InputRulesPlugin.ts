@@ -3,14 +3,13 @@ import {
   wrappingInputRule,
   textblockTypeInputRule,
   smartQuotes,
-  emDash,
-  ellipsis,
   InputRule
 } from 'prosemirror-inputrules';
-import { NodeType } from 'prosemirror-model';
+import { NodeType, MarkType } from 'prosemirror-model';
 import { createTable } from './table';
 import { MarkdownSchema } from '../core';
 import { TextSelection } from 'prosemirror-state';
+import { markTypeInputRule } from './markTypeInputRule';
 
 /// Given a blockquote node type, returns an input rule that turns `"> "`
 /// at the start of a textblock into a blockquote.
@@ -100,6 +99,44 @@ export function insertImageRule(nodeType: NodeType) {
   );
 }
 
+/// Input rule to mark strong.
+/// For example, `**value**` will be marked as strong.
+export function markStrong(markType: MarkType) {
+  return markTypeInputRule(/(?:\*\*|__)([^*_]+)(?:\*\*|__)$/, markType);
+}
+
+/// Input rule to mark em.
+/// For example, `*value*` will be marked as em.
+export function markEm(markType: MarkType) {
+  return [
+    markTypeInputRule(/(?:^|[^*])\*([^*]+)\*$/, markType, function (captured) {
+      if (!captured.fullMatch.startsWith('*')) {
+        captured.fullMatch = captured.fullMatch.slice(1);
+        captured.start = captured.start + 1;
+      }
+      return captured;
+    }),
+    markTypeInputRule(/(?:^|\W)_([^_]+)_$/, markType, function (captured) {
+      if (!captured.fullMatch.startsWith('_')) {
+        captured.fullMatch = captured.fullMatch.slice(1);
+        captured.start = captured.start + 1;
+      }
+      return captured;
+    })
+  ];
+}
+
+export const LEAF_NODE_REPLACING_CHARACTER = '\uFFFC';
+
+/// Input rule to mark code.
+/// For example, `\`value\`` will be marked as code.
+export function markCode(markType: MarkType) {
+  return markTypeInputRule(
+    new RegExp(`(?:\`)([^\`${LEAF_NODE_REPLACING_CHARACTER}]+)(?:\`)$`),
+    markType
+  );
+}
+
 /// A set of input rules for creating the basic block quotes, lists,
 /// code blocks, and heading.
 export function InputRulesPlugin(schema: MarkdownSchema) {
@@ -111,7 +148,10 @@ export function InputRulesPlugin(schema: MarkdownSchema) {
     headingRule(schema.nodes.heading, 6),
     insertTableInputRule(schema),
     insertHrInputRule(schema.nodes.horizontal_rule),
-    insertImageRule(schema.nodes.image)
+    insertImageRule(schema.nodes.image),
+    markStrong(schema.marks.strong),
+    markEm(schema.marks.em),
+    markCode(schema.marks.code)
   );
 
   return inputRules({ rules });
