@@ -24,7 +24,7 @@ import {
   keymap
 } from '@codemirror/view';
 import { indentWithTab } from '@codemirror/commands';
-import { replaceNodeAtPosition, assert } from '../core/utils';
+import { replaceNodeAtPosition, assert } from '../../core/utils';
 
 type LoadLanguage = (lang: string) => Promise<LanguageSupport> | LanguageSupport | void;
 

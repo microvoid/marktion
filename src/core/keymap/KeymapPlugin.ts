@@ -14,7 +14,7 @@ import { wrapInList, splitListItem, liftListItem, sinkListItem } from 'prosemirr
 import { undo, redo } from 'prosemirror-history';
 import { undoInputRule } from 'prosemirror-inputrules';
 import { Command } from 'prosemirror-state';
-import { MarkdownSchema } from '../core';
+import { MarkdownSchema } from '../schemas';
 
 const mac = typeof navigator != 'undefined' ? /Mac|iP(hone|[oa]d)/.test(navigator.platform) : false;
 

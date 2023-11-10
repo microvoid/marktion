@@ -3,16 +3,16 @@ import { EditorState } from 'prosemirror-state';
 import { dropCursor } from 'prosemirror-dropcursor';
 import { gapCursor } from 'prosemirror-gapcursor';
 import { keymap } from 'prosemirror-keymap';
-
+import { history } from 'prosemirror-history';
 import { defaultMarkdownSerializer } from 'prosemirror-markdown';
 import { baseKeymap } from 'prosemirror-commands';
+
 import { Marktion } from './marktion';
 import { parse, schema } from './core';
-import { InputRulesPlugin } from './plugin-input-rules';
-import { KeymapPlugin } from './plugin-keymap';
-import { HistoryPlugin } from './plugin-history';
-import { codeblock } from './node-codeblock';
-import { taskItem } from './node-task-list/task-item';
+import { InputRulesPlugin } from './core/input-rules';
+import { KeymapPlugin } from './core/keymap';
+import { codeblock } from './components/codeblock';
+import { taskItem } from './components/task';
 
 const defaultNodeViews: EditorProps['nodeViews'] = {
   code_block: codeblock,
@@ -33,7 +33,7 @@ export class ProseMirrorRenderer {
           InputRulesPlugin(schema),
           KeymapPlugin(schema),
           keymap(baseKeymap),
-          HistoryPlugin(),
+          history(),
           dropCursor(),
           gapCursor()
         ]

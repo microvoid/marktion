@@ -1,3 +1,4 @@
+import isArray from 'lodash/isArray';
 import {
   inputRules,
   wrappingInputRule,
@@ -6,10 +7,9 @@ import {
   InputRule
 } from 'prosemirror-inputrules';
 import { NodeType, MarkType } from 'prosemirror-model';
-import isArray from 'lodash/isArray';
-import { createTable } from './table';
-import { MarkdownSchema } from '../core';
 import { TextSelection } from 'prosemirror-state';
+import { createTable } from './table';
+import { MarkdownSchema } from '../schemas';
 import { markTypeInputRule } from './markTypeInputRule';
 
 /// Given a blockquote node type, returns an input rule that turns `"> "`

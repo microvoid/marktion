@@ -1,5 +1,5 @@
 import { Node } from 'prosemirror-model';
-import { MarkdownSchema } from '../core';
+import { MarkdownSchema } from '../schemas';
 
 export function createTable(schema: MarkdownSchema, r = 3, c = 3): Node {
   const cells = Array(c)

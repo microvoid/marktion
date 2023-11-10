@@ -2,7 +2,7 @@ import { NodeType, Node as ProsemirrorNode, ResolvedPos } from 'prosemirror-mode
 import { NodeViewConstructor } from 'prosemirror-view';
 import { createCustomMarkListItemNodeView } from './task-item-node-view';
 import { Command } from 'prosemirror-state';
-import { findParentNodeOfType } from '../core/utils';
+import { findParentNodeOfType } from '../../core/utils';
 
 export const taskItem: NodeViewConstructor = (node, view, getPos) => {
   const mark = document.createElement('input');
