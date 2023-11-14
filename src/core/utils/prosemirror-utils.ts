@@ -1,7 +1,9 @@
-import { Transaction, EditorState, Selection } from 'prosemirror-state';
+import { EditorState, Selection } from 'prosemirror-state';
+import type { Transaction, PluginKey, Plugin } from 'prosemirror-state';
 import { Fragment, Node as ProsemirrorNode, NodeType, ResolvedPos } from 'prosemirror-model';
 import isArray from 'lodash/isArray';
 import isObject from 'lodash/isObject';
+import get from 'lodash/get';
 
 export interface ProsemirrorNodeProps {
   /**
@@ -111,7 +113,7 @@ export function findParentNodeOfType(
   return findParentNode({ predicate: node => isNodeOfType({ types, node }), selection });
 }
 
-interface FindParentNodeProps extends StateSelectionPosProps {
+export interface FindParentNodeProps extends StateSelectionPosProps {
   predicate: (node: ProsemirrorNode, pos: number) => boolean;
 }
 
@@ -182,4 +184,8 @@ export function isEditorState(value: unknown): value is EditorState | Readonly<E
  */
 export function isSelection(value: unknown): value is Selection {
   return isObject(value) && value instanceof Selection;
+}
+
+export function getPluginKey(key: string | Plugin | PluginKey) {
+  return typeof key == 'string' ? key : get(key, 'key')!;
 }

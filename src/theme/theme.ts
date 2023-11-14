@@ -83,8 +83,11 @@ export const MarktionTheme = css`
     dl,
     dd,
     figure,
-    p,
     pre {
+      margin: var(--space-5) 0;
+    }
+
+    p {
       margin: var(--space-3) 0;
     }
 

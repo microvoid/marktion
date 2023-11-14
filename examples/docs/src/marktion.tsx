@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react';
-import { MarktionV2 } from 'marktion';
+import { createPortal } from 'react-dom';
+import { Marktion, createSlash, ReactEditor, usePortal, SlashPluginKey } from 'marktion';
 
 const INIT_MARKDOWN = [import.meta.env.VITE_README_ZH, import.meta.env.VITE_README_EN];
 
@@ -47,20 +47,21 @@ Italicized text is the _cat's meow_
 \`React\`
 `;
 
+function SlashMenu() {
+  const slashPortal = usePortal(SlashPluginKey)!;
+  return createPortal(<div>Slash Menu</div>, slashPortal);
+}
+
+const marktion = new Marktion({
+  renderer: 'WYSIWYG',
+  content: TEST + INIT_MARKDOWN[0],
+  plugins: [createSlash()]
+});
+
 export function MarktionV2App() {
-  const rootRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    // @ts-ignore
-    if (rootRef.current && !window['marktionV2']) {
-      // @ts-ignore
-      window['marktionV2'] = new MarktionV2({
-        root: rootRef.current,
-        renderer: 'WYSIWYG',
-        content: TEST + INIT_MARKDOWN[0]
-      });
-    }
-  }, []);
-
-  return <div className="marktion-themes" data-accent-color="tomato" ref={rootRef}></div>;
+  return (
+    <ReactEditor editor={marktion}>
+      <SlashMenu />
+    </ReactEditor>
+  );
 }

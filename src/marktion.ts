@@ -1,9 +1,10 @@
+import { EditorStateConfig } from 'prosemirror-state';
 import { CodemirrorRenderer } from './codemirror';
 import { ProseMirrorRenderer } from './prosemirror';
 import { MarktionTheme } from './theme';
 
 export type MarktionOptions = {
-  root?: HTMLElement;
+  plugins?: EditorStateConfig['plugins'];
   renderer: 'WYSIWYG' | 'SOURCE' | 'SSR';
   content: string;
 };
@@ -14,34 +15,39 @@ const defaultOptions: MarktionOptions = {
 };
 
 export class Marktion {
-  private declare wysiwyg: ProseMirrorRenderer;
-  private declare source: CodemirrorRenderer;
+  public rootEl?: HTMLElement;
 
-  constructor(public options: MarktionOptions = defaultOptions) {
-    this.render();
-  }
+  declare pmRenderer: ProseMirrorRenderer;
+  declare cmRenderer: CodemirrorRenderer;
 
-  render() {
-    const root = this.options.root!;
+  constructor(public options: MarktionOptions = defaultOptions) {}
+
+  mount(root: HTMLElement) {
+    this.rootEl = root;
+
     const doc = root.ownerDocument;
 
     root.classList.add(MarktionTheme);
 
-    if (!this.wysiwyg) {
+    if (!this.pmRenderer) {
       const div = doc.createElement('div');
       root.appendChild(div);
 
-      this.wysiwyg = new ProseMirrorRenderer(this, div);
+      this.pmRenderer = new ProseMirrorRenderer({
+        editor: this,
+        root: div,
+        plugin: this.options.plugins
+      });
     }
 
-    if (!this.source) {
+    if (!this.cmRenderer) {
       const div = doc.createElement('div');
       root.appendChild(div);
 
       div.classList.add('CodeMirror');
       div.style.marginTop = '20px';
 
-      this.source = new CodemirrorRenderer(this, div);
+      this.cmRenderer = new CodemirrorRenderer(this, div);
     }
   }
 }

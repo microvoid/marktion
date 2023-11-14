@@ -170,6 +170,9 @@ importers:
       csstype:
         specifier: ^3.1.2
         version: 3.1.2
+      escape-string-regexp:
+        specifier: ^5.0.0
+        version: 5.0.0
       highlight.js:
         specifier: ^11.8.0
         version: 11.8.0
@@ -275,6 +278,9 @@ importers:
       remark-stringify:
         specifier: ^10.0.3
         version: 10.0.3
+      type-fest:
+        specifier: ^4.7.1
+        version: 4.7.1
       unified:
         specifier: ^10.1.2
         version: 10.1.2
@@ -9935,6 +9941,11 @@ packages:
   /type-fest@2.19.0:
     resolution: {integrity: sha512-RAH822pAdBgcNMAfWnCBU3CFZcfZ/i1eZjwFU/dsLKumyuuP3niueg2UAukXYF0E2AAoc82ZSSf9J0WQBinzHA==}
     engines: {node: '>=12.20'}
+
+  /type-fest@4.7.1:
+    resolution: {integrity: sha512-iWr8RUmzAJRfhZugX9O7nZE6pCxDU8CZ3QxsLuTnGcBLJpCaP2ll3s4eMTBoFnU/CeXY/5rfQSuAEsTGJO4y8A==}
+    engines: {node: '>=16'}
+    dev: false
 
   /typed-array-buffer@1.0.0:
     resolution: {integrity: sha512-Y8KTSIglk9OZEr8zywiIHG/kmQ7KWyjseXs1CbSo8vC42w7hg2HgYTxSWwP0+is7bWDc1H+Fo026CpHFwm8tkw==}
