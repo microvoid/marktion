@@ -11,6 +11,7 @@ import { heading } from './components/heading';
 import { list } from './components/list';
 import { table } from './components/table';
 import { hr } from './components/hr';
+import { slash } from './plugins/slash';
 
 /**
  * Create the theme variables from the provided theme.
@@ -35,6 +36,9 @@ export const MarktionTheme = css`
   ${typography}
   ${radius}
 
+  ${slash}
+
+  position: relative;
   box-sizing: border-box;
   overflow-wrap: break-word;
   font-family: var(--default-font-family);

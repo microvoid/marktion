@@ -20,7 +20,12 @@ export class Marktion {
   declare pmRenderer: ProseMirrorRenderer;
   declare cmRenderer: CodemirrorRenderer;
 
-  constructor(public options: MarktionOptions = defaultOptions) {}
+  constructor(public options: MarktionOptions = defaultOptions) {
+    this.pmRenderer = new ProseMirrorRenderer({
+      editor: this,
+      plugin: this.options.plugins
+    });
+  }
 
   mount(root: HTMLElement) {
     this.rootEl = root;
@@ -29,15 +34,11 @@ export class Marktion {
 
     root.classList.add(MarktionTheme);
 
-    if (!this.pmRenderer) {
+    if (!this.pmRenderer.view) {
       const div = doc.createElement('div');
       root.appendChild(div);
 
-      this.pmRenderer = new ProseMirrorRenderer({
-        editor: this,
-        root: div,
-        plugin: this.options.plugins
-      });
+      this.pmRenderer.mount(div);
     }
 
     if (!this.cmRenderer) {

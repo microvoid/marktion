@@ -1,32 +1,77 @@
+import mitt, { Emitter } from 'mitt';
 import { EditorView } from 'prosemirror-view';
-import { Plugin, PluginKey, PluginView } from 'prosemirror-state';
-import { addSuggester, Suggester } from '../plugin-suggest';
-import { createPortal } from '../plugin-portal';
+import { EditorState, Plugin, PluginKey, PluginView } from 'prosemirror-state';
+import {
+  addSuggester,
+  ChangeReason,
+  SuggestChangeHandlerProps,
+  Suggester
+} from '../plugin-suggest';
+import { createPortal, getPortal } from '../plugin-portal';
 
-export const SlashPluginKey = new PluginKey('plugin-slash');
+export type SlashPluginState = {
+  event: Emitter<SlashEvent>;
+};
+export type SlashEvent = {
+  onOpenChange: {
+    open: boolean;
+    changeDetails?: SuggestChangeHandlerProps;
+  };
+  onChange: {
+    changeDetails: SuggestChangeHandlerProps;
+  };
+};
 
-export type SlashOptions = {
+export const SlashPluginKey = new PluginKey<SlashPluginState>('plugin-slash');
+
+export type CreateSlashOptions = {
   view?: (view: EditorView) => PluginView;
 };
 
-export function createSlash(options: SlashOptions = {}) {
+export function getSlashEvent(state: EditorState) {
+  return SlashPluginKey.getState(state);
+}
+
+export function createSlash(options: CreateSlashOptions = {}) {
+  const event = mitt<SlashEvent>();
+
   const slash: Suggester = {
-    disableDecorations: true,
+    disableDecorations: false,
     appendTransaction: false,
     suggestTag: 'span',
     name: 'slash',
     // validPrefixCharacters: /.?/,
     char: '/',
     onChange(props) {
-      console.log(props);
+      if (props.changeReason === ChangeReason.Start) {
+        onSlashOpen(props, {
+          event
+        });
+        return;
+      }
+
+      if (props.changeReason === ChangeReason.Move || props.changeReason === ChangeReason.Text) {
+        onSlashUpdate(props, {
+          event
+        });
+        return;
+      }
+
+      onSlashClose(props, {
+        event
+      });
     }
   };
 
-  const plugin = new Plugin({
+  const plugin = new Plugin<SlashPluginState>({
     key: SlashPluginKey,
     state: {
       init(_, state) {
         addSuggester(state, slash);
+
+        return {
+          event
+        };
       },
       apply(tr, value) {
         return value;
@@ -34,12 +79,51 @@ export function createSlash(options: SlashOptions = {}) {
     },
     view(view) {
       createPortal(view.state, SlashPluginKey);
-      options.view?.(view);
-      return {};
+      return options.view?.(view) || {};
     }
   });
 
   return plugin;
 }
 
-function suggestSlash() {}
+function onSlashOpen(props: SuggestChangeHandlerProps, slashState: SlashPluginState) {
+  const portal = getPortal(props.view.state, SlashPluginKey);
+
+  if (!portal) return;
+
+  const parent = props.view.dom;
+  const parentRect = parent.getBoundingClientRect();
+  const coords = props.view.coordsAtPos(props.range.from);
+  const rect = getCursurRect(
+    coords.left - parentRect.left + parent.scrollLeft,
+    coords.top - parentRect.top + parent.scrollTop,
+    1,
+    coords.bottom - coords.top
+  );
+
+  portal.style.top = rect.y + 'px';
+  portal.style.left = rect.x + 'px';
+  portal.style.width = rect.width + 'px';
+  portal.style.height = rect.height + 'px';
+
+  slashState.event.emit('onOpenChange', {
+    open: true,
+    changeDetails: props
+  });
+}
+
+function onSlashClose(props: SuggestChangeHandlerProps, slashState: SlashPluginState) {
+  slashState.event.emit('onOpenChange', {
+    open: false
+  });
+}
+
+function onSlashUpdate(props: SuggestChangeHandlerProps, slashState: SlashPluginState) {
+  slashState.event.emit('onChange', {
+    changeDetails: props
+  });
+}
+
+function getCursurRect(x: number, y: number, width: number, height: number) {
+  return new DOMRect(x, y, width, height);
+}

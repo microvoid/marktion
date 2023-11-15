@@ -23,30 +23,34 @@ const defaultNodeViews: EditorProps['nodeViews'] = {
 };
 
 export class ProseMirrorRenderer {
-  public view: EditorView;
+  public view!: EditorView;
+  public state: EditorState;
 
   constructor(
     public options: {
       editor: Marktion;
-      root: HTMLElement;
       plugin?: EditorStateConfig['plugins'];
     }
   ) {
-    this.view = new EditorView(options.root, {
-      state: EditorState.create({
-        doc: parse(options.editor.options.content)!,
-        plugins: [
-          InputRulesPlugin(schema),
-          KeymapPlugin(schema),
-          keymap(baseKeymap),
-          history(),
-          dropCursor(),
-          gapCursor(),
-          suggest(),
-          createPortalSet(),
-          ...(options.plugin || [])
-        ]
-      }),
+    this.state = EditorState.create({
+      doc: parse(options.editor.options.content)!,
+      plugins: [
+        InputRulesPlugin(schema),
+        KeymapPlugin(schema),
+        keymap(baseKeymap),
+        history(),
+        dropCursor(),
+        gapCursor(),
+        suggest(),
+        createPortalSet(),
+        ...(options.plugin || [])
+      ]
+    });
+  }
+
+  mount(root: HTMLElement) {
+    this.view = new EditorView(root, {
+      state: this.state,
       nodeViews: defaultNodeViews
     });
   }
@@ -56,6 +60,6 @@ export class ProseMirrorRenderer {
   }
 
   getState() {
-    return this.view.state;
+    return this.state;
   }
 }

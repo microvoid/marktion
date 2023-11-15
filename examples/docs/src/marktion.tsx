@@ -1,5 +1,4 @@
-import { createPortal } from 'react-dom';
-import { Marktion, createSlash, ReactEditor, usePortal, SlashPluginKey } from 'marktion';
+import { Marktion, createSlash, ReactEditor } from 'marktion';
 
 const INIT_MARKDOWN = [import.meta.env.VITE_README_ZH, import.meta.env.VITE_README_EN];
 
@@ -47,11 +46,6 @@ Italicized text is the _cat's meow_
 \`React\`
 `;
 
-function SlashMenu() {
-  const slashPortal = usePortal(SlashPluginKey)!;
-  return createPortal(<div>Slash Menu</div>, slashPortal);
-}
-
 const marktion = new Marktion({
   renderer: 'WYSIWYG',
   content: TEST + INIT_MARKDOWN[0],
@@ -59,9 +53,5 @@ const marktion = new Marktion({
 });
 
 export function MarktionV2App() {
-  return (
-    <ReactEditor editor={marktion}>
-      <SlashMenu />
-    </ReactEditor>
-  );
+  return <ReactEditor editor={marktion} />;
 }

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Marktion } from '../../marktion';
 import { MarktionContext } from '../../react-hooks';
+import { SlashPlugin } from '../slash';
 
 export type ReactEditorProps = React.PropsWithChildren<{
   editor: Marktion;
@@ -18,13 +19,12 @@ export function ReactEditor(props: ReactEditorProps) {
     }
   }, [props.editor]);
 
-  const contextChildren = editor.rootEl ? (
-    <MarktionContext.Provider value={editor}>{children}</MarktionContext.Provider>
-  ) : null;
-
   return (
-    <div className="marktion-themes" data-accent-color="tomato" ref={rootRef}>
-      {contextChildren}
+    <div className="marktion-themes marktion-theme" data-accent-color="tomato" ref={rootRef}>
+      <MarktionContext.Provider value={editor}>
+        <SlashPlugin />
+        {children}
+      </MarktionContext.Provider>
     </div>
   );
 }
