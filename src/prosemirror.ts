@@ -13,9 +13,9 @@ import { InputRulesPlugin } from './core/input-rules';
 import { KeymapPlugin } from './core/keymap';
 import { codeblock } from './components/codeblock';
 import { taskItem } from './components/task';
-import { createSlash } from './plugin-slash';
 import { suggest } from './plugin-suggest';
 import { createPortalSet } from './plugin-portal';
+import { createChain } from './core/createChain';
 
 const defaultNodeViews: EditorProps['nodeViews'] = {
   code_block: codeblock,
@@ -63,6 +63,10 @@ export class ProseMirrorRenderer {
       state: this.state,
       nodeViews: defaultNodeViews
     });
+  }
+
+  chain() {
+    return createChain(this.view);
   }
 
   getContent() {

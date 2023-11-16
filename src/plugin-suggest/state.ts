@@ -4,7 +4,7 @@ import isFunction from 'lodash/isFunction';
 import isString from 'lodash/isString';
 import { sort, object } from '../core/utils/helpers';
 
-import { isInvalidSplitReason, isJumpReason, isTextSelection, isValidMatch } from './predicates';
+import { isInvalidSplitReason, isJumpReason, isValidMatch } from './predicates';
 import type {
   AddIgnoredProps,
   CompareMatchProps,
@@ -27,6 +27,7 @@ import {
   findReason,
   IGNORE_SUGGEST_META_KEY
 } from './utils';
+import { isTextSelection } from '../core';
 
 /**
  * The `prosemirror-suggest` state which manages the list of suggesters.

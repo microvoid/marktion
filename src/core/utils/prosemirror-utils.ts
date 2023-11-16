@@ -5,6 +5,7 @@ import isArray from 'lodash/isArray';
 import isObject from 'lodash/isObject';
 import get from 'lodash/get';
 import { EditorView } from 'prosemirror-view';
+import { minMax } from './utilities';
 
 export interface ProsemirrorNodeProps {
   /**
@@ -189,10 +190,6 @@ export function isSelection(value: unknown): value is Selection {
 
 export function getPluginKey(key: string | Plugin | PluginKey) {
   return typeof key == 'string' ? key : get(key, 'key')!;
-}
-
-export function minMax(value = 0, min = 0, max = 0): number {
-  return Math.min(Math.max(value, min), max);
 }
 
 export function posToDOMRect(view: EditorView, from: number, to: number): DOMRect {

@@ -1,7 +1,7 @@
 import { Button } from 'antd';
 import { Code, BoldIcon, ItalicIcon, StrikethroughIcon } from 'lucide-react';
 import { isActive } from '../../core';
-import { useEditorState } from '../../react-hooks';
+import { useEditorState, usePMRenderer } from '../../react-hooks';
 
 export interface BubbleMenuItem {
   name: string;
@@ -12,38 +12,31 @@ export interface BubbleMenuItem {
 
 export function InlineTools(props: { showAI?: boolean }) {
   const editorState = useEditorState();
+  const pmRenderer = usePMRenderer();
 
   const items: BubbleMenuItem[] = [
     {
       name: 'bold',
       isActive: () => isActive(editorState, 'strong'),
-      command: () => {
-        // props.editor.chain().focus().toggleBold().run()
-      },
+      command: () => pmRenderer.chain().focus().toggleStrong().run(),
       icon: <BoldIcon style={{ width: 14, height: 14 }} />
     },
     {
       name: 'italic',
       isActive: () => isActive(editorState, 'em'),
-      command: () => {
-        // props.editor.chain().focus().toggleItalic().run()
-      },
+      command: () => pmRenderer.chain().focus().toggleEm().run(),
       icon: <ItalicIcon style={{ width: 14, height: 14 }} />
     },
     {
       name: 'strike',
       isActive: () => isActive(editorState, 'strike'),
-      command: () => {
-        // props.editor.chain().focus().toggleStrike().run()
-      },
+      command: () => pmRenderer.chain().focus().toggleStrike().run(),
       icon: <StrikethroughIcon style={{ width: 14, height: 14 }} />
     },
     {
       name: 'code',
       isActive: () => isActive(editorState, 'code'),
-      command: () => {
-        // props.editor.chain().focus().toggleCode().run()
-      },
+      command: () => pmRenderer.chain().focus().toggleCode().run(),
       icon: <Code style={{ width: 14, height: 14 }} />
     }
   ];

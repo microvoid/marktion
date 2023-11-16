@@ -1,6 +1,4 @@
-import { TextSelection } from 'prosemirror-state';
 import includes from 'lodash/includes';
-import isObject from 'lodash/isObject';
 import isString from 'lodash/isString';
 
 import type {
@@ -166,13 +164,4 @@ export function selectionOutsideMatch(
 ): boolean {
   const { match, selection } = props;
   return !!match && (selection.from < match.range.from || selection.from > match.range.to);
-}
-
-/**
- * Predicate checking whether the selection is a `TextSelection`.
- *
- * @param value - the value to check
- */
-export function isTextSelection(value: unknown): value is TextSelection {
-  return isObject(value) && value instanceof TextSelection;
 }
