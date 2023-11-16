@@ -225,7 +225,7 @@ export function posToDOMRect(view: EditorView, from: number, to: number): DOMRec
 }
 
 export function posToOffsetRect(view: EditorView, from: number, to: number): DOMRect {
-  const rect = posToDOMRect(view, from, from);
+  const rect = posToDOMRect(view, from, to);
   const parent = view.dom;
   const parentRect = parent.getBoundingClientRect();
 
