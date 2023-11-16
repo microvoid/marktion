@@ -11,7 +11,7 @@ export interface BubbleMenuItem {
 }
 
 export function InlineTools(props: { showAI?: boolean }) {
-  const editorState = useEditorState();
+  const editorState = useEditorState(true);
   const pmRenderer = usePMRenderer();
 
   const items: BubbleMenuItem[] = [

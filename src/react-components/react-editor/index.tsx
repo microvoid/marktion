@@ -3,6 +3,7 @@ import { Marktion, MarktionOptions } from '../../marktion';
 import { MarktionContext } from '../../react-hooks';
 import { useBubble } from '../bubble';
 import { useSlash } from '../slash';
+import { event } from '../../plugin-event';
 
 export type ReactEditorProps = React.PropsWithChildren<MarktionOptions>;
 
@@ -13,7 +14,7 @@ export function ReactEditor(props: ReactEditorProps) {
   const slash = useSlash();
 
   const editor = useMemo(() => {
-    const internalPlugins = [bubble.plugin, slash.plugin];
+    const internalPlugins = [bubble.plugin, slash.plugin, event()];
 
     return new Marktion({
       content: options.content,
