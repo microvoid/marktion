@@ -12,6 +12,7 @@ import { list } from './components/list';
 import { table } from './components/table';
 import { hr } from './components/hr';
 import { slash } from './plugins/slash';
+import { bubble } from './plugins/bubble';
 
 /**
  * Create the theme variables from the provided theme.
@@ -37,6 +38,7 @@ export const MarktionTheme = css`
   ${radius}
 
   ${slash}
+  ${bubble}
 
   position: relative;
   box-sizing: border-box;

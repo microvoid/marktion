@@ -1,5 +1,5 @@
 import { EditorView, EditorProps } from 'prosemirror-view';
-import { EditorState, EditorStateConfig } from 'prosemirror-state';
+import { EditorState, EditorStateConfig, Plugin } from 'prosemirror-state';
 import { dropCursor } from 'prosemirror-dropcursor';
 import { gapCursor } from 'prosemirror-gapcursor';
 import { keymap } from 'prosemirror-keymap';
@@ -46,6 +46,16 @@ export class ProseMirrorRenderer {
         ...(options.plugin || [])
       ]
     });
+  }
+
+  applyPlugin(...plugins: Plugin[]) {
+    this.state = this.state.reconfigure({
+      plugins: this.state.plugins.concat(plugins)
+    });
+
+    if (this.view) {
+      this.view.dispatch(this.state.tr);
+    }
   }
 
   mount(root: HTMLElement) {

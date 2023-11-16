@@ -1,28 +1,40 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Marktion } from '../../marktion';
+import React, { useEffect, useMemo, useRef } from 'react';
+import { Marktion, MarktionOptions } from '../../marktion';
 import { MarktionContext } from '../../react-hooks';
-import { SlashPlugin } from '../slash';
+import { useBubble } from '../bubble';
+import { useSlash } from '../slash';
 
-export type ReactEditorProps = React.PropsWithChildren<{
-  editor: Marktion;
-}>;
+export type ReactEditorProps = React.PropsWithChildren<MarktionOptions>;
 
 export function ReactEditor(props: ReactEditorProps) {
-  const { editor, children } = props;
+  const { children, ...options } = props;
   const rootRef = useRef<HTMLDivElement>(null);
-  const [_, setMounted] = useState(false);
+  const bubble = useBubble();
+  const slash = useSlash();
+
+  const editor = useMemo(() => {
+    const internalPlugins = [bubble.plugin, slash.plugin];
+
+    return new Marktion({
+      content: options.content,
+      plugins: internalPlugins.concat(options.plugins || []),
+      renderer: options.renderer
+    });
+  }, []);
 
   useEffect(() => {
     if (rootRef.current) {
       editor.mount(rootRef.current);
-      setMounted(true);
     }
-  }, [props.editor]);
+  }, []);
 
   return (
     <div className="marktion-themes marktion-theme" data-accent-color="tomato" ref={rootRef}>
       <MarktionContext.Provider value={editor}>
-        <SlashPlugin />
+        {/* <SlashPlugin /> */}
+        {bubble.element}
+        {slash.element}
+
         {children}
       </MarktionContext.Provider>
     </div>

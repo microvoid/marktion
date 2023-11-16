@@ -4,6 +4,7 @@ import { Fragment, Node as ProsemirrorNode, NodeType, ResolvedPos } from 'prosem
 import isArray from 'lodash/isArray';
 import isObject from 'lodash/isObject';
 import get from 'lodash/get';
+import { EditorView } from 'prosemirror-view';
 
 export interface ProsemirrorNodeProps {
   /**
@@ -188,4 +189,51 @@ export function isSelection(value: unknown): value is Selection {
 
 export function getPluginKey(key: string | Plugin | PluginKey) {
   return typeof key == 'string' ? key : get(key, 'key')!;
+}
+
+export function minMax(value = 0, min = 0, max = 0): number {
+  return Math.min(Math.max(value, min), max);
+}
+
+export function posToDOMRect(view: EditorView, from: number, to: number): DOMRect {
+  const minPos = 0;
+  const maxPos = view.state.doc.content.size;
+  const resolvedFrom = minMax(from, minPos, maxPos);
+  const resolvedEnd = minMax(to, minPos, maxPos);
+  const start = view.coordsAtPos(resolvedFrom);
+  const end = view.coordsAtPos(resolvedEnd, -1);
+  const top = Math.min(start.top, end.top);
+  const bottom = Math.max(start.bottom, end.bottom);
+  const left = Math.min(start.left, end.left);
+  const right = Math.max(start.right, end.right);
+  const width = right - left;
+  const height = bottom - top;
+  const x = left;
+  const y = top;
+  const data = {
+    top,
+    bottom,
+    left,
+    right,
+    width,
+    height,
+    x,
+    y
+  };
+
+  return {
+    ...data,
+    toJSON: () => data
+  };
+}
+
+export function posToOffsetRect(view: EditorView, from: number, to: number): DOMRect {
+  const rect = posToDOMRect(view, from, from);
+  const parent = view.dom;
+  const parentRect = parent.getBoundingClientRect();
+
+  const x = rect.left - parentRect.left + parent.scrollLeft;
+  const y = rect.top - parentRect.top + parent.scrollTop;
+
+  return new DOMRect(x, y, rect.width, rect.height);
 }

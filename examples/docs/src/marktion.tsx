@@ -46,12 +46,6 @@ Italicized text is the _cat's meow_
 \`React\`
 `;
 
-const marktion = new Marktion({
-  renderer: 'WYSIWYG',
-  content: TEST + INIT_MARKDOWN[0],
-  plugins: [createSlash()]
-});
-
 export function MarktionV2App() {
-  return <ReactEditor editor={marktion} />;
+  return <ReactEditor renderer="WYSIWYG" content={TEST + INIT_MARKDOWN[0]} />;
 }

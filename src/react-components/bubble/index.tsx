@@ -1,9 +1,9 @@
 import { DropDownProps, Dropdown } from 'antd';
-import { useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { slash } from '../../plugin-slash';
+import { useMemo, useState } from 'react';
+import { bubble } from '../../plugin-bubble';
 
-export function Slash(props: Omit<DropDownProps, 'menu'>) {
+export function Bubble(props: Omit<DropDownProps, 'menu'>) {
   return (
     <Dropdown
       placement="bottomLeft"
@@ -26,16 +26,16 @@ export function Slash(props: Omit<DropDownProps, 'menu'>) {
   );
 }
 
-export function useSlash() {
+export function useBubble() {
   const [open, setOpen] = useState(false);
   const [portalEl, setPortalEl] = useState<HTMLElement | null>(null);
 
   const element = portalEl
-    ? createPortal(<Slash open={open} onOpenChange={setOpen} />, portalEl)
+    ? createPortal(<Bubble open={open} onOpenChange={setOpen} />, portalEl)
     : null;
 
   const plugin = useMemo(() => {
-    return slash({
+    return bubble({
       onAttach(portal) {
         setPortalEl(portal);
       },
