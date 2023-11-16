@@ -70,6 +70,6 @@ export class ProseMirrorRenderer {
   }
 
   getState() {
-    return this.state;
+    return this.view.state || this.state;
   }
 }

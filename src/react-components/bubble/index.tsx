@@ -1,28 +1,14 @@
-import { DropDownProps, Dropdown } from 'antd';
+import { Dropdown, Popover, PopoverProps } from 'antd';
 import { createPortal } from 'react-dom';
 import { useMemo, useState } from 'react';
 import { bubble } from '../../plugin-bubble';
+import { InlineTools } from './inline-tools';
 
-export function Bubble(props: Omit<DropDownProps, 'menu'>) {
+export function Bubble(props: Omit<PopoverProps, 'content'>) {
   return (
-    <Dropdown
-      placement="bottomLeft"
-      menu={{
-        items: [
-          {
-            key: 'blockquote',
-            label: 'blockquote'
-          },
-          {
-            key: 'heading',
-            label: 'heading'
-          }
-        ]
-      }}
-      {...props}
-    >
+    <Popover trigger="click" showArrow={false} content={<InlineTools />} {...props}>
       <div style={{ height: '100%' }}></div>
-    </Dropdown>
+    </Popover>
   );
 }
 
