@@ -99,59 +99,6 @@ export interface FindProsemirrorNodeResult extends ProsemirrorNodeProps {
 }
 
 /**
- *  Iterates over parent nodes, returning closest node of a given `nodeType`.
- *  `start` points to the start position of the node, `pos` points directly
- *  before the node.
- *
- *  ```ts
- *  const parent = findParentNodeOfType({types: schema.nodes.paragraph, selection});
- *  ```
- */
-export function findParentNodeOfType(
-  props: FindParentNodeOfTypeProps
-): FindProsemirrorNodeResult | undefined {
-  const { types, selection } = props;
-
-  return findParentNode({ predicate: node => isNodeOfType({ types, node }), selection });
-}
-
-export interface FindParentNodeProps extends StateSelectionPosProps {
-  predicate: (node: ProsemirrorNode, pos: number) => boolean;
-}
-
-/**
- * Iterates over parent nodes, returning the closest node and its start position
- * that the `predicate` returns truthy for. `start` points to the start position
- * of the node, `pos` points directly before the node.
- *
- * ```ts
- * const predicate = node => node.type === schema.nodes.blockquote;
- * const parent = findParentNode({ predicate, selection });
- * ```
- */
-export function findParentNode(props: FindParentNodeProps): FindProsemirrorNodeResult | undefined {
-  const { predicate, selection } = props;
-  const $pos = isEditorState(selection)
-    ? selection.selection.$from
-    : isSelection(selection)
-    ? selection.$from
-    : selection;
-
-  for (let depth = $pos.depth; depth > 0; depth--) {
-    const node = $pos.node(depth);
-    const pos = depth > 0 ? $pos.before(depth) : 0;
-    const start = $pos.start(depth);
-    const end = pos + node.nodeSize;
-
-    if (predicate(node, pos)) {
-      return { pos, depth, node, start, end };
-    }
-  }
-
-  return;
-}
-
-/**
  * Checks if the type a given `node` has a given `nodeType`.
  */
 export function isNodeOfType(props: NodeEqualsTypeProps): boolean {

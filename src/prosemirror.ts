@@ -15,7 +15,8 @@ import { codeblock } from './components/codeblock';
 import { taskItem } from './components/task';
 import { suggest } from './plugin-suggest';
 import { createPortalSet } from './plugin-portal';
-import { createChain } from './core/createChain';
+import { CommandManager } from './core/CommandManager';
+import * as commands from './core/commands';
 
 const defaultNodeViews: EditorProps['nodeViews'] = {
   code_block: codeblock,
@@ -25,6 +26,7 @@ const defaultNodeViews: EditorProps['nodeViews'] = {
 export class ProseMirrorRenderer {
   public view!: EditorView;
   public state: EditorState;
+  public cmdManager!: CommandManager;
 
   constructor(
     public options: {
@@ -63,10 +65,15 @@ export class ProseMirrorRenderer {
       state: this.state,
       nodeViews: defaultNodeViews
     });
+
+    this.cmdManager = new CommandManager({
+      view: this.view,
+      commands
+    });
   }
 
   chain() {
-    return createChain(this.view);
+    return this.cmdManager.chain();
   }
 
   getContent() {

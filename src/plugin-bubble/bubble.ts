@@ -35,9 +35,14 @@ export const bubble = (options: BubbleOptions = {}) => {
     const changeState = getBubbleChangeState(view, prevState);
     const portal = getPortal(view.state, BubblePluginKey);
 
-    if (changeState && portal) {
+    if (!portal) {
+      return;
+    }
+
+    if (changeState) {
       const rect = posToOffsetRect(view, changeState.from, changeState.to);
 
+      portal.style.display = 'block';
       portal.style.top = rect.y + 'px';
       portal.style.left = rect.x + 'px';
       portal.style.width = rect.width + 'px';
@@ -46,9 +51,10 @@ export const bubble = (options: BubbleOptions = {}) => {
       bubbleState.open = true;
       options.onOpenChange?.(true, changeState);
     } else {
+      portal.style.display = 'none';
       options.onOpenChange?.(false);
     }
-  }, options.delay || 500);
+  }, options.delay || 200);
 
   return new Plugin<BubblePluginState>({
     key: BubblePluginKey,

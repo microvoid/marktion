@@ -1,8 +1,19 @@
-import { Command } from 'prosemirror-state';
+import { RawCommands } from '../types.js';
 
-export const scrollIntoView =
-  (): Command =>
-  ({ tr }, dispatch) => {
+declare global {
+  interface Commands<ReturnType> {
+    scrollIntoView: {
+      /**
+       * Scroll the selection into view.
+       */
+      scrollIntoView: () => ReturnType;
+    };
+  }
+}
+
+export const scrollIntoView: RawCommands['scrollIntoView'] =
+  () =>
+  ({ tr, dispatch }) => {
     if (dispatch) {
       tr.scrollIntoView();
     }

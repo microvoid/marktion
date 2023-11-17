@@ -1,7 +1,7 @@
 import { NodeSpec } from 'prosemirror-model';
 
 export const task_item: NodeSpec = {
-  content: 'block+',
+  content: 'paragraph block*',
   defining: true,
   attrs: {
     checked: { default: false }

@@ -2,7 +2,8 @@ import { NodeType, Node as ProsemirrorNode, ResolvedPos } from 'prosemirror-mode
 import { NodeViewConstructor } from 'prosemirror-view';
 import { createCustomMarkListItemNodeView } from './task-item-node-view';
 import { Command } from 'prosemirror-state';
-import { findParentNodeOfType } from '../../core/utils';
+import { findParentNode } from '../../core/helpers';
+// import { findParentNodeOfType } from '../../core/utils';
 
 export const taskItem: NodeViewConstructor = (node, view, getPos) => {
   const mark = document.createElement('input');
@@ -56,10 +57,7 @@ function toggleCheckboxChecked(
   }
 
   return ({ tr }, dispatch) => {
-    const found = findParentNodeOfType({
-      selection: $pos ?? tr.selection.$from,
-      types: type
-    });
+    const found = findParentNode(node => node.type === type)(tr.selection);
 
     if (!found) {
       return false;

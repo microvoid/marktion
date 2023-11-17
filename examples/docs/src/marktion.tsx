@@ -1,4 +1,4 @@
-import { Marktion, createSlash, ReactEditor } from 'marktion';
+import { ReactEditor } from 'marktion';
 
 const INIT_MARKDOWN = [import.meta.env.VITE_README_ZH, import.meta.env.VITE_README_EN];
 
