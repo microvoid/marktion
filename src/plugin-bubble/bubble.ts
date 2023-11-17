@@ -2,7 +2,7 @@ import { EditorState, Plugin, PluginKey } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import debounce from 'lodash/debounce';
 import { createPortal, getPortal } from '../plugin-portal';
-import { posToOffsetRect } from '../core';
+import { isActive, posToOffsetRect } from '../core';
 
 export const BubblePluginKey = new PluginKey<BubblePluginState>('plugin-bubble');
 export type BubblePluginState = {
@@ -16,6 +16,7 @@ export type BubbleChangeState = {
   from: number;
   to: number;
 };
+
 export type BubbleOptions = {
   delay?: number;
   onOpenChange?: (open: boolean, changeState?: BubbleChangeState) => void;
@@ -31,33 +32,44 @@ export const bubble = (options: BubbleOptions = {}) => {
     open: false
   };
 
-  const debounceChange = debounce((view: EditorView, prevState: EditorState) => {
-    const changeState = getBubbleChangeState(view, prevState);
+  const debounceChange = debounce((view: EditorView, changeState: BubbleChangeState) => {
     const portal = getPortal(view.state, BubblePluginKey);
 
     if (!portal) {
       return;
     }
 
-    if (changeState) {
-      const rect = posToOffsetRect(view, changeState.from, changeState.to);
+    const rect = posToOffsetRect(view, changeState.from, changeState.to);
 
-      portal.style.display = 'block';
-      portal.style.top = rect.y + 'px';
-      portal.style.left = rect.x + 'px';
-      portal.style.width = rect.width + 'px';
-      portal.style.height = rect.height + 'px';
+    portal.style.display = 'block';
+    portal.style.top = rect.y + 'px';
+    portal.style.left = rect.x + 'px';
+    portal.style.width = rect.width + 'px';
+    portal.style.height = rect.height + 'px';
 
-      bubbleState.open = true;
-      options.onOpenChange?.(true, changeState);
-    } else {
-      portal.style.display = 'none';
-      options.onOpenChange?.(false);
-    }
+    bubbleState.open = true;
+    options.onOpenChange?.(true, changeState);
   }, options.delay || 200);
+
+  const close = (view: EditorView) => {
+    const portal = getPortal(view.state, BubblePluginKey);
+
+    if (!portal) {
+      return;
+    }
+    portal.style.display = 'none';
+    options.onOpenChange?.(false);
+  };
 
   return new Plugin<BubblePluginState>({
     key: BubblePluginKey,
+    props: {
+      handleDOMEvents: {
+        blur(view) {
+          close(view);
+        }
+      }
+    },
     state: {
       init() {
         return bubbleState;
@@ -73,7 +85,13 @@ export const bubble = (options: BubbleOptions = {}) => {
 
       return {
         update(view, prevState) {
-          debounceChange(view, prevState);
+          const changeState = getBubbleChangeState(view, prevState);
+
+          if (changeState) {
+            debounceChange(view, changeState);
+          } else {
+            close(view);
+          }
         }
       };
     }
@@ -100,6 +118,18 @@ function getBubbleChangeState(view: EditorView, prevState: EditorState): BubbleC
   const isSame = !selectionChanged && !docChanged;
 
   if (composing || isSame) {
+    return null;
+  }
+
+  if (isActive(view.state, 'image')) {
+    return null;
+  }
+
+  if (selection.$from.node() !== selection.$to.node()) {
+    return null;
+  }
+
+  if (selection.content().size <= 0) {
     return null;
   }
 

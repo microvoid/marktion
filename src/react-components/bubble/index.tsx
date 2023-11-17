@@ -6,7 +6,7 @@ import { InlineTools } from './inline-tools';
 
 export function Bubble(props: Omit<PopoverProps, 'content'>) {
   return (
-    <Popover trigger="click" showArrow={false} content={<InlineTools />} {...props}>
+    <Popover trigger="click" arrow={false} content={<InlineTools />} {...props}>
       <div style={{ height: '100%' }}></div>
     </Popover>
   );
@@ -16,9 +16,7 @@ export function useBubble() {
   const [open, setOpen] = useState(false);
   const [portalEl, setPortalEl] = useState<HTMLElement | null>(null);
 
-  const element = portalEl
-    ? createPortal(<Bubble open={open} onOpenChange={setOpen} />, portalEl)
-    : null;
+  const element = portalEl ? createPortal(<Bubble open={open} />, portalEl) : null;
 
   const plugin = useMemo(() => {
     return bubble({
