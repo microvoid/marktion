@@ -116,9 +116,7 @@ export const getSlashItems = (): SlashItem[] => {
       searchTerms: ['title', 'big', 'large'],
       icon: <Heading1 />,
       command: (editor, range) => {
-        console.log(
-          editor.chain().focus().deleteRange(range).setNode('heading', { level: 1 }).run()
-        );
+        editor.chain().focus().deleteRange(range).setNode('heading', { level: 1 }).run();
       }
     },
     {

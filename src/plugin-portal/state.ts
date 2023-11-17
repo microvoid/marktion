@@ -45,6 +45,7 @@ export class PortalSetState {
     const el = this.#view.dom.ownerDocument.createElement('div');
 
     el.classList.add(`portal-${key.slice(0, -1)}`);
+    el.classList.add('plugin-portal-item');
 
     this.#rootEl.appendChild(el);
     this.#portalMap.set(key, el);

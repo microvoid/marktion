@@ -13,7 +13,6 @@ import { InputRulesPlugin } from './core/input-rules';
 import { KeymapPlugin } from './core/keymap';
 import { codeblock } from './components/codeblock';
 import { taskItem } from './components/task';
-import { suggest } from './plugin-suggest';
 import { createPortalSet } from './plugin-portal';
 import { CommandManager } from './core/CommandManager';
 import * as commands from './core/commands';
@@ -43,7 +42,6 @@ export class ProseMirrorRenderer {
         history(),
         dropCursor(),
         gapCursor(),
-        suggest(),
         createPortalSet(),
         ...(options.plugin || [])
       ]
@@ -62,6 +60,9 @@ export class ProseMirrorRenderer {
 
   mount(root: HTMLElement) {
     this.view = new EditorView(root, {
+      editable(state) {
+        return true;
+      },
       state: this.state,
       nodeViews: defaultNodeViews
     });

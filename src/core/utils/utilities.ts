@@ -1,3 +1,8 @@
+// source: https://stackoverflow.com/a/6969486
+export function escapeForRegEx(string: string): string {
+  return string.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
+}
+
 export function minMax(value = 0, min = 0, max = 0): number {
   return Math.min(Math.max(value, min), max);
 }
