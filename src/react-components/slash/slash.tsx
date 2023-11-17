@@ -1,30 +1,33 @@
 import { DropDownProps, Dropdown } from 'antd';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Range } from '../../core';
 import { getSlashItems } from './getSlashItems';
 import { usePMRenderer } from '../../react-hooks';
-
-const items = getSlashItems();
+import { SuggestionProps } from '../../plugin-suggestion';
 
 export type SlashProps = {
-  range: Range | null;
+  detail: SuggestionProps | null;
 } & Omit<DropDownProps, 'menu'>;
 
 export function Slash(props: SlashProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const pmRenderer = usePMRenderer();
 
+  const items = useMemo(
+    () => getSlashItems(props.detail?.text!, props.detail?.state!),
+    [props.detail?.text]
+  );
+
   const onSelectItem = useCallback(
     (index: number) => {
       const item = items[index];
 
       if (item) {
-        item.command(pmRenderer, props.range!);
+        item.command(pmRenderer, props.detail?.range!);
         setSelectedIndex(0);
       }
     },
-    [props.range, items]
+    [props.detail, items]
   );
 
   useEffect(() => {
@@ -63,6 +66,8 @@ export function Slash(props: SlashProps) {
     };
   }, [props.open, items, selectedIndex, setSelectedIndex, onSelectItem]);
 
+  const open = items.length > 0 ? props.open : false;
+
   return (
     <Dropdown
       placement="bottomLeft"
@@ -82,6 +87,7 @@ export function Slash(props: SlashProps) {
         })
       }}
       {...props}
+      open={open}
     >
       <div style={{ height: '100%' }}></div>
     </Dropdown>

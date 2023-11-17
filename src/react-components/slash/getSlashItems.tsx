@@ -12,8 +12,10 @@ import {
   TableIcon
 } from 'lucide-react';
 import { ProseMirrorRenderer } from '../../prosemirror';
+import { isActive } from '../../core';
+import { EditorState } from 'prosemirror-state';
 
-type SlashItem = {
+export type SlashItem = {
   title: string;
   description: string;
   searchTerms: string[];
@@ -21,7 +23,34 @@ type SlashItem = {
   command: (editor: ProseMirrorRenderer, range: { from: number; to: number }) => void;
 };
 
-export const getSlashItems = (): SlashItem[] => {
+export const getSlashItems = (query?: string, state?: EditorState) => {
+  if (!query || !state) {
+    return getDefaultSlashItems();
+  }
+
+  const isTableActive = isActive(state, 'table');
+  const suggestions = isTableActive ? getTableSuggestions() : getDefaultSlashItems();
+
+  query = query.slice(1);
+
+  return suggestions.filter(item => {
+    if (typeof query === 'string' && query.length > 0) {
+      const search = query.toLowerCase();
+      return (
+        item.title.toLowerCase().includes(search) ||
+        item.description.toLowerCase().includes(search) ||
+        (item.searchTerms && item.searchTerms.some((term: string) => term.includes(search)))
+      );
+    }
+    return true;
+  });
+};
+
+export const getTableSuggestions = (): SlashItem[] => {
+  return [];
+};
+
+export const getDefaultSlashItems = (): SlashItem[] => {
   return [
     // {
     //   title: 'Continue writing',

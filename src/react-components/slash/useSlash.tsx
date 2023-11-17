@@ -1,16 +1,16 @@
 import { createPortal } from 'react-dom';
 import { useMemo, useState } from 'react';
-import { Range } from '../../core';
 import { slash } from '../../plugin-slash';
 import { Slash } from './slash';
+import { SuggestionProps } from '../../plugin-suggestion';
 
 export function useSlash() {
   const [open, setOpen] = useState(false);
-  const [range, setRange] = useState<Range | null>(null);
+  const [detail, setDetail] = useState<SuggestionProps | null>(null);
   const [portalEl, setPortalEl] = useState<HTMLElement | null>(null);
 
   const element = portalEl
-    ? createPortal(<Slash open={open} onOpenChange={setOpen} range={range} />, portalEl)
+    ? createPortal(<Slash open={open} onOpenChange={setOpen} detail={detail} />, portalEl)
     : null;
 
   const plugin = useMemo(() => {
@@ -18,7 +18,7 @@ export function useSlash() {
       char: '/',
       onChange(open, props) {
         setOpen(open);
-        setRange(props.range);
+        setDetail(props);
       },
       onAttach(portal) {
         setPortalEl(portal);

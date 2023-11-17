@@ -19,11 +19,12 @@ export interface SuggestionOptions {
     match: SuggestionMatch;
   }) => boolean;
   onAttach?: (protal: HTMLElement) => void;
-  onChange?: (open: boolean, props: SuggestionProps) => void;
+  onChange?: (open: boolean, props: SuggestionProps, state?: EditorState) => void;
   onKeyDown?: (props: SuggestionKeyDownProps) => boolean;
 }
 
 export interface SuggestionProps {
+  state: EditorState;
   range: Range;
   query: string;
   text: string;
@@ -98,6 +99,7 @@ export function suggestion({
           const state = handleExit && !handleStart ? prev : next;
 
           props = {
+            state: view.state,
             range: state.range,
             query: state.query,
             text: state.text
@@ -113,10 +115,10 @@ export function suggestion({
 
           if (handleExit) {
             portal.style.display = 'none';
-            return onChange?.(false, props);
+            return onChange?.(false, props, editorView.state);
           }
 
-          onChange?.(true, props);
+          onChange?.(true, props, editorView.state);
         },
 
         destroy: () => {
