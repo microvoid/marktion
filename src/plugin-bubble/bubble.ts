@@ -66,7 +66,12 @@ export const bubble = (options: BubbleOptions = {}) => {
     props: {
       handleDOMEvents: {
         blur(view) {
-          close(view);
+          // be friendly to the blur event of outside click behavior, such as bubble btn;
+          setTimeout(() => {
+            if (!view.hasFocus()) {
+              close(view);
+            }
+          }, 200);
         }
       }
     },
