@@ -24,15 +24,27 @@ export function ReactEditor(props: ReactEditorProps) {
   }, []);
 
   useEffect(() => {
-    if (rootRef.current) {
+    if (rootRef.current && !editor.rootEl) {
       editor.mount(rootRef.current);
     }
+  }, []);
+
+  useEffect(() => {
+    const onKeydown = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.key === '/') {
+        editor.setRenderer(editor.renderer === 'SOURCE' ? 'WYSIWYG' : 'SOURCE');
+      }
+    };
+
+    window.addEventListener('keydown', onKeydown);
+    return () => {
+      window.removeEventListener('keydown', onKeydown);
+    };
   }, []);
 
   return (
     <div className="marktion-themes marktion-theme" data-accent-color="tomato" ref={rootRef}>
       <MarktionContext.Provider value={editor}>
-        {/* <SlashPlugin /> */}
         {bubble.element}
         {slash.element}
 

@@ -1,5 +1,6 @@
 export * from './table';
 export * from './createChainableState';
+export * from './createDocument';
 export * from './findParentNode';
 export * from './findParentNodeClosestToPos';
 export * from './getMarkType';

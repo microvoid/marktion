@@ -53,7 +53,20 @@ export const MarktionTheme = css`
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  .CodeMirror {
+  .wrapper-wysiwyg,
+  .wrapper-source {
+    display: none;
+  }
+
+  &[data-renderer='WYSIWYG'] .wrapper-wysiwyg {
+    display: block;
+  }
+
+  &[data-renderer='SOURCE'] .wrapper-source {
+    display: block;
+  }
+
+  .wrapper-source .cm-editor {
     min-height: var(--space-6);
     box-shadow: var(--shadow-6);
     padding: var(--space-4);

@@ -61,6 +61,8 @@ export const schema = new Schema({
   marks
 });
 
+console.log(schema);
+
 export type MarkdownSchema = typeof schema;
 export type MarkdownMark = MarkdownSchema extends Schema<infer N, infer M> ? M : never;
 export type MarkdownNode = MarkdownSchema extends Schema<infer N, infer M> ? N : never;

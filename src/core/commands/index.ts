@@ -12,6 +12,8 @@ export * from './insertContentAt';
 export * from './lift';
 export * from './liftListItem';
 export * from './scrollIntoView';
+export * from './setContent';
+export * from './setDocument';
 export * from './setMark';
 export * from './setNode';
 export * from './toggleBulletList';

@@ -16,39 +16,85 @@ const defaultOptions: MarktionOptions = {
 
 export class Marktion {
   public rootEl?: HTMLElement;
+  public renderer: MarktionOptions['renderer'];
+  public content: string;
 
-  declare pmRenderer: ProseMirrorRenderer;
-  declare cmRenderer: CodemirrorRenderer;
+  pmRenderer: ProseMirrorRenderer;
+  cmRenderer: CodemirrorRenderer;
 
   constructor(public options: MarktionOptions = defaultOptions) {
+    this.renderer = options.renderer;
+    this.content = options.content;
+
     this.pmRenderer = new ProseMirrorRenderer({
-      editor: this,
+      content: options.content,
       plugin: this.options.plugins
+    });
+
+    this.cmRenderer = new CodemirrorRenderer({
+      content: options.content
     });
   }
 
+  getContent() {
+    const content =
+      this.renderer === 'SOURCE' ? this.cmRenderer.getContent() : this.pmRenderer.getContent();
+
+    return content;
+  }
+
+  setRenderer(renderer: MarktionOptions['renderer'], force = false) {
+    const rootEl = this.rootEl;
+
+    if (!rootEl) {
+      throw new Error('This is no root element founded, did editor mounted?');
+    }
+
+    if (!force && this.renderer === renderer) {
+      return;
+    }
+
+    rootEl.setAttribute('data-renderer', renderer);
+
+    const document = rootEl.ownerDocument;
+
+    if (renderer === 'WYSIWYG') {
+      if (!this.pmRenderer.view) {
+        const div = document.createElement('div');
+        rootEl.appendChild(div);
+
+        div.classList.add('wrapper-wysiwyg');
+
+        this.pmRenderer.attachTo(div);
+      } else {
+        const content = this.getContent();
+        this.pmRenderer.setContent(content);
+      }
+
+      this.pmRenderer.view.focus();
+    } else if (renderer === 'SOURCE') {
+      if (!this.cmRenderer.view) {
+        const div = document.createElement('div');
+        rootEl.appendChild(div);
+
+        div.classList.add('wrapper-source');
+
+        this.cmRenderer.attachTo(div);
+      } else {
+        // const content = this.getContent();
+        // this.cmRenderer.setContent(content);
+      }
+
+      this.cmRenderer.view.focus();
+    }
+
+    this.renderer = renderer;
+  }
+
   mount(root: HTMLElement) {
+    root.classList.add(MarktionTheme);
     this.rootEl = root;
 
-    const doc = root.ownerDocument;
-
-    root.classList.add(MarktionTheme);
-
-    if (!this.pmRenderer.view) {
-      const div = doc.createElement('div');
-      root.appendChild(div);
-
-      this.pmRenderer.mount(div);
-    }
-
-    if (!this.cmRenderer) {
-      const div = doc.createElement('div');
-      root.appendChild(div);
-
-      div.classList.add('CodeMirror');
-      div.style.marginTop = '20px';
-
-      this.cmRenderer = new CodemirrorRenderer(this, div);
-    }
+    this.setRenderer(this.options.renderer, true);
   }
 }

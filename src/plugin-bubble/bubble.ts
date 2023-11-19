@@ -39,6 +39,12 @@ export const bubble = (options: BubbleOptions = {}) => {
       return;
     }
 
+    if (changeState.state.selection.$from.node() !== changeState.state.selection.$to.node()) {
+      return null;
+    }
+
+    console.log(changeState.state.selection.$from.node());
+
     const rect = posToOffsetRect(view, changeState.from, changeState.to);
 
     portal.style.display = 'block';
@@ -127,10 +133,6 @@ function getBubbleChangeState(view: EditorView, prevState: EditorState): BubbleC
   }
 
   if (isActive(view.state, 'image')) {
-    return null;
-  }
-
-  if (selection.$from.node() !== selection.$to.node()) {
     return null;
   }
 

@@ -29,12 +29,12 @@ export class ProseMirrorRenderer {
 
   constructor(
     public options: {
-      editor: Marktion;
+      content: string;
       plugin?: EditorStateConfig['plugins'];
     }
   ) {
     this.state = EditorState.create({
-      doc: parse(options.editor.options.content)!,
+      doc: parse(options.content)!,
       plugins: [
         InputRulesPlugin(schema),
         KeymapPlugin(schema),
@@ -48,17 +48,25 @@ export class ProseMirrorRenderer {
     });
   }
 
-  applyPlugin(...plugins: Plugin[]) {
-    this.state = this.state.reconfigure({
-      plugins: this.state.plugins.concat(plugins)
-    });
-
-    if (this.view) {
-      this.view.dispatch(this.state.tr);
-    }
+  chain() {
+    return this.cmdManager.chain();
   }
 
-  mount(root: HTMLElement) {
+  getContent() {
+    // return defaultMarkdownSerializer.serialize(this.view.state.doc);
+    return this.options.content;
+  }
+
+  setContent(content: string) {
+    const fragments = parse(content)!;
+    this.cmdManager.commands.setDocument(fragments);
+  }
+
+  getState() {
+    return this.view.state || this.state;
+  }
+
+  attachTo(root: HTMLElement) {
     this.view = new EditorView(root, {
       editable(state) {
         return true;
@@ -71,17 +79,5 @@ export class ProseMirrorRenderer {
       view: this.view,
       commands
     });
-  }
-
-  chain() {
-    return this.cmdManager.chain();
-  }
-
-  getContent() {
-    return defaultMarkdownSerializer.serialize(this.view.state.doc);
-  }
-
-  getState() {
-    return this.view.state || this.state;
   }
 }
