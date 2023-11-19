@@ -16,7 +16,7 @@ import {
   a,
   code
 } from 'prosemirror-test-builder';
-import { parse } from './parser';
+import { parse } from './parse';
 
 describe('marktion - encoding', () => {
   const md =
@@ -62,7 +62,7 @@ describe('marktion - encoding', () => {
     )
   ).toString();
 
-  test('parser', () => {
+  test('parse', () => {
     const result = parse(md);
 
     expect(result.toString()).toBe(expectDoc);

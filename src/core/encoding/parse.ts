@@ -3,9 +3,9 @@ import type { Root } from 'mdast';
 import remarkParse from 'remark-parse';
 import remarkGfm from 'remark-gfm';
 import remarkStringify from 'remark-stringify';
-import type { Parent, Node as MdastNode } from 'unist';
-import type { Node as ProseMirrorNode } from 'prosemirror-model';
-import { Formatter, FormatMdNode, FormatContext } from './formatter';
+import type { Parent, Node as ASTNode } from 'unist';
+import type { Node as PMNode } from 'prosemirror-model';
+import { Formatter, FormatMdNode, ParseContext } from './formatter';
 import { schema } from '../schemas';
 
 export function parse(source: string) {
@@ -19,10 +19,7 @@ function unifiedParse(source: string) {
   return process.runSync(process.parse(source));
 }
 
-function toProseMirrorDoc(
-  node: FormatMdNode,
-  context: FormatContext = { paths: [] }
-): ProseMirrorNode[] {
+function toProseMirrorDoc(node: FormatMdNode, context: ParseContext = { paths: [] }): PMNode[] {
   const impl = Formatter.get(node.type);
 
   if (!impl) {
@@ -40,7 +37,7 @@ function toProseMirrorDoc(
 
   context.paths.push(node);
 
-  let children: ProseMirrorNode[] = [];
+  let children: PMNode[] = [];
 
   if (unistNodeIsParent(node)) {
     children = children.concat(...node.children.map(item => toProseMirrorDoc(item, context)));
@@ -51,6 +48,6 @@ function toProseMirrorDoc(
   return impl.parse(node, schema, children, context);
 }
 
-function unistNodeIsParent(node: MdastNode): node is Parent {
+function unistNodeIsParent(node: ASTNode): node is Parent {
   return 'children' in node;
 }

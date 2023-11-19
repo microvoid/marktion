@@ -4,11 +4,9 @@ import { dropCursor } from 'prosemirror-dropcursor';
 import { gapCursor } from 'prosemirror-gapcursor';
 import { keymap } from 'prosemirror-keymap';
 import { history } from 'prosemirror-history';
-import { defaultMarkdownSerializer } from 'prosemirror-markdown';
 import { baseKeymap } from 'prosemirror-commands';
 
-import { Marktion } from './marktion';
-import { parse, schema } from './core';
+import { parse, serialize, schema } from './core';
 import { InputRulesPlugin } from './core/input-rules';
 import { KeymapPlugin } from './core/keymap';
 import { codeblock } from './components/codeblock';
@@ -53,8 +51,11 @@ export class ProseMirrorRenderer {
   }
 
   getContent() {
-    // return defaultMarkdownSerializer.serialize(this.view.state.doc);
-    return this.options.content;
+    const content = serialize(this.view.state.doc);
+
+    console.log(content);
+
+    return content;
   }
 
   setContent(content: string) {

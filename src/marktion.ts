@@ -81,8 +81,8 @@ export class Marktion {
 
         this.cmRenderer.attachTo(div);
       } else {
-        // const content = this.getContent();
-        // this.cmRenderer.setContent(content);
+        const content = this.getContent();
+        this.cmRenderer.setContent(content);
       }
 
       this.cmRenderer.view.focus();

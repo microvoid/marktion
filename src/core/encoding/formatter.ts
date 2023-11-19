@@ -1,58 +1,31 @@
-import type { MarkdownMark, MarkdownNode, MarkdownSchema } from '../schemas';
-import type { Node as ProseMirrorNode, Mark } from 'prosemirror-model';
-import { Root, Node, RootContent, PhrasingContent, Table, TableRow } from 'mdast';
+import { Root, Node, RootContent, PhrasingContent, Table, TableRow, Text } from 'mdast';
+import type { Node as PMNode, Mark } from 'prosemirror-model';
+import type { MarkdownSchema } from '../schemas';
+import { schema } from '../schemas';
 import { createProseMirrorNode } from './utils';
 
 export type FormatMdNode = Root | RootContent | PhrasingContent;
-export type FormatContext = {
+export type ParseContext = {
   paths: FormatMdNode[];
   definitions?: Record<string, { url: string; title: string | null | undefined }>;
-  imageReference?: Record<string, ProseMirrorNode>;
+  imageReference?: Record<string, PMNode>;
   linkReference?: Record<string, Mark>;
 };
 
+export type FormatContext = {
+  getMarkSerialize: (name: string) => FormatterImpl<GetMdAstNode<string>>;
+};
+
 export type FormatterImpl<T extends Node> = {
-  parse: (
-    node: T,
-    schema: MarkdownSchema,
-    children: ProseMirrorNode[],
+  parse: (node: T, schema: MarkdownSchema, children: PMNode[], context: ParseContext) => PMNode[];
+  serialize: (
+    node: PMNode,
+    children: Extract<T, { children: any }>['children'],
     context: FormatContext
-  ) => ProseMirrorNode[];
-  serialize: (node: ProseMirrorNode, children: Extract<T, { children: any }>['children']) => T[];
+  ) => T[];
 };
 
 export type GetMdAstNode<T> = Extract<FormatMdNode, { type: T }>;
-
-export const SchemaToMdAst: Record<MarkdownNode | MarkdownMark, string> = {
-  // node
-  doc: 'root',
-  paragraph: 'paragraph',
-  blockquote: 'blockquote',
-  hard_break: 'break',
-  code_block: 'code',
-  heading: 'heading',
-  horizontal_rule: 'thematicBreak',
-  image: 'image',
-
-  task_list: 'list',
-  task_item: 'listItem',
-
-  list_item: 'listItem',
-  ordered_list: 'list',
-  bullet_list: 'list',
-
-  table: 'table',
-  table_row: 'tableRow',
-  table_cell: 'tableCell',
-  table_header: 'tableRow',
-  // mark
-  text: 'text',
-  strong: 'strong',
-  code: 'inlineCode',
-  em: 'emphasis',
-  strike: 'break',
-  link: 'link'
-};
 
 const FormatterMap = new Map<Node['type'], FormatterImpl<Root>>();
 
@@ -114,12 +87,11 @@ Formatter.impl('code', {
       language: node.lang
     });
   },
-  serialize(node, children) {
-    // TODO
+  serialize(node, children: Array<Text>) {
     return [
       {
         type: 'code',
-        value: children
+        value: children.map(child => child.value).join('')
       }
     ];
   }
@@ -226,6 +198,16 @@ Formatter.impl('listItem', {
     return createProseMirrorNode(schema.nodes.list_item.name, schema, children);
   },
   serialize(node, children) {
+    if (schema.nodes.task_item === node.type) {
+      return [
+        {
+          type: 'listItem',
+          checked: node.attrs['checked'],
+          children
+        }
+      ];
+    }
+
     return [
       {
         type: 'listItem',
@@ -325,7 +307,30 @@ Formatter.impl('text', {
   parse: (node, schema) => {
     return [schema.text(node.value)];
   },
-  serialize(node) {
+  serialize(node, children, context) {
+    const marks = node.marks;
+
+    if (marks.length > 0) {
+      return marks.reduce(
+        (children, mark) => {
+          const impl = context.getMarkSerialize(mark.type.name);
+
+          if (!impl) {
+            console.warn(
+              'Couldn\'t find any way to serialize ProseMirror node of type "' +
+                mark.type.name +
+                '" to a unist node.'
+            );
+
+            return children;
+          }
+
+          return impl.serialize(node, children, context) as Text[];
+        },
+        [{ type: 'text', value: node.text ?? '' }]
+      );
+    }
+
     return [{ type: 'text', value: node.text ?? '' }];
   }
 });

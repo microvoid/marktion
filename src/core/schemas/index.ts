@@ -1,4 +1,4 @@
-import { Schema, MarkSpec } from 'prosemirror-model';
+import { Schema, MarkSpec, NodeType } from 'prosemirror-model';
 import { paragraph } from './paragraph';
 import { blockquote } from './blockquote';
 import { horizontal_rule } from './horizontal_rule';
@@ -60,8 +60,6 @@ export const schema = new Schema({
   nodes,
   marks
 });
-
-console.log(schema);
 
 export type MarkdownSchema = typeof schema;
 export type MarkdownMark = MarkdownSchema extends Schema<infer N, infer M> ? M : never;
