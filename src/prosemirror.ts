@@ -51,9 +51,11 @@ export class ProseMirrorRenderer {
   }
 
   getContent() {
-    const content = serialize(this.view.state.doc);
+    if (!this.view) {
+      return this.options.content;
+    }
 
-    console.log(content);
+    const content = serialize(this.view.state.doc);
 
     return content;
   }

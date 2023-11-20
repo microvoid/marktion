@@ -31,10 +31,6 @@ function toProseMirrorDoc(node: FormatMdNode, context: ParseContext = { paths: [
     return [];
   }
 
-  if (!context.paths) {
-    context.paths = [];
-  }
-
   context.paths.push(node);
 
   let children: PMNode[] = [];

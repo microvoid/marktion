@@ -5,11 +5,10 @@ import remarkStringify from 'remark-stringify';
 import type { Node as ASTNode } from 'unist';
 import type { Node as PMNode } from 'prosemirror-model';
 
-import type { MarkdownMark, MarkdownNode } from '../schemas';
-import { Formatter } from './formatter';
+import { Formatter, SerializeContext } from './formatter';
 import { RootContent } from 'mdast';
 
-export const PM_TO_AST_NAME_MAP: Record<MarkdownNode | MarkdownMark | string, string> = {
+export const PM_TO_AST_NAME_MAP: Record<string, string> = {
   // node
   doc: 'root',
   paragraph: 'paragraph',
@@ -29,37 +28,45 @@ export const PM_TO_AST_NAME_MAP: Record<MarkdownNode | MarkdownMark | string, st
   table: 'table',
   table_row: 'tableRow',
   table_cell: 'tableCell',
-  table_header: 'tableRow',
+  table_header: 'tableCell',
 
   // mark
   text: 'text',
   strong: 'strong',
   code: 'inlineCode',
   em: 'emphasis',
-  strike: 'break',
+  strike: 'delete',
   link: 'link'
 };
 
 export function serialize(node: PMNode) {
   const ast = toASTNode(node);
 
-  const processor = unified().use(remarkParse).use(remarkGfm).use(remarkStringify);
+  const processor = unified().use(remarkParse).use(remarkGfm).use(remarkStringify, {
+    fences: true,
+    bullet: '-',
+    listItemIndent: 'one'
+  });
 
   return processor.stringify(ast[0] as any) as string;
 }
 
-function toASTNode(node: PMNode): ASTNode[] {
+function toASTNode(
+  node: PMNode,
+  context: SerializeContext = { paths: [], getMarkSerialize: getSerializer }
+): ASTNode[] {
   const serializer = getSerializer(node.type.name);
-
   const children: ASTNode[] = [];
 
+  context.paths.push(node);
+
   for (let i = 0, len = node.childCount; i < len; i++) {
-    children.push(...toASTNode(node.child(i)));
+    children.push(...toASTNode(node.child(i), context));
   }
 
-  const nodes: ASTNode[] = serializer.serialize(node, children as RootContent[], {
-    getMarkSerialize: getSerializer
-  });
+  context.paths.pop();
+
+  const nodes: ASTNode[] = serializer.serialize(node, children as RootContent[], context);
 
   return nodes;
 }

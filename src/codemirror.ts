@@ -38,6 +38,10 @@ export class CodemirrorRenderer {
   }
 
   getContent() {
+    if (!this.view) {
+      return this.options.content;
+    }
+
     return this.view.state.doc.toString();
   }
 

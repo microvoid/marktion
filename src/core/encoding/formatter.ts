@@ -1,4 +1,4 @@
-import { Root, Node, RootContent, PhrasingContent, Table, TableRow, Text } from 'mdast';
+import { Root, Node, RootContent, PhrasingContent, Table, TableRow, Text, AlignType } from 'mdast';
 import type { Node as PMNode, Mark } from 'prosemirror-model';
 import type { MarkdownSchema } from '../schemas';
 import { schema } from '../schemas';
@@ -12,8 +12,9 @@ export type ParseContext = {
   linkReference?: Record<string, Mark>;
 };
 
-export type FormatContext = {
-  getMarkSerialize: (name: string) => FormatterImpl<GetMdAstNode<string>>;
+export type SerializeContext = {
+  getMarkSerialize?: (name: string) => FormatterImpl<GetMdAstNode<string>>;
+  paths: PMNode[];
 };
 
 export type FormatterImpl<T extends Node> = {
@@ -21,7 +22,7 @@ export type FormatterImpl<T extends Node> = {
   serialize: (
     node: PMNode,
     children: Extract<T, { children: any }>['children'],
-    context: FormatContext
+    context: SerializeContext
   ) => T[];
 };
 
@@ -91,6 +92,7 @@ Formatter.impl('code', {
     return [
       {
         type: 'code',
+        lang: node.attrs.language,
         value: children.map(child => child.value).join('')
       }
     ];
@@ -218,7 +220,7 @@ Formatter.impl('listItem', {
 });
 
 Formatter.impl('list', {
-  parse(node, schema, children, context) {
+  parse(node, schema, children) {
     const first = children[0];
 
     if (first && first.type.name === schema.nodes.task_item.name) {
@@ -242,10 +244,12 @@ Formatter.impl('list', {
   },
   serialize(node, children) {
     const spread = node.attrs.spread as boolean;
+    const ordered = node.type.name === schema.nodes.ordered_list.name;
+
     return [
       {
         type: 'list',
-        ordered: true,
+        ordered,
         spread,
         start: node.attrs.start as number,
         children: children.map(child => {
@@ -262,7 +266,30 @@ Formatter.impl('table', {
     return createProseMirrorNode(schema.nodes.table.name, schema, children);
   },
   serialize(node, children) {
-    return [];
+    const headerRow = node.child(0);
+    const headerCell = headerRow?.child(0);
+
+    let aligns: AlignType[] | null = null;
+
+    if (headerCell && headerCell.type.name === schema.nodes.table_header.name) {
+      aligns = [];
+
+      for (let i = 0, len = headerRow.childCount; i < len; i++) {
+        const align = headerRow.child(i).attrs.align;
+
+        if (align) {
+          aligns.push(align);
+        }
+      }
+    }
+
+    return [
+      {
+        type: 'table',
+        align: aligns,
+        children
+      }
+    ];
   }
 });
 
@@ -271,7 +298,12 @@ Formatter.impl('tableRow', {
     return createProseMirrorNode(schema.nodes.table_row.name, schema, children);
   },
   serialize(node, children) {
-    return [];
+    return [
+      {
+        type: 'tableRow',
+        children
+      }
+    ];
   }
 });
 
@@ -299,7 +331,12 @@ Formatter.impl('tableCell', {
     return createProseMirrorNode(schema.nodes.table_cell.name, schema, nodes);
   },
   serialize(node, children) {
-    return [];
+    return [
+      {
+        type: 'tableCell',
+        children
+      }
+    ];
   }
 });
 
@@ -313,7 +350,7 @@ Formatter.impl('text', {
     if (marks.length > 0) {
       return marks.reduce(
         (children, mark) => {
-          const impl = context.getMarkSerialize(mark.type.name);
+          const impl = context.getMarkSerialize?.(mark.type.name);
 
           if (!impl) {
             console.warn(
@@ -386,9 +423,17 @@ Formatter.impl('link', {
       )
     );
   },
-  serialize(node, children) {
-    // TODO: Confirm
-    return [];
+  serialize(node, children, context) {
+    const linkMark = node.marks[0] || {};
+
+    return [
+      {
+        type: 'link',
+        url: linkMark.attrs.href || '',
+        title: linkMark.attrs.title,
+        children
+      }
+    ];
   }
 });
 

@@ -54,9 +54,8 @@ export class Marktion {
       return;
     }
 
-    rootEl.setAttribute('data-renderer', renderer);
-
     const document = rootEl.ownerDocument;
+    const content = this.getContent();
 
     if (renderer === 'WYSIWYG') {
       if (!this.pmRenderer.view) {
@@ -64,10 +63,8 @@ export class Marktion {
         rootEl.appendChild(div);
 
         div.classList.add('wrapper-wysiwyg');
-
         this.pmRenderer.attachTo(div);
       } else {
-        const content = this.getContent();
         this.pmRenderer.setContent(content);
       }
 
@@ -80,8 +77,8 @@ export class Marktion {
         div.classList.add('wrapper-source');
 
         this.cmRenderer.attachTo(div);
+        this.cmRenderer.setContent(content);
       } else {
-        const content = this.getContent();
         this.cmRenderer.setContent(content);
       }
 
@@ -89,6 +86,7 @@ export class Marktion {
     }
 
     this.renderer = renderer;
+    rootEl.setAttribute('data-renderer', renderer);
   }
 
   mount(root: HTMLElement) {
