@@ -18,6 +18,7 @@
   font-style: var(--default-font-style);
   line-height: var(--default-line-height);
   letter-spacing: var(--default-letter-spacing);
+  background-color: var(--color-panel);
   text-size-adjust: none;
 
   -webkit-font-smoothing: antialiased;

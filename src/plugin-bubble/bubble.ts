@@ -135,6 +135,9 @@ function getBubbleChangeState(view: EditorView, prevState: EditorState): BubbleC
   if (isActive(view.state, 'image')) {
     return null;
   }
+  if (isActive(view.state, 'code_block')) {
+    return null;
+  }
 
   if (selection.content().size <= 0) {
     return null;

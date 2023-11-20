@@ -249,6 +249,8 @@
 /* * * * * * * * * * * * * * * * * * * */
 
 .marktion-themes {
+  --color-panel: var(--color-panel-solid);
+  
   &:where([data-panel-background='solid']) {
     --color-panel: var(--color-panel-solid);
   }

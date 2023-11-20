@@ -1,9 +1,11 @@
+import cls from 'classnames';
+import { ConfigProvider, theme } from 'antd';
 import React, { useEffect, useMemo, useRef } from 'react';
 import { Marktion, MarktionOptions } from '../../marktion';
 import { MarktionContext } from '../../react-hooks';
+import { event } from '../../plugin-event';
 import { useBubble } from '../bubble';
 import { useSlash } from '../slash';
-import { event } from '../../plugin-event';
 
 export type ReactEditorProps = React.PropsWithChildren<MarktionOptions>;
 
@@ -42,14 +44,39 @@ export function ReactEditor(props: ReactEditorProps) {
     };
   }, []);
 
-  return (
-    <div className="marktion-themes marktion-theme" data-accent-color="tomato" ref={rootRef}>
-      <MarktionContext.Provider value={editor}>
-        {bubble.element}
-        {slash.element}
+  const darkMode = false;
 
-        {children}
-      </MarktionContext.Provider>
+  return (
+    <div
+      className={cls('marktion-themes', {
+        dark: darkMode
+      })}
+      data-accent-color="violet"
+      ref={rootRef}
+    >
+      <AntdProvider darkMode={darkMode}>
+        <MarktionContext.Provider value={editor}>
+          {bubble.element}
+          {slash.element}
+
+          {children}
+        </MarktionContext.Provider>
+      </AntdProvider>
     </div>
+  );
+}
+
+function AntdProvider({ darkMode, children }: React.PropsWithChildren<{ darkMode?: boolean }>) {
+  return (
+    <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: '#654dc4'
+        },
+        algorithm: darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm
+      }}
+    >
+      {children}
+    </ConfigProvider>
   );
 }
