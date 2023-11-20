@@ -4,8 +4,10 @@
 @import './nodes/list.css';
 @import './nodes/table.css';
 @import './nodes/hr.css';
-@import './plugins/bubble.css';
+
 @import './plugins/slash.css';
+@import './plugins/bubble.css';
+@import './plugins/placeholder.css';
 
 .marktion-themes .ProseMirror {
   min-height: var(--space-6);

@@ -1,0 +1,17 @@
+.marktion-themes .ProseMirror {
+  .is-editor-empty:first-child::before {
+    content: attr(data-placeholder);
+    float: left;
+    color: var(--gray-8);
+    pointer-events: none;
+    height: 0;
+  }
+  
+  .is-empty::before {
+    content: attr(data-placeholder);
+    float: left;
+    color: var(--gray-8);
+    pointer-events: none;
+    height: 0;
+  }
+}

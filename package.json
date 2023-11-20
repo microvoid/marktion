@@ -11,10 +11,10 @@
   "scripts": {
     "dev": "pnpm run build && run-p dev:ts dev:docs dev:css",
     "dev:ts": "tsc -w",
-    "dev:css": "postcss -o dist/marktion.css -w ./theme/index.css",
+    "dev:css": "postcss -w -o dist/marktion.css ./theme/index.css",
     "dev:docs": "cd examples/docs && pnpm run dev",
     "test": "vitest",
-    "build": "tsc",
+    "build": "tsc && postcss -o dist/marktion.css ./theme/index.css",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "format": "pnpm run format:source && pnpm run format:other",
     "format:other": "prettier ./**/*.{md,json,html} --write",

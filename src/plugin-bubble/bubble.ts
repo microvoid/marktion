@@ -1,4 +1,4 @@
-import { EditorState, Plugin, PluginKey } from 'prosemirror-state';
+import { AllSelection, EditorState, Plugin, PluginKey } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import debounce from 'lodash/debounce';
 import { createPortal, getPortal } from '../plugin-portal';
@@ -40,10 +40,9 @@ export const bubble = (options: BubbleOptions = {}) => {
     }
 
     if (changeState.state.selection.$from.node() !== changeState.state.selection.$to.node()) {
+      options.onOpenChange?.(false);
       return null;
     }
-
-    console.log(changeState.state.selection.$from.node());
 
     const rect = posToOffsetRect(view, changeState.from, changeState.to);
 
@@ -111,6 +110,10 @@ export const bubble = (options: BubbleOptions = {}) => {
 
 function getBubbleChangeState(view: EditorView, prevState: EditorState): BubbleChangeState | null {
   const hasValidSelection = view.state.selection.$from.pos !== view.state.selection.$to.pos;
+
+  if (view.state.selection instanceof AllSelection) {
+    return null;
+  }
 
   if (!hasValidSelection) {
     return null;
