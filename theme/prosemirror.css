@@ -1,9 +1,10 @@
-@import './prosemirror-reset.css';
-@import './nodes/blockquote.css';
-@import './nodes/heading.css';
-@import './nodes/list.css';
-@import './nodes/table.css';
-@import './nodes/hr.css';
+@import './prose/reset.css';
+@import './prose/blockquote.css';
+@import './prose/heading.css';
+@import './prose/list.css';
+@import './prose/table.css';
+@import './prose/hr.css';
+@import './prose/inline.css';
 
 @import './plugins/slash.css';
 @import './plugins/bubble.css';

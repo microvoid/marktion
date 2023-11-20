@@ -73,6 +73,9 @@ export function Slash(props: SlashProps) {
       placement="bottomLeft"
       trigger={['click']}
       menu={{
+        style: {
+          minWidth: 200
+        },
         activeKey: items[selectedIndex]?.title,
         onClick: ({ key }) => {
           const index = items.findIndex(item => item.title === key);
@@ -80,9 +83,14 @@ export function Slash(props: SlashProps) {
         },
         items: items.map(item => {
           return {
-            icon: item.icon,
+            icon: <div className="slash-item-icon">{item.icon}</div>,
             key: item.title,
-            label: item.title
+            label: (
+              <div className="slash-item-caption">
+                <div className="slash-item-caption-title">{item.title}</div>
+                <div className="slash-item-caption-description">{item.description}</div>
+              </div>
+            )
           };
         })
       }}

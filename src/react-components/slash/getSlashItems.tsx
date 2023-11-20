@@ -59,8 +59,8 @@ export const getDefaultSlashItems = (): SlashItem[] => {
     //   // icon: <Magic className="w-7 text-black" />,
     // },
     {
-      title: 'To-do List',
-      description: 'Track tasks with a to-do list.',
+      title: 'Todo List',
+      description: 'Track tasks with a todo list.',
       searchTerms: ['todo', 'task', 'list', 'check', 'checkbox'],
       icon: <ListChecksIcon />,
       command: (editor, range) => {

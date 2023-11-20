@@ -54,29 +54,22 @@ export function ReactEditor(props: ReactEditorProps) {
       data-accent-color="violet"
       ref={rootRef}
     >
-      <AntdProvider darkMode={darkMode}>
+      <ConfigProvider
+        getPopupContainer={() => rootRef.current || document.body}
+        theme={{
+          token: {
+            colorPrimary: '#654dc4'
+          },
+          algorithm: darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm
+        }}
+      >
         <MarktionContext.Provider value={editor}>
           {bubble.element}
           {slash.element}
 
           {children}
         </MarktionContext.Provider>
-      </AntdProvider>
+      </ConfigProvider>
     </div>
-  );
-}
-
-function AntdProvider({ darkMode, children }: React.PropsWithChildren<{ darkMode?: boolean }>) {
-  return (
-    <ConfigProvider
-      theme={{
-        token: {
-          colorPrimary: '#654dc4'
-        },
-        algorithm: darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm
-      }}
-    >
-      {children}
-    </ConfigProvider>
   );
 }
