@@ -1,4 +1,3 @@
-export const color = `
 @import '@radix-ui/colors/tomato.css';
 @import '@radix-ui/colors/tomato-dark.css';
 @import '@radix-ui/colors/tomato-alpha.css';
@@ -163,16 +162,15 @@ export const color = `
 /*                                     */
 /* * * * * * * * * * * * * * * * * * * */
 
-& {
+:where(.marktion-themes) {
   --color-background: white;
   --color-overlay: var(--black-a6);
   --color-panel-solid: white;
   --color-panel-translucent: rgba(255, 255, 255, 0.8);
   --color-surface: rgba(255, 255, 255, 0.9);
 }
-
-&:is(.dark, .dark-theme),
-&:is(.dark, .dark-theme) &:where(&:not(.light, .light-theme)) {
+:is(.dark, .dark-theme),
+:is(.dark, .dark-theme) :where(.marktion-themes:not(.light, .light-theme)) {
   --color-background: var(--gray-1);
   --color-overlay: var(--black-a8);
   --color-panel-solid: var(--gray-2);
@@ -187,11 +185,10 @@ export const color = `
 /* * * * * * * * * * * * * * * * * * * */
 
 /* Because Chrome is buggy with box-shadow transitions from "transparent" keyword and/or RGB color into P3 colors. */
-/* Note: using \`:where\` here to guarantee that the P3 color will take over regardless of the output rule order. */
-&:where(&) {
+/* Note: using `:where` here to guarantee that the P3 color will take over regardless of the output rule order. */
+:where(.marktion-themes) {
   --color-transparent: rgb(0 0 0 / 0);
 }
-
 @supports (color: color(display-p3 1 1 1)) {
   @media (color-gamut: p3) {
     .marktion-themes {
@@ -207,26 +204,27 @@ export const color = `
 /* * * * * * * * * * * * * * * * * * * */
 
 /* Make sure that forced light/dark appearance also sets corresponding browser colors, like input autofill color */
-&:where(.light, .light-theme) {
+.marktion-themes:where(.light, .light-theme) {
   color-scheme: light;
 }
-&:where(.dark, .dark-theme) {
+.marktion-themes:where(.dark, .dark-theme) {
   color-scheme: dark;
 }
 
 /* * * * * * * * * * * * * * * * * * * */
 /*                                     */
-/*         Focus and selection         */
+/*   Focus, selection, and autofill    */
 /*                                     */
 /* * * * * * * * * * * * * * * * * * * */
 
-&,
+.marktion-themes,
 [data-accent-color]:where(:not([data-accent-color='gray'])) {
-  --color-selection-root: var(--accent-a5);
+  --color-autofill-root: var(--accent-a3);
   --color-focus-root: var(--accent-8);
+  --color-selection-root: var(--accent-a5);
 }
 
-& ::selection {
+.marktion-themes ::selection {
   background-color: var(--color-selection-root);
 }
 
@@ -236,7 +234,7 @@ export const color = `
 /*                                     */
 /* * * * * * * * * * * * * * * * * * * */
 
-& {
+.marktion-themes {
   color: var(--gray-12);
 
   &:where([data-has-background='true']) {
@@ -250,7 +248,7 @@ export const color = `
 /*                                     */
 /* * * * * * * * * * * * * * * * * * * */
 
-& {
+.marktion-themes {
   &:where([data-panel-background='solid']) {
     --color-panel: var(--color-panel-solid);
   }
@@ -301,8 +299,8 @@ export const color = `
 /*                                     */
 /* * * * * * * * * * * * * * * * * * * */
 
-&.dark,
-&.dark-theme {
+.dark,
+.dark-theme {
   --gray-2-translucent: #1d1d1db3;
   --mauve-2-translucent: #1e1d1eb3;
   --slate-2-translucent: #1b1d1eb3;
@@ -331,8 +329,8 @@ export const color = `
 /* * * * * * * * * * * * * * * * * * * */
 
 :root,
-&.light,
-&.light-theme {
+.light,
+.light-theme {
   --gray-surface: #ffffffcc;
   --mauve-surface: #ffffffcc;
   --slate-surface: #ffffffcc;
@@ -404,8 +402,8 @@ export const color = `
   }
 }
 
-&.dark,
-&.dark-theme {
+.dark,
+.dark-theme {
   --gray-surface: #21212180;
   --mauve-surface: #22212380;
   --slate-surface: #1f212380;
@@ -700,7 +698,7 @@ export const color = `
   --accent-a12: var(--purple-a12);
 }
 
-&, [data-accent-color='violet'] {
+[data-accent-color='violet'] {
   --color-surface-accent: var(--violet-surface);
 
   --accent-1: var(--violet-1);
@@ -1446,4 +1444,4 @@ export const color = `
     --gray-a11: var(--sand-a11);
     --gray-a12: var(--sand-a12);
   }
-}`;
+}

@@ -1,4 +1,4 @@
-export const fonts = `@font-face {
+@font-face {
   font-family: 'Segoe UI (Custom)';
   font-weight: 300;
   size-adjust: 103%;
@@ -170,4 +170,4 @@ export const fonts = `@font-face {
   ascent-override: 85%;
   descent-override: 22%;
   src: local('Consolas Bold Italic');
-}`;
+}

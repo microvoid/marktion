@@ -1,0 +1,30 @@
+.marktion-themes .ProseMirror {
+  img,
+  video {
+    max-width: 100%;
+    height: auto;
+  }
+
+  ol,
+  ul,
+  menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  blockquote,
+  table,
+  ul,
+  ol,
+  dl,
+  dd,
+  figure,
+  pre {
+    margin: var(--space-5) 0;
+  }
+
+  p {
+    margin: var(--space-3) 0;
+  }
+}

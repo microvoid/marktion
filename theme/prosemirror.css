@@ -1,0 +1,16 @@
+@import './prosemirror-reset.css';
+@import './nodes/blockquote.css';
+@import './nodes/heading.css';
+@import './nodes/list.css';
+@import './nodes/table.css';
+@import './nodes/hr.css';
+@import './plugins/bubble.css';
+@import './plugins/slash.css';
+
+.marktion-themes .ProseMirror {
+  min-height: var(--space-6);
+  box-shadow: var(--shadow-6);
+  padding: var(--space-4);
+  border-radius: var(--radius-2);
+  outline: none;
+}

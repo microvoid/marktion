@@ -1,4 +1,5 @@
 import { ReactEditor } from 'marktion';
+import 'marktion/dist/marktion.css';
 
 const INIT_MARKDOWN = [import.meta.env.VITE_README_ZH, import.meta.env.VITE_README_EN];
 

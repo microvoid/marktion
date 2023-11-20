@@ -1,7 +1,6 @@
 import { EditorStateConfig } from 'prosemirror-state';
 import { CodemirrorRenderer } from './codemirror';
 import { ProseMirrorRenderer } from './prosemirror';
-import { MarktionTheme } from './theme';
 
 export type MarktionOptions = {
   plugins?: EditorStateConfig['plugins'];
@@ -90,7 +89,6 @@ export class Marktion {
   }
 
   mount(root: HTMLElement) {
-    root.classList.add(MarktionTheme);
     this.rootEl = root;
 
     this.setRenderer(this.options.renderer, true);

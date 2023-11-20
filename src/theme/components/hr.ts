@@ -1,9 +1,0 @@
-export const hr = `
---prose-hr: var(--gray-11);
-
-hr {
-  margin: var(--space-6) 0;
-  border: none;
-  border-top: 1px solid var(--prose-hr);
-}
-`;

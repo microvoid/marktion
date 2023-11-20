@@ -1,0 +1,48 @@
+.marktion-themes,
+.marktion-themes *,
+.marktion-themes *:before,
+.marktion-themes *:after {
+  /** Preserve box-sizing when override exists:
+  * https://css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice/
+  * */
+  box-sizing: inherit;
+}
+
+.marktion-themes {
+  position: relative;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  font-family: var(--default-font-family);
+  font-size: var(--default-font-size);
+  font-weight: var(--default-font-weight);
+  font-style: var(--default-font-style);
+  line-height: var(--default-line-height);
+  letter-spacing: var(--default-letter-spacing);
+  text-size-adjust: none;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.marktion-themes {
+  .wrapper-wysiwyg,
+  .wrapper-source {
+    display: none;
+  }
+
+  &[data-renderer='WYSIWYG'] .wrapper-wysiwyg {
+    display: block;
+  }
+
+  &[data-renderer='SOURCE'] .wrapper-source {
+    display: block;
+  }
+
+  .wrapper-source .cm-editor {
+    min-height: var(--space-6);
+    box-shadow: var(--shadow-6);
+    padding: var(--space-4);
+    border-radius: var(--radius-2);
+    outline: none;
+  }
+}
