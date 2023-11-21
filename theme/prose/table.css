@@ -13,6 +13,7 @@
     border-radius: calc(var(--table-border-radius) - 1px);
     border-spacing: 0;
     box-sizing: border-box;
+    table-layout: fixed;
   
     /* Makes "height: 100%" work on content inside cells */
     height: 0;
@@ -36,5 +37,9 @@
     padding: var(--table-cell-padding);
     /* Works as min-height */
     height: var(--table-cell-min-height);
+
+    p {
+      margin: var(--space-1);
+    }
   }
 }

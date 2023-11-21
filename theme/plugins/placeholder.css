@@ -6,6 +6,11 @@
     pointer-events: none;
     height: 0;
   }
+
+  .is-empty {
+    overflow: hidden;
+    white-space: nowrap;
+  }
   
   .is-empty::before {
     content: attr(data-placeholder);

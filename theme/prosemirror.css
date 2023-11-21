@@ -5,6 +5,7 @@
 @import './prose/table.css';
 @import './prose/hr.css';
 @import './prose/inline.css';
+@import './prose/code.css';
 
 @import './plugins/slash.css';
 @import './plugins/bubble.css';

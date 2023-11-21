@@ -84,7 +84,7 @@
     }
   }
 
-  li[role='task-item'] > div {
+  li[role='task-item'][data-checked] > div {
     color: var(--gray-11);
     text-decoration: line-through;
     text-decoration-thickness: 2px;

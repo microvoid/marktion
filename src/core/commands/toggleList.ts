@@ -6,7 +6,7 @@ import { isList, getNodeType, findParentNode } from '../helpers';
 import { RawCommands } from '../types.js';
 
 const joinListBackwards = (tr: Transaction, listType: NodeType): boolean => {
-  const list = findParentNode(node => node.type === listType)(tr.selection);
+  const list = findParentNode(node => node.type === listType)(tr.selection.$from);
 
   if (!list) {
     return true;
@@ -31,7 +31,7 @@ const joinListBackwards = (tr: Transaction, listType: NodeType): boolean => {
 };
 
 const joinListForwards = (tr: Transaction, listType: NodeType): boolean => {
-  const list = findParentNode(node => node.type === listType)(tr.selection);
+  const list = findParentNode(node => node.type === listType)(tr.selection.$from);
 
   if (!list) {
     return true;
@@ -88,7 +88,7 @@ export const toggleList: RawCommands['toggleList'] =
       return false;
     }
 
-    const parentList = findParentNode(node => isList(node.type.name))(selection);
+    const parentList = findParentNode(node => isList(node.type.name))(selection.$from);
 
     if (range.depth >= 1 && parentList && range.depth - parentList.depth <= 1) {
       // remove list

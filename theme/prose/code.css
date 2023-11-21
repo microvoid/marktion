@@ -1,0 +1,6 @@
+.marktion-themes .ProseMirror {
+  .cm-editor {
+    background-color: var(--gray-3);
+    outline: none;
+  }
+}

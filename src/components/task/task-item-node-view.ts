@@ -3,30 +3,23 @@
  * Modified by youking-lib
  */
 
-import { NodeView } from 'prosemirror-view';
 import { Node as ProsemirrorNode } from 'prosemirror-model';
-
-type UpdateElement = (node: ProsemirrorNode, dom: HTMLElement) => void;
+import { NodeView } from 'prosemirror-view';
 
 export function createCustomMarkListItemNodeView({
   node,
-  mark,
-  updateDOM,
-  updateMark
+  mark
 }: {
   node: ProsemirrorNode;
   mark: HTMLElement;
-  updateDOM: UpdateElement;
-  updateMark: UpdateElement;
 }): NodeView {
+  const dom = document.createElement('li');
+  const contentDOM = document.createElement('div');
   const markContainer = document.createElement('label');
+
   markContainer.contentEditable = 'false';
   markContainer.setAttribute('role', 'task-item-label');
   markContainer.append(mark);
-
-  const contentDOM = document.createElement('div');
-
-  const dom = document.createElement('li');
 
   dom.setAttribute('role', 'task-item');
   dom.append(markContainer);
@@ -46,4 +39,20 @@ export function createCustomMarkListItemNodeView({
   update(node);
 
   return { dom, contentDOM, update };
+}
+
+function updateDOM(node: ProsemirrorNode, dom: HTMLElement) {
+  if (node.attrs.checked) {
+    dom.setAttribute('data-checked', 'true');
+  } else {
+    dom.removeAttribute('data-checked');
+  }
+
+  node.attrs.closed
+    ? dom.classList.add('COLLAPSIBLE_LIST_ITEM_CLOSED')
+    : dom.classList.remove('COLLAPSIBLE_LIST_ITEM_CLOSED');
+}
+
+function updateMark(node: ProsemirrorNode, mark: HTMLElement) {
+  node.childCount <= 1 ? mark.classList.add('disabled') : mark.classList.remove('disabled');
 }

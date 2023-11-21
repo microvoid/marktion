@@ -7,10 +7,14 @@ import { event } from '../../plugin-event';
 import { useBubble } from '../bubble';
 import { useSlash } from '../slash';
 
-export type ReactEditorProps = React.PropsWithChildren<MarktionOptions>;
+export type ReactEditorProps = React.PropsWithChildren<
+  MarktionOptions & {
+    dark?: boolean;
+  }
+>;
 
 export function ReactEditor(props: ReactEditorProps) {
-  const { children, ...options } = props;
+  const { children, dark, ...options } = props;
   const rootRef = useRef<HTMLDivElement>(null);
   const bubble = useBubble();
   const slash = useSlash();
@@ -44,12 +48,10 @@ export function ReactEditor(props: ReactEditorProps) {
     };
   }, []);
 
-  const darkMode = false;
-
   return (
     <div
       className={cls('marktion-themes', {
-        dark: darkMode
+        dark
       })}
       data-accent-color="violet"
       ref={rootRef}
@@ -60,7 +62,7 @@ export function ReactEditor(props: ReactEditorProps) {
           token: {
             colorPrimary: '#654dc4'
           },
-          algorithm: darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm
+          algorithm: dark ? theme.darkAlgorithm : theme.defaultAlgorithm
         }}
       >
         <MarktionContext.Provider value={editor}>
