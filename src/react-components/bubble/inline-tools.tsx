@@ -1,4 +1,4 @@
-import { Button } from 'antd';
+import { Button, Space } from 'antd';
 import { Code, BoldIcon, ItalicIcon, StrikethroughIcon } from 'lucide-react';
 import { isActive } from '../../core';
 import { useEditorState, usePMRenderer } from '../../react-hooks';
@@ -42,7 +42,7 @@ export function InlineTools(props: { showAI?: boolean }) {
   ];
 
   return (
-    <>
+    <Space>
       {/* {props.showAI && <BubbleAI />} */}
 
       {items.map(item => {
@@ -56,6 +56,6 @@ export function InlineTools(props: { showAI?: boolean }) {
           </Button>
         );
       })}
-    </>
+    </Space>
   );
 }

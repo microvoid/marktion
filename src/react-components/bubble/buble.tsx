@@ -1,12 +1,20 @@
-import { Dropdown, Popover, PopoverProps } from 'antd';
+import { Popover, PopoverProps } from 'antd';
 import { createPortal } from 'react-dom';
 import { useMemo, useState } from 'react';
 import { bubble } from '../../plugin-bubble';
 import { InlineTools } from './inline-tools';
 
+const defaultPopoverAlign: PopoverProps['align'] = { offset: [0, -10] };
+
 export function Bubble(props: Omit<PopoverProps, 'content'>) {
   return (
-    <Popover trigger="click" arrow={false} content={<InlineTools />} {...props}>
+    <Popover
+      trigger="click"
+      arrow={false}
+      content={<InlineTools />}
+      align={defaultPopoverAlign}
+      {...props}
+    >
       <div style={{ height: '100%' }}></div>
     </Popover>
   );
