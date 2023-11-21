@@ -12,8 +12,6 @@ import {
   TableIcon
 } from 'lucide-react';
 import { ProseMirrorRenderer } from '../../prosemirror';
-import { isActive } from '../../core';
-import { EditorState } from 'prosemirror-state';
 
 export type SlashItem = {
   title: string;
@@ -21,33 +19,6 @@ export type SlashItem = {
   searchTerms: string[];
   icon: React.ReactNode;
   command: (editor: ProseMirrorRenderer, range: { from: number; to: number }) => void;
-};
-
-export const getSlashItems = (query?: string, state?: EditorState) => {
-  if (!query || !state) {
-    return getDefaultSlashItems();
-  }
-
-  const isTableActive = isActive(state, 'table');
-  const suggestions = isTableActive ? getTableSuggestions() : getDefaultSlashItems();
-
-  query = query.slice(1);
-
-  return suggestions.filter(item => {
-    if (typeof query === 'string' && query.length > 0) {
-      const search = query.toLowerCase();
-      return (
-        item.title.toLowerCase().includes(search) ||
-        item.description.toLowerCase().includes(search) ||
-        (item.searchTerms && item.searchTerms.some((term: string) => term.includes(search)))
-      );
-    }
-    return true;
-  });
-};
-
-export const getTableSuggestions = (): SlashItem[] => {
-  return [];
 };
 
 export const getDefaultSlashItems = (): SlashItem[] => {
@@ -62,7 +33,7 @@ export const getDefaultSlashItems = (): SlashItem[] => {
       title: 'Todo List',
       description: 'Track tasks with a todo list.',
       searchTerms: ['todo', 'task', 'list', 'check', 'checkbox'],
-      icon: <ListChecksIcon />,
+      icon: <ListChecksIcon style={{ width: 16, height: 16 }} />,
       command: (editor, range) => {
         editor.chain().focus().deleteRange(range).toggleTaskList().run();
       }
@@ -71,7 +42,7 @@ export const getDefaultSlashItems = (): SlashItem[] => {
       title: 'Bullet List',
       description: 'Create a simple bullet list.',
       searchTerms: ['unordered', 'point'],
-      icon: <ListIcon />,
+      icon: <ListIcon style={{ width: 16, height: 16 }} />,
       command: (editor, range) => {
         editor.chain().focus().deleteRange(range).toggleBulletList().run();
       }
@@ -80,7 +51,7 @@ export const getDefaultSlashItems = (): SlashItem[] => {
       title: 'Numbered List',
       description: 'Create a list with numbering.',
       searchTerms: ['ordered'],
-      icon: <ListOrderedIcon />,
+      icon: <ListOrderedIcon style={{ width: 16, height: 16 }} />,
       command: (editor, range) => {
         editor.chain().focus().deleteRange(range).toggleOrderedList().run();
       }
@@ -89,7 +60,7 @@ export const getDefaultSlashItems = (): SlashItem[] => {
       title: 'Quote',
       description: 'Capture a quote.',
       searchTerms: ['blockquote'],
-      icon: <QuoteIcon />,
+      icon: <QuoteIcon style={{ width: 16, height: 16 }} />,
       command: (editor, range) => {
         editor
           .chain()
@@ -104,7 +75,7 @@ export const getDefaultSlashItems = (): SlashItem[] => {
       title: 'Code',
       description: 'Capture a code snippet.',
       searchTerms: ['codeblock'],
-      icon: <Code2Icon />,
+      icon: <Code2Icon style={{ width: 16, height: 16 }} />,
       command: (editor, range) => {
         editor.chain().focus().deleteRange(range).toggleCodeBlock().run();
       }
@@ -113,7 +84,7 @@ export const getDefaultSlashItems = (): SlashItem[] => {
       title: 'Image',
       description: 'Upload an image from your computer.',
       searchTerms: ['photo', 'picture', 'media'],
-      icon: <ImageIcon />,
+      icon: <ImageIcon style={{ width: 16, height: 16 }} />,
       command: (editor, range) => {
         // editor.chain().focus().deleteRange(range).run();
 
@@ -129,7 +100,7 @@ export const getDefaultSlashItems = (): SlashItem[] => {
       title: 'Table',
       description: 'Simple powerfull table.',
       searchTerms: ['table'],
-      icon: <TableIcon />,
+      icon: <TableIcon style={{ width: 16, height: 16 }} />,
       command: (editor, range) => {
         editor
           .chain()
@@ -143,7 +114,7 @@ export const getDefaultSlashItems = (): SlashItem[] => {
       title: 'Heading 1',
       description: 'Big section heading.',
       searchTerms: ['title', 'big', 'large'],
-      icon: <Heading1 />,
+      icon: <Heading1 style={{ width: 16, height: 16 }} />,
       command: (editor, range) => {
         editor.chain().focus().deleteRange(range).setNode('heading', { level: 1 }).run();
       }
@@ -152,7 +123,7 @@ export const getDefaultSlashItems = (): SlashItem[] => {
       title: 'Heading 2',
       description: 'Medium section heading.',
       searchTerms: ['subtitle', 'medium'],
-      icon: <Heading2 />,
+      icon: <Heading2 style={{ width: 16, height: 16 }} />,
       command: (editor, range) => {
         editor.chain().focus().deleteRange(range).setNode('heading', { level: 2 }).run();
       }
@@ -161,7 +132,7 @@ export const getDefaultSlashItems = (): SlashItem[] => {
       title: 'Heading 3',
       description: 'Small section heading.',
       searchTerms: ['subtitle', 'small'],
-      icon: <Heading3 />,
+      icon: <Heading3 style={{ width: 16, height: 16 }} />,
       command: (editor, range) => {
         editor.chain().focus().deleteRange(range).setNode('heading', { level: 3 }).run();
       }
@@ -170,7 +141,7 @@ export const getDefaultSlashItems = (): SlashItem[] => {
       title: 'Text',
       description: 'Just start typing with plain text.',
       searchTerms: ['p', 'paragraph'],
-      icon: <TextIcon />,
+      icon: <TextIcon style={{ width: 16, height: 16 }} />,
       command: (editor, range) => {
         editor.chain().focus().deleteRange(range).toggleNode('paragraph', 'paragraph').run();
       }

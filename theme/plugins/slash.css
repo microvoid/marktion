@@ -9,8 +9,8 @@
   }
 
   .slash-item-icon {
-    width: var(--space-7);
-    height: var(--space-7);
+    width: var(--space-6);
+    height: var(--space-6);
 
     display: flex;
     justify-content: center;
@@ -26,5 +26,6 @@
 
   .slash-item-caption-description {
     color: var(--gray-10);
+    font-size: var(--font-size-1);
   }
 }

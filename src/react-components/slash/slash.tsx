@@ -15,7 +15,7 @@ export function Slash(props: SlashProps) {
 
   const items = useMemo(
     () => getSlashItems(props.detail?.text!, props.detail?.state!),
-    [props.detail?.text]
+    [props.detail?.text, props.detail?.state]
   );
 
   const onSelectItem = useCallback(
