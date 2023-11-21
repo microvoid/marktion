@@ -7,6 +7,7 @@ import type { Parent, Node as ASTNode } from 'unist';
 import type { Node as PMNode } from 'prosemirror-model';
 import { Formatter, FormatMdNode, ParseContext } from './formatter';
 import { schema } from '../schemas';
+import { unwrapImage } from './remark-plugin/image';
 
 export function parse(source: string) {
   const u = unifiedParse(source) as Root;
@@ -16,6 +17,7 @@ export function parse(source: string) {
 
 function unifiedParse(source: string) {
   const process = unified().use(remarkParse).use(remarkGfm).use(remarkStringify);
+
   return process.runSync(process.parse(source));
 }
 

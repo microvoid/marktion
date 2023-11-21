@@ -4,6 +4,8 @@ import 'marktion/dist/marktion.css';
 const INIT_MARKDOWN = [import.meta.env.VITE_README_ZH, import.meta.env.VITE_README_EN];
 
 const TEST = `
+![](/public/recorder.gif)
+
 | Syntax      | Description | Test Text     |
 | :---        |    :----:   |          ---: |
 | Header      | Title       | Here's this   |
@@ -15,8 +17,6 @@ const TEST = `
 ~~123123123~~
 
 4. 444
-
-![](/public/recorder.gif)
 [百度](https://baidu.com "这是百度")
 
 | 属性      | 描述                   | 类型                                       | 默认值 |
