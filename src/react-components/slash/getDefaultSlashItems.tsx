@@ -11,6 +11,7 @@ import {
   ImageIcon,
   TableIcon
 } from 'lucide-react';
+import { handleUpload } from '../../plugin-upload';
 import { ProseMirrorRenderer } from '../../prosemirror';
 
 export type SlashItem = {
@@ -86,13 +87,21 @@ export const getDefaultSlashItems = (): SlashItem[] => {
       searchTerms: ['photo', 'picture', 'media'],
       icon: <ImageIcon style={{ width: 16, height: 16 }} />,
       command: (editor, range) => {
-        // editor.chain().focus().deleteRange(range).run();
+        editor.chain().focus().deleteRange(range).run();
 
         // upload image
         const input = document.createElement('input');
         input.type = 'file';
         input.accept = 'image/*';
-        input.onchange = async event => {};
+
+        input.onchange = event => {
+          const files = input.files;
+
+          if (files) {
+            handleUpload(editor.view, files, event);
+          }
+        };
+
         input.click();
       }
     },

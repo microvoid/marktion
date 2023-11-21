@@ -1,8 +1,8 @@
-import { Range, posToOffsetRect } from '../core';
 import { EditorState, Plugin, PluginKey, Transaction } from 'prosemirror-state';
 import { Decoration, DecorationSet, EditorView } from 'prosemirror-view';
 
 import { SuggestionMatch, findSuggestionMatch } from './findSuggestionMatch.js';
+import { Range, posToOffsetRect } from '../core';
 import { createPortal } from '../plugin-portal';
 
 export interface SuggestionOptions {
@@ -36,7 +36,7 @@ export interface SuggestionKeyDownProps {
   range: Range;
 }
 
-export type SuggesttionPluginState = {
+export type SuggestionPluginState = {
   active: boolean;
   range: Range;
   query: null | string;
@@ -45,7 +45,7 @@ export type SuggesttionPluginState = {
   decorationId?: string | null;
 };
 
-export const SuggestionPluginKey = new PluginKey<SuggesttionPluginState>('plugin-suggestion');
+export const SuggestionPluginKey = new PluginKey<SuggestionPluginState>('plugin-suggestion');
 
 export const defaultAllow: SuggestionOptions['allow'] = ({ transaction, match }) => {
   return Boolean(transaction.docChanged && match);
@@ -67,7 +67,7 @@ export function suggestion({
   let props: SuggestionProps | undefined;
   let editorView: EditorView | null = null;
 
-  const plugin = new Plugin<SuggesttionPluginState>({
+  const plugin = new Plugin<SuggestionPluginState>({
     key: pluginKey,
 
     view(view) {

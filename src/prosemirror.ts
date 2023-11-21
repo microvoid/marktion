@@ -15,6 +15,7 @@ import { createPortalSet } from './plugin-portal';
 import { CommandManager } from './core/CommandManager';
 import * as commands from './core/commands';
 import { placeholder } from './plugin-placeholder';
+import { upload } from './plugin-upload';
 
 const defaultNodeViews: EditorProps['nodeViews'] = {
   code_block: codeblock,
@@ -42,6 +43,7 @@ export class ProseMirrorRenderer {
         dropCursor(),
         gapCursor(),
         createPortalSet(),
+        upload(),
         placeholder({
           includeChildren: true,
           placeholder: "Press '/' for commands, 'Space' for AI ..."
