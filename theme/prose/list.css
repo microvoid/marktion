@@ -30,13 +30,18 @@
     padding-left: 0;
   }
 
+  ul[role='task-list'] {
+    margin: 0;
+  }
+
   li[role='task-item'] {
     display: flex;
     align-items: flex-start;
+    margin: var(--space-3) 0;
   }
 
   li[role='task-item'] [role='task-item-label'] {
-    margin: var(--space-3) var(--space-1) var(--space-3) 0;
+    margin-right: var(--space-1);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -44,6 +49,10 @@
     height: var(--checkbox-size);
     width: var(--checkbox-size);
     user-select: none;
+  }
+
+  li[role='task-item'] div > p {
+    margin: 0;
   }
 
   li[role='task-item'] [role='task-item-label'] input[type='checkbox'] {
@@ -76,7 +85,6 @@
   }
 
   li[role='task-item'] > div {
-    display: inline-block;
     color: var(--gray-11);
     text-decoration: line-through;
     text-decoration-thickness: 2px;
