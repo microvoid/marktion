@@ -1,6 +1,7 @@
 export * from './blockquote';
 export * from './codeblock';
 export * from './image';
+export * from './link';
 export * from './table';
 
 export * from './clearNodes';
@@ -15,6 +16,7 @@ export * from './scrollIntoView';
 export * from './setContent';
 export * from './setDocument';
 export * from './setMark';
+export * from './setMeta';
 export * from './setNode';
 export * from './toggleBulletList';
 export * from './toggleList';

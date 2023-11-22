@@ -30,10 +30,6 @@
     padding-left: 0;
   }
 
-  ul[role='task-list'] {
-    margin: 0;
-  }
-
   li[role='task-item'] {
     display: flex;
     align-items: flex-start;

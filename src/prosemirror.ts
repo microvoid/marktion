@@ -16,6 +16,8 @@ import { CommandManager } from './core/CommandManager';
 import * as commands from './core/commands';
 import { placeholder } from './plugin-placeholder';
 import { upload } from './plugin-upload';
+import { Attrs, MarkType, NodeType } from 'prosemirror-model';
+import { getAttributes } from './core/helpers/getAttributes';
 
 const defaultNodeViews: EditorProps['nodeViews'] = {
   code_block: codeblock,
@@ -55,6 +57,10 @@ export class ProseMirrorRenderer {
 
   chain() {
     return this.cmdManager.chain();
+  }
+
+  getAttributes(nameOrType: string | NodeType | MarkType): Attrs {
+    return getAttributes(this.view.state, nameOrType);
   }
 
   getContent() {
