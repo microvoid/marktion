@@ -1,6 +1,6 @@
 import { minimalSetup } from 'codemirror';
 import { EditorState } from '@codemirror/state';
-import { EditorView, keymap } from '@codemirror/view';
+import { EditorView, keymap, placeholder } from '@codemirror/view';
 import { defaultKeymap } from '@codemirror/commands';
 import { markdown } from '@codemirror/lang-markdown';
 import { syntaxHighlighting, defaultHighlightStyle } from '@codemirror/language';
@@ -14,6 +14,7 @@ function createState(content: string) {
     doc: content,
     extensions: [
       keymap.of(DEFAULT_KEYMAP),
+      placeholder('please enter the markdown source'),
       markdown(),
       minimalSetup,
       syntaxHighlighting(defaultHighlightStyle)

@@ -8,4 +8,5 @@
   --space-7: calc(40px * var(--scaling));
   --space-8: calc(48px * var(--scaling));
   --space-9: calc(64px * var(--scaling));
+  --space-10: calc(80px * var(--scaling));
 }

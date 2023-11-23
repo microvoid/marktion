@@ -7,4 +7,5 @@
 @import './variables/typography.css';
 
 @import './marktion-themes.css';
-@import './prosemirror.css'
+@import './wysiwyg-editor.css';
+@import './source-editor.css';

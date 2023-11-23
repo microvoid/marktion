@@ -91,6 +91,8 @@ export class ProseMirrorRenderer {
       nodeViews: defaultNodeViews
     });
 
+    this.view.dom.classList.add('wysiwyg-editor');
+
     this.cmdManager = new CommandManager({
       view: this.view,
       commands

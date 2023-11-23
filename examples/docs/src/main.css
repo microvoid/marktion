@@ -1,0 +1,4 @@
+.marktion-themes .wrapper-source .cm-editor,
+.marktion-themes .wysiwyg-editor {
+  min-height: 200px!important;
+}

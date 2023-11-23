@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom/client';
 import { useDarkMode } from 'usehooks-ts';
 import { ConfigProvider, theme as AntdTheme } from 'antd';
 
-import './main.css';
 import { MarktionV2App } from './marktion';
+import './main.css';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>

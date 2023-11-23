@@ -38,12 +38,4 @@
   &[data-renderer='SOURCE'] .wrapper-source {
     display: block;
   }
-
-  .wrapper-source .cm-editor {
-    min-height: var(--space-6);
-    box-shadow: var(--shadow-6);
-    padding: var(--space-4);
-    border-radius: var(--radius-2);
-    outline: none;
-  }
 }
