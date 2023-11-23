@@ -13,13 +13,16 @@ import {
 } from 'lucide-react';
 import { handleUpload } from '../../plugin-upload';
 import { ProseMirrorRenderer } from '../../prosemirror';
+import { SlashItemKey } from './constants';
 
 export type SlashItem = {
   title: string;
+  key: SlashItemKey;
+  command: (editor: ProseMirrorRenderer, range: { from: number; to: number }) => void;
   description: string;
   searchTerms: string[];
   icon: React.ReactNode;
-  command: (editor: ProseMirrorRenderer, range: { from: number; to: number }) => void;
+  syntax?: string;
 };
 
 export const getDefaultSlashItems = (): SlashItem[] => {
@@ -31,8 +34,10 @@ export const getDefaultSlashItems = (): SlashItem[] => {
     //   // icon: <Magic className="w-7 text-black" />,
     // },
     {
+      key: SlashItemKey.TodoList,
       title: 'Todo List',
       description: 'Track tasks with a todo list.',
+      syntax: '"[]"+Space',
       searchTerms: ['todo', 'task', 'list', 'check', 'checkbox'],
       icon: <ListChecksIcon style={{ width: 16, height: 16 }} />,
       command: (editor, range) => {
@@ -40,8 +45,10 @@ export const getDefaultSlashItems = (): SlashItem[] => {
       }
     },
     {
+      key: SlashItemKey.BulletList,
       title: 'Bullet List',
       description: 'Create a simple bullet list.',
+      syntax: '"-"+Space',
       searchTerms: ['unordered', 'point'],
       icon: <ListIcon style={{ width: 16, height: 16 }} />,
       command: (editor, range) => {
@@ -49,8 +56,10 @@ export const getDefaultSlashItems = (): SlashItem[] => {
       }
     },
     {
+      key: SlashItemKey.NumberedList,
       title: 'Numbered List',
       description: 'Create a list with numbering.',
+      syntax: '"1."+Space',
       searchTerms: ['ordered'],
       icon: <ListOrderedIcon style={{ width: 16, height: 16 }} />,
       command: (editor, range) => {
@@ -58,7 +67,9 @@ export const getDefaultSlashItems = (): SlashItem[] => {
       }
     },
     {
+      key: SlashItemKey.Quote,
       title: 'Quote',
+      syntax: '">"+Space',
       description: 'Capture a quote.',
       searchTerms: ['blockquote'],
       icon: <QuoteIcon style={{ width: 16, height: 16 }} />,
@@ -73,7 +84,9 @@ export const getDefaultSlashItems = (): SlashItem[] => {
       }
     },
     {
+      key: SlashItemKey.Code,
       title: 'Code',
+      syntax: '"```"+Space',
       description: 'Capture a code snippet.',
       searchTerms: ['codeblock'],
       icon: <Code2Icon style={{ width: 16, height: 16 }} />,
@@ -82,8 +95,10 @@ export const getDefaultSlashItems = (): SlashItem[] => {
       }
     },
     {
+      key: SlashItemKey.Image,
       title: 'Image',
       description: 'Upload an image from your computer.',
+      syntax: '"![](uri)"+Space',
       searchTerms: ['photo', 'picture', 'media'],
       icon: <ImageIcon style={{ width: 16, height: 16 }} />,
       command: (editor, range) => {
@@ -106,8 +121,10 @@ export const getDefaultSlashItems = (): SlashItem[] => {
       }
     },
     {
+      key: SlashItemKey.Table,
       title: 'Table',
       description: 'Simple powerfull table.',
+      syntax: '"|2x3|"+Space',
       searchTerms: ['table'],
       icon: <TableIcon style={{ width: 16, height: 16 }} />,
       command: (editor, range) => {
@@ -120,8 +137,10 @@ export const getDefaultSlashItems = (): SlashItem[] => {
       }
     },
     {
+      key: SlashItemKey.Heading1,
       title: 'Heading 1',
       description: 'Big section heading.',
+      syntax: '"#"+Space',
       searchTerms: ['title', 'big', 'large'],
       icon: <Heading1 style={{ width: 16, height: 16 }} />,
       command: (editor, range) => {
@@ -129,8 +148,10 @@ export const getDefaultSlashItems = (): SlashItem[] => {
       }
     },
     {
+      key: SlashItemKey.Heading2,
       title: 'Heading 2',
       description: 'Medium section heading.',
+      syntax: '"##"+Space',
       searchTerms: ['subtitle', 'medium'],
       icon: <Heading2 style={{ width: 16, height: 16 }} />,
       command: (editor, range) => {
@@ -138,8 +159,10 @@ export const getDefaultSlashItems = (): SlashItem[] => {
       }
     },
     {
+      key: SlashItemKey.Heading3,
       title: 'Heading 3',
       description: 'Small section heading.',
+      syntax: '"###"+Space',
       searchTerms: ['subtitle', 'small'],
       icon: <Heading3 style={{ width: 16, height: 16 }} />,
       command: (editor, range) => {
@@ -147,6 +170,7 @@ export const getDefaultSlashItems = (): SlashItem[] => {
       }
     },
     {
+      key: SlashItemKey.Text,
       title: 'Text',
       description: 'Just start typing with plain text.',
       searchTerms: ['p', 'paragraph'],

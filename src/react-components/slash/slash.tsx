@@ -1,4 +1,4 @@
-import { DropDownProps, Dropdown } from 'antd';
+import { DropDownProps, Dropdown, Tag } from 'antd';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { getSlashItems } from './getSlashItems';
@@ -28,6 +28,15 @@ export function Slash(props: SlashProps) {
       }
     },
     [props.detail, items]
+  );
+
+  useEffect(
+    function resetSelectedIndexOnClose() {
+      if (!props.open) {
+        setSelectedIndex(0);
+      }
+    },
+    [props.open]
   );
 
   useEffect(() => {
@@ -76,7 +85,7 @@ export function Slash(props: SlashProps) {
         style: {
           minWidth: 200
         },
-        activeKey: items[selectedIndex]?.title,
+        activeKey: items[selectedIndex]?.key,
         onClick: ({ key }) => {
           const index = items.findIndex(item => item.title === key);
           onSelectItem(index);
@@ -84,10 +93,18 @@ export function Slash(props: SlashProps) {
         items: items.map(item => {
           return {
             icon: <div className="slash-item-icon">{item.icon}</div>,
-            key: item.title,
+            key: item.key,
             label: (
               <div className="slash-item-caption">
-                <div className="slash-item-caption-title">{item.title}</div>
+                <div className="slash-item-caption-title">
+                  {item.title}
+
+                  {item.syntax && (
+                    <Tag className="slash-item-caption-syntax" bordered={false}>
+                      {item.syntax}
+                    </Tag>
+                  )}
+                </div>
                 <div className="slash-item-caption-description">{item.description}</div>
               </div>
             )
