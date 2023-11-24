@@ -60,6 +60,12 @@ export class ProseMirrorRenderer {
     return this.cmdManager.chain();
   }
 
+  focus() {
+    requestAnimationFrame(() => {
+      this.view.focus();
+    });
+  }
+
   setContent(content: string) {
     const fragments = parse(content)!;
     this.cmdManager.commands.setDocument(fragments);

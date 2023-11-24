@@ -12,6 +12,7 @@ export * from './insertContent';
 export * from './insertContentAt';
 export * from './lift';
 export * from './liftListItem';
+export * from './markdown';
 export * from './scrollIntoView';
 export * from './setContent';
 export * from './setDocument';

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import { useDarkMode } from 'usehooks-ts';
-import { ConfigProvider, theme as AntdTheme, Row, Col } from 'antd';
+import { ConfigProvider, theme as AntdTheme, Row, Col, Tag } from 'antd';
 
 import { MarktionEditor } from './editor';
 

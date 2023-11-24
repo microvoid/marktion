@@ -5,6 +5,7 @@ export * from './findParentNode';
 export * from './findParentNodeClosestToPos';
 export * from './getMarkType';
 export * from './getSchemaTypeNameByName';
+export * from './getTextContentFromNodes';
 export * from './isActive';
 export * from './isList';
 export * from './isTextSelection';
