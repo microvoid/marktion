@@ -12,7 +12,7 @@ import { SlashItemKey } from './constants';
 export const getTableSlashItems = (): SlashItem[] => {
   return [
     {
-      key: SlashItemKey.AddColAfter,
+      key: SlashItemKey.AddRowAfter,
       title: 'add row after',
       description: '',
       searchTerms: ['row', 'add', 'after'],

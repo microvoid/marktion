@@ -18,6 +18,7 @@ import { placeholder } from './plugin-placeholder';
 import { upload } from './plugin-upload';
 import { Attrs, MarkType, NodeType } from 'prosemirror-model';
 import { getAttributes } from './core/helpers/getAttributes';
+import { getEditable, setEditable } from './core/meta';
 
 const defaultNodeViews: EditorProps['nodeViews'] = {
   code_block: codeblock,
@@ -59,6 +60,19 @@ export class ProseMirrorRenderer {
     return this.cmdManager.chain();
   }
 
+  setContent(content: string) {
+    const fragments = parse(content)!;
+    this.cmdManager.commands.setDocument(fragments);
+  }
+
+  setEditable(editable: boolean) {
+    this.view.dispatch(setEditable(this.state.tr, editable));
+  }
+
+  getEditable() {
+    return getEditable(this.state.tr);
+  }
+
   getAttributes(nameOrType: string | NodeType | MarkType): Attrs {
     return getAttributes(this.view.state, nameOrType);
   }
@@ -73,21 +87,16 @@ export class ProseMirrorRenderer {
     return content;
   }
 
-  setContent(content: string) {
-    const fragments = parse(content)!;
-    this.cmdManager.commands.setDocument(fragments);
-  }
-
   getState() {
     return this.view.state || this.state;
   }
 
   attachTo(root: HTMLElement) {
     this.view = new EditorView(root, {
-      editable(state) {
-        return true;
-      },
       state: this.state,
+      editable(state) {
+        return getEditable(state.tr);
+      },
       nodeViews: defaultNodeViews
     });
 
@@ -97,5 +106,7 @@ export class ProseMirrorRenderer {
       view: this.view,
       commands
     });
+
+    this.setEditable(true);
   }
 }

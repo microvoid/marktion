@@ -1,6 +1,7 @@
 import { Plugin, PluginKey } from 'prosemirror-state';
-import { Decoration, DecorationSet, EditorView } from 'prosemirror-view';
+import { Decoration, DecorationSet } from 'prosemirror-view';
 import { Node } from 'prosemirror-model';
+import { getEditable } from '../core/meta';
 
 export type PlaceholderPluginState = {
   active: boolean;
@@ -79,8 +80,6 @@ const defaultOptions = {
 };
 
 export function placeholder(options: Partial<PlaceholderOptions> = {}) {
-  let editorView: EditorView | null = null;
-
   options = {
     ...defaultOptions,
     ...options
@@ -88,32 +87,9 @@ export function placeholder(options: Partial<PlaceholderOptions> = {}) {
 
   return new Plugin<PlaceholderPluginState>({
     key: PlaceholderPluginKey,
-    state: {
-      init(config, instance) {
-        return {
-          active: false
-        };
-      },
-      apply(tr, value) {
-        return value;
-      }
-    },
-    view(view) {
-      editorView = view;
-
-      return {
-        destroy() {
-          editorView = null;
-        }
-      };
-    },
     props: {
-      decorations: ({ doc, selection }) => {
-        if (!editorView) {
-          return null;
-        }
-
-        const active = editorView.editable || !options.showOnlyWhenEditable;
+      decorations: ({ doc, selection, tr }) => {
+        const active = getEditable(tr) || !options.showOnlyWhenEditable;
         const { anchor } = selection;
         const decorations: Decoration[] = [];
 
