@@ -3,4 +3,12 @@
     position: absolute;
     z-index: -1;
   }
+
+  &.plugin-ai-inline-message-content {
+    .wysiwyg-editor {
+      min-height: unset;
+      box-shadow: none;
+      padding: 0;
+    }
+  }
 }

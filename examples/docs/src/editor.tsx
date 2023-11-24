@@ -3,10 +3,18 @@ import { ReactEditor, type ReactEditorProps, useAI } from 'marktion';
 const defaultEditorContent = '';
 
 export function MarktionEditor(props: Partial<ReactEditorProps>) {
-  const ai = useAI();
+  const ai = useAI({
+    basePath: import.meta.env.VITE_OPENAI_BASE_URL
+  });
 
   return (
-    <ReactEditor renderer="WYSIWYG" content={defaultEditorContent} plugins={[ai.plugin]} {...props}>
+    <ReactEditor
+      className="marktion-editor"
+      renderer="WYSIWYG"
+      content={defaultEditorContent}
+      plugins={[ai.plugin]}
+      {...props}
+    >
       {ai.element}
     </ReactEditor>
   );

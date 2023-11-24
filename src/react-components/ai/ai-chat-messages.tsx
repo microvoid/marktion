@@ -1,5 +1,5 @@
 import { List, Avatar, theme } from 'antd';
-import { User2Icon } from 'lucide-react';
+import { UserIcon } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import { Message } from 'ai/react';
 import { OpenAIIcon } from './icon-openai';
@@ -51,16 +51,11 @@ export function ChatMessages({ messages }: { messages: Message[] }) {
               <List.Item key={item.id}>
                 <List.Item.Meta
                   avatar={
-                    <Avatar
-                      size="small"
-                      icon={
-                        <User2Icon
-                          style={{
-                            width: '100%',
-                            height: '100%'
-                          }}
-                        />
-                      }
+                    <UserIcon
+                      style={{
+                        width: '100%',
+                        height: '100%'
+                      }}
                     />
                   }
                   description={item.content}
@@ -75,5 +70,12 @@ export function ChatMessages({ messages }: { messages: Message[] }) {
 }
 
 function renderContent(str: string) {
-  return <ReactSSR content={str} className="inline-style" innerStyle={{ fontSize: 14 }} />;
+  return (
+    <ReactSSR
+      content={str}
+      className="plugin-ai-inline-message-content"
+      data-scaling="90%"
+      innerStyle={{ fontSize: 14 }}
+    />
+  );
 }

@@ -9,12 +9,13 @@ import { useSlash } from '../slash';
 
 export type ReactEditorProps = React.PropsWithChildren<
   MarktionOptions & {
+    className?: string;
     dark?: boolean;
   }
 >;
 
 export function ReactEditor(props: ReactEditorProps) {
-  const { children, dark, ...options } = props;
+  const { children, dark, className, ...options } = props;
   const rootRef = useRef<HTMLDivElement>(null);
   const bubble = useBubble();
   const slash = useSlash();
@@ -50,7 +51,7 @@ export function ReactEditor(props: ReactEditorProps) {
 
   return (
     <div
-      className={cls('marktion-themes', {
+      className={cls('marktion-themes', className, {
         dark
       })}
       data-accent-color="violet"

@@ -6,10 +6,14 @@ import { GptOptions } from './type';
 import { usePMRenderer } from '../..';
 import { ChatMenu, ChatMenuKey, ChatMenuProps } from './ai-chat-menu';
 import { ChatMessages } from './ai-chat-messages';
+import { DEBUG_MESSAGE } from './DEBUG_utils';
 
 export type AIChatPanelProps = PopoverProps & {
   gptConfig: GptOptions['config'];
 };
+
+// const defaultInitialMessages = DEBUG_MESSAGE;
+const defaultInitialMessages: Message[] = [];
 
 export function AIChatPanel({ children, gptConfig, ...popoverProps }: AIChatPanelProps) {
   const inputRef = useRef<InputRef>(null);
@@ -20,7 +24,7 @@ export function AIChatPanel({ children, gptConfig, ...popoverProps }: AIChatPane
 
   const { messages, input, isLoading, handleInputChange, handleSubmit, setMessages, stop } =
     useChat({
-      // initialMessages: DEBUG_MESSAGE,
+      initialMessages: defaultInitialMessages,
       api: `${gptConfig?.basePath}/chat/completions`,
       body: {
         temperature: 0.7,
@@ -40,7 +44,7 @@ export function AIChatPanel({ children, gptConfig, ...popoverProps }: AIChatPane
 
   useEffect(() => {
     if (!popoverProps.open) {
-      setMessages([]);
+      setMessages(defaultInitialMessages);
       stop();
     } else {
       requestAnimationFrame(() => {
