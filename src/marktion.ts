@@ -1,11 +1,13 @@
 import { EditorStateConfig } from 'prosemirror-state';
 import { CodemirrorRenderer } from './codemirror';
 import { ProseMirrorRenderer } from './prosemirror';
+import { UploadOptions } from './plugin-upload';
 
 export type MarktionOptions = {
-  plugins?: EditorStateConfig['plugins'];
-  renderer: 'WYSIWYG' | 'SOURCE' | 'SSR';
   content: string;
+  renderer: 'WYSIWYG' | 'SOURCE' | 'SSR';
+  uploadOptions?: UploadOptions;
+  plugins?: EditorStateConfig['plugins'];
   onChange?: (editor: Marktion) => void;
 };
 
@@ -28,7 +30,8 @@ export class Marktion {
 
     this.pmRenderer = new ProseMirrorRenderer({
       content: options.content,
-      plugin: this.options.plugins,
+      plugin: options.plugins,
+      uploadOptions: options.uploadOptions,
       onChange: () => {
         options.onChange?.(this);
       }

@@ -1,7 +1,14 @@
 import { Tag } from 'antd';
 import debounce from 'lodash/debounce';
 import { useEffect, useRef, useState } from 'react';
-import { ReactEditor, type ReactEditorProps, useAI, Marktion, ReactEditorRef } from 'marktion';
+import {
+  ReactEditor,
+  type ReactEditorProps,
+  useAI,
+  Marktion,
+  ReactEditorRef,
+  defaultUploader
+} from 'marktion';
 
 import { Article, api } from './api';
 import { useMainContextSelector } from './hooks';
@@ -41,6 +48,11 @@ export function MarktionEditor(props: MarktionEditorProps) {
         renderer="WYSIWYG"
         content={defaultEditorContent}
         plugins={[ai.plugin]}
+        uploadOptions={{
+          uploader(files, event, view) {
+            return defaultUploader(files, event, view);
+          }
+        }}
         onChange={editor => {
           setLoading(true);
 

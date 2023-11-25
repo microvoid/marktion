@@ -21,7 +21,11 @@ export function readImageAsBase64(file: File): Promise<{ alt: string; src: strin
 
 /// The default uploader.
 /// It will upload transform images to base64.
-export const defaultUploader: UploadOptions['uploader'] = async (files, event, view) => {
+export const defaultUploader: NonNullable<UploadOptions['uploader']> = async (
+  files,
+  event,
+  view
+) => {
   const imgs: File[] = [];
 
   for (let i = 0; i < files.length; i++) {

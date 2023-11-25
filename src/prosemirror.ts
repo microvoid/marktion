@@ -1,5 +1,5 @@
-import { EditorView, EditorProps, DirectEditorProps } from 'prosemirror-view';
-import { EditorState, EditorStateConfig, Plugin } from 'prosemirror-state';
+import { EditorView, EditorProps } from 'prosemirror-view';
+import { EditorState, EditorStateConfig } from 'prosemirror-state';
 import { dropCursor } from 'prosemirror-dropcursor';
 import { gapCursor } from 'prosemirror-gapcursor';
 import { keymap } from 'prosemirror-keymap';
@@ -15,7 +15,7 @@ import { createPortalSet } from './plugin-portal';
 import { CommandManager } from './core/CommandManager';
 import * as commands from './core/commands';
 import { placeholder } from './plugin-placeholder';
-import { upload } from './plugin-upload';
+import { UploadOptions, upload } from './plugin-upload';
 import { Attrs, MarkType, NodeType } from 'prosemirror-model';
 import { getAttributes } from './core/helpers/getAttributes';
 import { getEditable, setEditable } from './core/meta';
@@ -33,6 +33,7 @@ export class ProseMirrorRenderer {
   constructor(
     public options: {
       content: string;
+      uploadOptions?: UploadOptions;
       plugin?: EditorStateConfig['plugins'];
       onChange?: () => void;
     }
@@ -47,7 +48,7 @@ export class ProseMirrorRenderer {
         dropCursor(),
         gapCursor(),
         createPortalSet(),
-        upload(),
+        upload(options.uploadOptions),
         placeholder({
           includeChildren: true,
           placeholder: "Press '/' for commands, 'Space' for AI ..."

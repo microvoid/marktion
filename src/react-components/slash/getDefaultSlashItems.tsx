@@ -113,7 +113,7 @@ export const getDefaultSlashItems = (): SlashItem[] => {
           const files = input.files;
 
           if (files) {
-            handleUpload(editor.view, files, event);
+            handleUpload(editor.view, files, event, editor.options.uploadOptions);
           }
         };
 

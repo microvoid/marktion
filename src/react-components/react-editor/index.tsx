@@ -28,10 +28,8 @@ export const ReactEditor = React.forwardRef<ReactEditorRef, ReactEditorProps>((p
     const internalPlugins = [bubble.plugin, slash.plugin, event()];
 
     return new Marktion({
-      content: options.content,
-      plugins: internalPlugins.concat(options.plugins || []),
-      renderer: options.renderer,
-      onChange: options.onChange
+      ...options,
+      plugins: internalPlugins.concat(options.plugins || [])
     });
   }, []);
 
