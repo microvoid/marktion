@@ -1,7 +1,10 @@
 import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { List } from 'antd';
 import type { Article } from './api';
 import { useMainContextSelector } from './hooks';
+
+dayjs.extend(relativeTime);
 
 export type ArticlesProps = {};
 
@@ -32,9 +35,9 @@ function ArticleItem({
   return (
     <List.Item
       actions={[
-        <a key="list-loadmore-edit" onClick={() => onEdit(article)}>
+        <span style={{ cursor: 'pointer' }} onClick={() => onEdit(article)}>
           edit
-        </a>
+        </span>
       ]}
     >
       <List.Item.Meta
@@ -46,14 +49,22 @@ function ArticleItem({
               whiteSpace: 'nowrap'
             }}
           >
-            {`${dayjs(article.createAt).format('YYYY-MM-DD HH:mm')}. ${getMarktionTitle(
-              article.content
-            )}`}
+            {`${timeFormat(article.createAt)}. ${getMarktionTitle(article.content)}`}
           </div>
         }
       />
     </List.Item>
   );
+}
+
+function timeFormat(input: number) {
+  const time = dayjs(input);
+
+  if (dayjs().diff(time, 'day') < 1) {
+    return time.fromNow();
+  }
+
+  return `${time.format('YYYY-MM-DD HH:mm')}`;
 }
 
 function getMarktionTitle(markdown: string) {
@@ -62,18 +73,3 @@ function getMarktionTitle(markdown: string) {
 
   return heading.replace(/#+\s/, '') || 'untitled';
 }
-
-const data = [
-  {
-    title: 'Ant Design Title 1'
-  },
-  {
-    title: 'Ant Design Title 2'
-  },
-  {
-    title: 'Ant Design Title 3'
-  },
-  {
-    title: 'Ant Design Title 4'
-  }
-];

@@ -32,7 +32,7 @@ function App() {
   return (
     <div className="marktion" style={{ backgroundColor: token.token.colorBgBase }}>
       <Row justify="center" align="middle" style={{ height: 80 }}>
-        <Col sm={20}>
+        <Col md={20} xs={22}>
           <Row justify="end">
             <Settings />
           </Row>
