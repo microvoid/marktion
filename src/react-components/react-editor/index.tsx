@@ -1,6 +1,6 @@
 import cls from 'classnames';
 import { ConfigProvider, theme } from 'antd';
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useImperativeHandle, useMemo, useRef } from 'react';
 import { Marktion, MarktionOptions } from '../../marktion';
 import { MarktionContext } from '../../react-hooks';
 import { event } from '../../plugin-event';
@@ -14,7 +14,11 @@ export type ReactEditorProps = React.PropsWithChildren<
   }
 >;
 
-export function ReactEditor(props: ReactEditorProps) {
+export type ReactEditorRef = {
+  editor: Marktion;
+};
+
+export const ReactEditor = React.forwardRef<ReactEditorRef, ReactEditorProps>((props, ref) => {
   const { children, dark, className, ...options } = props;
   const rootRef = useRef<HTMLDivElement>(null);
   const bubble = useBubble();
@@ -26,9 +30,20 @@ export function ReactEditor(props: ReactEditorProps) {
     return new Marktion({
       content: options.content,
       plugins: internalPlugins.concat(options.plugins || []),
-      renderer: options.renderer
+      renderer: options.renderer,
+      onChange: options.onChange
     });
   }, []);
+
+  useImperativeHandle(ref, () => {
+    return {
+      editor
+    };
+  });
+
+  useEffect(() => {
+    editor.options.onChange = props.onChange;
+  }, [editor, props.onChange]);
 
   useEffect(() => {
     if (rootRef.current && !editor.rootEl) {
@@ -75,4 +90,4 @@ export function ReactEditor(props: ReactEditorProps) {
       </ConfigProvider>
     </div>
   );
-}
+});

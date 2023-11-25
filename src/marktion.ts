@@ -6,6 +6,7 @@ export type MarktionOptions = {
   plugins?: EditorStateConfig['plugins'];
   renderer: 'WYSIWYG' | 'SOURCE' | 'SSR';
   content: string;
+  onChange?: (editor: Marktion) => void;
 };
 
 const defaultOptions: MarktionOptions = {
@@ -27,11 +28,17 @@ export class Marktion {
 
     this.pmRenderer = new ProseMirrorRenderer({
       content: options.content,
-      plugin: this.options.plugins
+      plugin: this.options.plugins,
+      onChange: () => {
+        options.onChange?.(this);
+      }
     });
 
     this.cmRenderer = new CodemirrorRenderer({
-      content: options.content
+      content: options.content,
+      onChange: () => {
+        options.onChange?.(this);
+      }
     });
   }
 
@@ -40,6 +47,14 @@ export class Marktion {
       this.renderer === 'SOURCE' ? this.cmRenderer.getContent() : this.pmRenderer.getContent();
 
     return content;
+  }
+
+  setContent(content: string) {
+    if (this.renderer === 'SOURCE') {
+      this.cmRenderer.setContent(content);
+    } else if (this.renderer === 'WYSIWYG') {
+      this.pmRenderer.setContent(content);
+    }
   }
 
   setRenderer(renderer: MarktionOptions['renderer'], force = false) {
@@ -62,12 +77,13 @@ export class Marktion {
         rootEl.appendChild(div);
 
         div.classList.add('wrapper-wysiwyg');
+
         this.pmRenderer.attachTo(div);
       } else {
         this.pmRenderer.setContent(content);
       }
 
-      this.pmRenderer.view.focus();
+      this.pmRenderer.focus();
     } else if (renderer === 'SOURCE') {
       if (!this.cmRenderer.view) {
         const div = document.createElement('div');
@@ -81,7 +97,7 @@ export class Marktion {
         this.cmRenderer.setContent(content);
       }
 
-      this.cmRenderer.view.focus();
+      this.cmRenderer.focus();
     }
 
     this.renderer = renderer;

@@ -1,4 +1,4 @@
-import { EditorView, EditorProps } from 'prosemirror-view';
+import { EditorView, EditorProps, DirectEditorProps } from 'prosemirror-view';
 import { EditorState, EditorStateConfig, Plugin } from 'prosemirror-state';
 import { dropCursor } from 'prosemirror-dropcursor';
 import { gapCursor } from 'prosemirror-gapcursor';
@@ -34,6 +34,7 @@ export class ProseMirrorRenderer {
     public options: {
       content: string;
       plugin?: EditorStateConfig['plugins'];
+      onChange?: () => void;
     }
   ) {
     this.state = EditorState.create({
@@ -100,10 +101,17 @@ export class ProseMirrorRenderer {
   attachTo(root: HTMLElement) {
     this.view = new EditorView(root, {
       state: this.state,
+      nodeViews: defaultNodeViews,
+      dispatchTransaction: tr => {
+        this.view.updateState(this.view.state.apply(tr));
+
+        if (tr.docChanged) {
+          this.options.onChange?.();
+        }
+      },
       editable(state) {
         return getEditable(state.tr);
-      },
-      nodeViews: defaultNodeViews
+      }
     });
 
     this.view.dom.classList.add('wysiwyg-editor');

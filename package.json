@@ -84,6 +84,7 @@
     "escape-string-regexp": "^5.0.0",
     "highlight.js": "^11.8.0",
     "is-promise": "^4.0.0",
+    "localforage": "^1.10.0",
     "lodash": "^4.17.21",
     "lowlight": "^2.9.0",
     "lucide-react": "^0.264.0",
