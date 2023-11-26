@@ -54,7 +54,7 @@ export function MarktionEditor(props: MarktionEditorProps) {
             const data = new FormData();
             data.set('file', files[0]);
 
-            const response = await axios(`http://localhost:3000/api/upload`, {
+            const response = await axios(`http://172.28.199.177:3402/api/upload`, {
               method: 'POST',
               data
             });
