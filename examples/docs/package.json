@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "axios": "^1.6.2",
     "dayjs": "^1.11.10",
     "marktion": "workspace:*",
     "nanoid": "^4.0.2",

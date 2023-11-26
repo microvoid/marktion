@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { Tag } from 'antd';
 import debounce from 'lodash/debounce';
 import { useEffect, useRef, useState } from 'react';
@@ -49,8 +50,19 @@ export function MarktionEditor(props: MarktionEditorProps) {
         content={defaultEditorContent}
         plugins={[ai.plugin]}
         uploadOptions={{
-          uploader(files, event, view) {
-            return defaultUploader(files, event, view);
+          async uploader(files, event, view) {
+            const data = new FormData();
+            data.set('file', files[0]);
+
+            const response = await axios(`http://localhost:3000/api/upload`, {
+              method: 'POST',
+              data
+            });
+
+            return view.state.schema.nodes.image.createAndFill({
+              src: response.data.url,
+              alt: files[0].name
+            })!;
           }
         }}
         onChange={editor => {
