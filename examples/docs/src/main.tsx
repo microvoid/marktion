@@ -39,7 +39,7 @@ function App() {
         </Col>
       </Row>
 
-      <Row justify="center" style={{ height: 'calc(100vh - 80px)', marginTop: 200 }}>
+      <Row justify="center" style={{ minHeight: 'calc(100vh - 80px)', marginTop: 100 }}>
         <Col xs={22}>
           <div style={{ maxWidth: 800, margin: '0 auto' }}>
             <MarktionEditor
