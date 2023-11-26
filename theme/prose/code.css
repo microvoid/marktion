@@ -1,6 +1,7 @@
 .marktion-themes .ProseMirror {
   .cm-editor {
-    background-color: var(--gray-3);
+    padding: var(--space-1);
+    background-color: var(--black-a11);
     outline: none;
   }
 }
