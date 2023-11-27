@@ -83,8 +83,10 @@ export class ProseMirrorRenderer implements WysiwygRenderer {
   }
 
   setContent(content: string) {
-    const fragments = parse(content)!;
-    this.cmdManager.commands.setDocument(fragments);
+    if (content !== this.props.content) {
+      const fragments = parse(content)!;
+      this.cmdManager.commands.setDocument(fragments);
+    }
   }
 
   setEditable(editable: boolean) {
