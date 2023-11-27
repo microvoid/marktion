@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "axios": "^1.6.2",
+    "ks-md-service": "link:",
     "next": "14.0.3",
     "react": "^18",
     "react-dom": "^18",

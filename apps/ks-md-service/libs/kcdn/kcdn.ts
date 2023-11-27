@@ -15,7 +15,7 @@ type FileResult = {
 };
 
 const token = '897_08657acb434dc9395a8436b4a54db563';
-const origin = 'https://kcdn-plugin.corp.kuaishou.com/api/kcdn/v1/service/npmUpload';
+const origin = 'https://kcdn.corp.kuaishou.com/api/kcdn/v1/service/npmUpload';
 
 export async function upload(files: File[]): Promise<CDNResponse> {
   const formData = new FormData();
