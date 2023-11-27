@@ -24,3 +24,5 @@ dist-site
 *.njsproj
 *.sln
 *.sw?
+
+apps/ks-md-service
