@@ -99,8 +99,6 @@ export class CodeMirrorNodeView implements NodeView {
   }
 
   update(node: ProsemirrorNode): boolean {
-    console.log(node);
-
     if (node.type !== this.node.type) {
       return false;
     }

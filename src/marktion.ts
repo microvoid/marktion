@@ -91,6 +91,7 @@ export class Marktion {
       content,
       theme
     });
+    this.getRenderer().focus();
 
     rootEl.setAttribute('data-renderer', renderer);
   }
