@@ -1,5 +1,5 @@
 import { EditorView } from 'prosemirror-view';
-import { EditorState, Plugin, PluginKey } from 'prosemirror-state';
+import { EditorState, Selection, Plugin, PluginKey } from 'prosemirror-state';
 import { getEditable } from '../core/meta';
 import { GptOptions } from '../react-components/ai/type';
 import { DEFAULT_CONTINUE_WRITING, DEFAULT_GPT_PROMPT } from './constants';
@@ -11,7 +11,7 @@ export type AIOptions = {
   enableQuickContinueWriting?: boolean;
   enableQuickQuestion?: boolean;
   enableAIChat?: boolean;
-  onAIChatOpenChange?: (open: boolean) => void;
+  onAIChatOpenChange?: (open: boolean, selection?: Selection) => void;
   onAttachAIChat?: (protal: HTMLElement) => void;
 };
 
@@ -70,7 +70,7 @@ export function AI(options: AIOptions = defaultAIOptions) {
             portal.style.width = rect.width + 'px';
             portal.style.height = rect.height + 'px';
 
-            options.onAIChatOpenChange?.(true);
+            options.onAIChatOpenChange?.(true, selection);
 
             return true;
           }

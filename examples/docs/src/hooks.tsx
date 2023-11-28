@@ -7,6 +7,8 @@ export type MainContextType = {
   draft: Article | null;
 
   refreshArticles: () => void;
+  deleteArticle: (id: string) => void;
+
   setArticles: React.Dispatch<React.SetStateAction<Article[]>>;
   setDraft: React.Dispatch<React.SetStateAction<Article | null>>;
 };
@@ -21,8 +23,13 @@ export function MainContextProvider({ children }: React.PropsWithChildren) {
   const [articles, setArticles] = useState<Article[]>([]);
   const [draft, setDraft] = useState<Article | null>(null);
 
-  const refreshArticles = useCallback(() => {
+  const refreshArticles = useCallback(async () => {
     api.getArticles().then(setArticles);
+  }, []);
+
+  const deleteArticle = useCallback(async (articleId: string) => {
+    await api.delArtcile(articleId);
+    refreshArticles();
   }, []);
 
   useEffect(() => {
@@ -37,6 +44,7 @@ export function MainContextProvider({ children }: React.PropsWithChildren) {
         setDraft,
         setArticles,
 
+        deleteArticle,
         refreshArticles
       }}
     >

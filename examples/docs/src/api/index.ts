@@ -21,6 +21,7 @@ export interface APIAdapter {
   createUser(input: Pick<User, 'avatar' | 'email' | 'username'>): Promise<User>;
   getLoginUser(): Promise<User>;
 
+  delArtcile(articleId: string): Promise<void>;
   getArticles(userId: string): Promise<Article[]>;
   upsertArticle(options: Pick<Article, 'content' | 'owner'>): Promise<Article>;
 }

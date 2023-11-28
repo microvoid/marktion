@@ -2,8 +2,7 @@ import { NodeViewConstructor } from 'prosemirror-view';
 import { Compartment } from '@codemirror/state';
 import { LanguageDescription } from '@codemirror/language';
 import { languages } from '@codemirror/language-data';
-// import { oneDark } from '@codemirror/theme-one-dark';
-import { syntaxHighlighting, defaultHighlightStyle } from '@codemirror/language';
+import { oneDark } from '@codemirror/theme-one-dark';
 import { minimalSetup } from 'codemirror';
 import { CodeMirrorNodeView } from './CodeMirrorNodeView';
 
@@ -14,7 +13,7 @@ export const codeblock: NodeViewConstructor = (node, view, getPos) => {
     node,
     view,
     toggleName: 'paragraph',
-    extensions: [languageConf.of([]), minimalSetup, syntaxHighlighting(defaultHighlightStyle)],
+    extensions: [languageConf.of([]), minimalSetup, oneDark],
     getPos: getPos as () => number,
     loadLanguage
   });

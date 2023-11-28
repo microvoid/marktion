@@ -1,6 +1,8 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { List } from 'antd';
+import { Divider, List, Space } from 'antd';
+import { PencilLineIcon, Trash2Icon } from 'lucide-react';
+
 import type { Article } from './api';
 import { useMainContextSelector } from './hooks';
 
@@ -32,12 +34,31 @@ function ArticleItem({
   article: Article;
   onEdit: (article: Article) => void;
 }) {
+  const deleteArticle = useMainContextSelector(ctx => ctx.deleteArticle);
+
   return (
     <List.Item
       actions={[
-        <span style={{ cursor: 'pointer' }} onClick={() => onEdit(article)}>
-          edit
-        </span>
+        <div style={{ display: 'flex', alignItems: 'center', userSelect: 'none' }}>
+          <PencilLineIcon
+            style={{ cursor: 'pointer' }}
+            onClick={() => onEdit(article)}
+            width={16}
+            height={16}
+          />
+
+          <Divider type="vertical" />
+
+          <Trash2Icon
+            style={{
+              cursor: 'pointer',
+              color: 'red'
+            }}
+            onClick={() => deleteArticle(article.id)}
+            width={16}
+            height={16}
+          />
+        </div>
       ]}
     >
       <List.Item.Meta

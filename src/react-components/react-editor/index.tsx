@@ -44,6 +44,10 @@ export const ReactEditor = React.forwardRef<ReactEditorRef, ReactEditorProps>((p
   }, [editor, props.onChange]);
 
   useEffect(() => {
+    editor.setTheme(dark ? 'dark' : 'light');
+  }, [editor, dark]);
+
+  useEffect(() => {
     if (rootRef.current && !editor.rootEl) {
       editor.mount(rootRef.current);
     }

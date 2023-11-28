@@ -245,6 +245,32 @@ export class CodeMirrorNodeView implements NodeView {
           return false;
         }
       },
+
+      {
+        key: 'Enter',
+        run: () => {
+          const ranges = this.cm.state.selection.ranges;
+
+          if (ranges.length > 1) {
+            return false;
+          }
+
+          const selection = ranges[0];
+
+          if (this.cm.state.doc.lines <= 1) {
+            return false;
+          }
+
+          if (selection.from === this.cm.state.doc.length) {
+            if (exitCode(this.view.state, this.view.dispatch)) {
+              this.view.focus();
+              return true;
+            }
+          }
+
+          return false;
+        }
+      },
       {
         key: 'Backspace',
         run: () => {

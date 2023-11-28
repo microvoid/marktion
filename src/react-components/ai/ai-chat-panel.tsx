@@ -1,21 +1,25 @@
-import { PopoverProps, Popover, Input, InputRef, Button, theme } from 'antd';
+import { useChat, Message } from 'ai/react';
+import { Selection } from 'prosemirror-state';
 import { SparklesIcon, SendHorizonalIcon } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useChat, Message } from 'ai/react';
+import { PopoverProps, Popover, Input, InputRef, Button, theme } from 'antd';
+
 import { GptOptions } from './type';
-import { usePMRenderer } from '../..';
-import { ChatMenu, ChatMenuKey, ChatMenuProps } from './ai-chat-menu';
-import { ChatMessages } from './ai-chat-messages';
 import { DEBUG_MESSAGE } from './DEBUG_utils';
+import { usePMRenderer } from '../../react-hooks';
+import { ChatMessages } from './ai-chat-messages';
+import { ChatMenu, ChatMenuKey, ChatMenuProps } from './ai-chat-menu';
+import { insertMessages } from './helper';
 
 export type AIChatPanelProps = PopoverProps & {
   gptConfig: GptOptions['config'];
+  selection: Selection | null;
 };
 
 // const defaultInitialMessages = DEBUG_MESSAGE;
 const defaultInitialMessages: Message[] = [];
 
-export function AIChatPanel({ children, gptConfig, ...popoverProps }: AIChatPanelProps) {
+export function AIChatPanel({ children, gptConfig, selection, ...popoverProps }: AIChatPanelProps) {
   const inputRef = useRef<InputRef>(null);
   const [chatMenuOpen, setChatMenuOpen] = useState(false);
   const chatMenuWrapperRef = useRef<HTMLDivElement>(null);
@@ -84,7 +88,7 @@ export function AIChatPanel({ children, gptConfig, ...popoverProps }: AIChatPane
     };
   }, [popoverProps.onOpenChange]);
 
-  const onSubmit = (e?: React.KeyboardEvent) => {
+  const onSubmit = (e?: React.KeyboardEvent | React.MouseEvent) => {
     if (isComposingInput) return;
     if (e?.shiftKey) return;
 
@@ -95,9 +99,7 @@ export function AIChatPanel({ children, gptConfig, ...popoverProps }: AIChatPane
     key => {
       if (key === ChatMenuKey.InsertToContent) {
         popoverProps.onOpenChange?.(false);
-
-        const markdown = messagesToMarkdown(messages);
-        pm.chain().focus().insertMarkdownAt(pm.state.selection, markdown).run();
+        insertMessages(pm, messages, selection);
       }
     },
     [pm, messages]
@@ -123,8 +125,9 @@ export function AIChatPanel({ children, gptConfig, ...popoverProps }: AIChatPane
       suffix={
         <Button
           loading={isLoading}
-          icon={<SendHorizonalIcon fontSize={14} />}
-          onClick={onSubmit as any}
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          icon={<SendHorizonalIcon width={16} height={16} />}
+          onClick={onSubmit}
         />
       }
       placeholder="OpenAI GPT-3 Playground"

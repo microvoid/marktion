@@ -12,7 +12,7 @@ import {
   TableIcon
 } from 'lucide-react';
 import { handleUpload } from '../../plugin-upload';
-import { ProseMirrorRenderer } from '../../prosemirror';
+import { ProseMirrorRenderer } from '../../renderer-prosemirror';
 import { SlashItemKey } from './constants';
 
 export type SlashItem = {
@@ -113,7 +113,7 @@ export const getDefaultSlashItems = (): SlashItem[] => {
           const files = input.files;
 
           if (files) {
-            handleUpload(editor.view, files, event, editor.options.uploadOptions);
+            handleUpload(editor.view, files, event, editor.props.uploadOptions);
           }
         };
 
