@@ -32,6 +32,15 @@ export class LocalAdapter implements APIAdapter {
     return articles || [];
   }
 
+  async delArtcile(id: string) {
+    const list = await this.getArticles();
+
+    await localforage.setItem(
+      'articles',
+      list.filter(item => item.id !== id)
+    );
+  }
+
   async upsertArticle(input: Pick<Article, 'content' | 'owner'>, id?: string): Promise<Article> {
     const list = await this.getArticles();
     const loginUser = await this.getLoginUser();

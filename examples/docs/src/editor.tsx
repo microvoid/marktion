@@ -56,7 +56,7 @@ export function MarktionEditor(props: MarktionEditorProps) {
         onChange={editor => {
           setLoading(true);
 
-          debouceSave({
+          debounceSave({
             editor,
             draft,
             onOk(article) {
@@ -81,7 +81,7 @@ export function MarktionEditor(props: MarktionEditorProps) {
   );
 }
 
-const debouceSave = debounce(handleSave, 500);
+const debounceSave = debounce(handleSave, 1000);
 
 async function handleSave({
   editor,
