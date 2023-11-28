@@ -2,7 +2,6 @@ import { unified } from 'unified';
 import type { Root } from 'mdast';
 import remarkParse from 'remark-parse';
 import remarkGfm from 'remark-gfm';
-import remarkStringify from 'remark-stringify';
 import type { Parent, Node as ASTNode } from 'unist';
 import type { Node as PMNode } from 'prosemirror-model';
 import { Formatter, FormatMdNode, ParseContext } from './formatter';
@@ -16,9 +15,10 @@ export function parse(source: string) {
 }
 
 function unifiedParse(source: string) {
-  const process = unified().use(remarkParse).use(remarkGfm).use(remarkStringify);
+  const process = unified().use(remarkParse).use(remarkGfm);
+  const parsed = process.parse(source);
 
-  return process.runSync(process.parse(source));
+  return process.runSync(parsed);
 }
 
 function toProseMirrorDoc(node: FormatMdNode, context: ParseContext = { paths: [] }): PMNode[] {
