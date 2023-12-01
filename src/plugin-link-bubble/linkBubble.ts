@@ -1,6 +1,13 @@
 import { EditorState, Plugin, PluginKey } from 'prosemirror-state';
 import { createPortal, getPortal } from '../plugin-portal';
-import { getMarkRange, getMarkType, isTextSelection, posToOffsetRect, Range } from '../core';
+import {
+  getMarkRange,
+  getMarkType,
+  isActive,
+  isTextSelection,
+  posToOffsetRect,
+  Range
+} from '../core';
 
 export type LinkBubbleState = {
   range: Range;
@@ -76,6 +83,10 @@ export function linkBubble(options: LinkBubbleOptions = {}) {
 
 export function getLinkBubbleState(state: EditorState) {
   const selection = state.selection;
+
+  if (!isActive(state, 'link')) {
+    return null;
+  }
 
   if (isTextSelection(selection)) {
     const range = getMarkRange(selection.$cursor!, getMarkType('link', state.schema));
