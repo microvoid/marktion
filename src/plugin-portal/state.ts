@@ -62,4 +62,8 @@ export class PortalSetState {
   getPortalMap() {
     return this.#portalMap;
   }
+
+  getPortalRoot() {
+    return this.#rootEl;
+  }
 }

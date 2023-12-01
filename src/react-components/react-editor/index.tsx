@@ -6,6 +6,7 @@ import { MarktionContext } from '../../react-hooks';
 import { event } from '../../plugin-event';
 import { useBubble, useLinkBubble } from '../bubble';
 import { useSlash } from '../slash';
+import { getPortalRoot } from '../../plugin-portal';
 
 export type ReactEditorProps = React.PropsWithChildren<
   MarktionOptions & {
@@ -76,7 +77,7 @@ export const ReactEditor = React.forwardRef<ReactEditorRef, ReactEditorProps>((p
       ref={rootRef}
     >
       <ConfigProvider
-        getPopupContainer={() => rootRef.current || document.body}
+        getPopupContainer={() => getPortalRoot(editor.pmRenderer.state) || document.body}
         theme={{
           token: {
             colorPrimary: '#654dc4'
