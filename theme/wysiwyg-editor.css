@@ -10,6 +10,7 @@
 @import './plugins/ai.css';
 @import './plugins/slash.css';
 @import './plugins/bubble.css';
+@import './plugins/linkBubble.css';
 @import './plugins/placeholder.css';
 
 .marktion-themes .wysiwyg-editor {

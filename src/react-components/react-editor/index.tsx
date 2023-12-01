@@ -4,7 +4,7 @@ import React, { useEffect, useImperativeHandle, useMemo, useRef } from 'react';
 import { Marktion, MarktionOptions } from '../../marktion';
 import { MarktionContext } from '../../react-hooks';
 import { event } from '../../plugin-event';
-import { useBubble } from '../bubble';
+import { useBubble, useLinkBubble } from '../bubble';
 import { useSlash } from '../slash';
 
 export type ReactEditorProps = React.PropsWithChildren<
@@ -21,11 +21,12 @@ export type ReactEditorRef = {
 export const ReactEditor = React.forwardRef<ReactEditorRef, ReactEditorProps>((props, ref) => {
   const { children, dark, className, ...options } = props;
   const rootRef = useRef<HTMLDivElement>(null);
-  const bubble = useBubble();
   const slash = useSlash();
+  const bubble = useBubble();
+  const linkBubble = useLinkBubble();
 
   const editor = useMemo(() => {
-    const internalPlugins = [bubble.plugin, slash.plugin, event()];
+    const internalPlugins = [bubble.plugin, linkBubble.plugin, slash.plugin, event()];
 
     return new Marktion({
       ...options,
@@ -84,6 +85,7 @@ export const ReactEditor = React.forwardRef<ReactEditorRef, ReactEditorProps>((p
         }}
       >
         <MarktionContext.Provider value={editor}>
+          {linkBubble.element}
           {bubble.element}
           {slash.element}
 
