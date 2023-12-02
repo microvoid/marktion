@@ -8,8 +8,8 @@ html, body {
   width: 100vw;
 }
 
-.marktion-editor > .wrapper-source .cm-editor,
-.marktion-editor > .wrapper-wysiwyg .wysiwyg-editor {
+.marktion-editor > .wrapper-source > .cm-editor,
+.marktion-editor > .wrapper-wysiwyg > .wysiwyg-editor {
   min-height: 400px;
 }
 
