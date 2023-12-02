@@ -151,6 +151,10 @@ function getBubbleChangeState(view: EditorView, prevState: EditorState): BubbleC
   const from = Math.min(...ranges.map(range => range.$from.pos));
   const to = Math.max(...ranges.map(range => range.$to.pos));
 
+  if (from === to) {
+    return null;
+  }
+
   return {
     view,
     state,

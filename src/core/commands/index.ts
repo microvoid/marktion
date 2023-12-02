@@ -19,6 +19,7 @@ export * from './setDocument';
 export * from './setMark';
 export * from './setMeta';
 export * from './setNode';
+export * from './setTextSelection';
 export * from './toggleBulletList';
 export * from './toggleList';
 export * from './toggleMark';

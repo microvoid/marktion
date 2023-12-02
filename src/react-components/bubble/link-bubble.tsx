@@ -17,6 +17,7 @@ export function useLinkBubble() {
     ? createPortal(
         <LinkBubble
           key={changeState && changeState.range.from + '-' + changeState.range.to}
+          changeState={changeState}
           open={open}
         />,
         portalEl
@@ -53,22 +54,38 @@ type FieldType = {
   url: string;
 };
 
-export function LinkBubble(props: Omit<PopoverProps, 'content'>) {
+type LinkBubbleProps = Omit<PopoverProps, 'content'> & {
+  changeState: LinkBubbleState;
+};
+
+export function LinkBubble({ changeState, ...popoverProps }: LinkBubbleProps) {
+  const pmRenderer = usePMRenderer();
+
   return (
     <Popover
       destroyTooltipOnHide
       trigger="click"
       arrow={false}
-      content={<LinkBubbleContent />}
+      content={
+        <LinkBubbleContent
+          onFinish={values => {
+            pmRenderer
+              .chain()
+              .setTextSelection(changeState?.range!)
+              .setLink({ href: values.url })
+              .run();
+          }}
+        />
+      }
       align={defaultPopoverAlign}
-      {...props}
+      {...popoverProps}
     >
       <div style={{ height: '100%' }}></div>
     </Popover>
   );
 }
 
-function LinkBubbleContent() {
+function LinkBubbleContent(props: { onFinish: (values: FieldType) => void }) {
   useEditorState(true);
   const pmRenderer = usePMRenderer();
   const [form] = Form.useForm<FieldType>();
@@ -85,10 +102,7 @@ function LinkBubbleContent() {
       initialValues={{ url: link.href }}
       autoComplete="off"
       size="small"
-      onFinish={values => {
-        console.log(values.url);
-        pmRenderer.chain().focus().setLink({ href: values.url }).run();
-      }}
+      onFinish={props.onFinish}
     >
       <Form.Item<FieldType>
         label="Url"

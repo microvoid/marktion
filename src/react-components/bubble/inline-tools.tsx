@@ -43,7 +43,19 @@ export function InlineTools(props: { showAI?: boolean }) {
     {
       name: 'link',
       isActive: () => isActive(editorState, 'link'),
-      command: () => pmRenderer.chain().focus().toggleLink({ href: '' }).run(),
+      command: () => {
+        const selection = pmRenderer.view.state.selection;
+
+        pmRenderer.chain().focus().toggleLink({ href: '' }).run();
+
+        setTimeout(() => {
+          pmRenderer
+            .chain()
+            .setTextSelection(Math.ceil(selection.from + selection.to) / 2)
+            .run();
+        }, 200);
+      },
+
       icon: <LinkIcon style={{ width: 14, height: 14 }} />
     }
   ];
