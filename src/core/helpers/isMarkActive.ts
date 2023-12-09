@@ -3,7 +3,7 @@ import { EditorState } from 'prosemirror-state';
 
 import { MarkRange } from '../types';
 import { objectIncludes } from '../utils';
-import { getMarkType } from './getMarkType.js';
+import { getMarkType } from './getMarkType';
 
 export function isMarkActive(
   state: EditorState,

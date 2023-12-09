@@ -3,6 +3,7 @@ export * from './createChainableState';
 export * from './createDocument';
 export * from './findParentNode';
 export * from './findParentNodeClosestToPos';
+export * from './getMarkRange';
 export * from './getMarkType';
 export * from './getSchemaTypeNameByName';
 export * from './getTextContentFromNodes';

@@ -63,13 +63,7 @@ function ArticleItem({
     >
       <List.Item.Meta
         description={
-          <div
-            style={{
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap'
-            }}
-          >
+          <div className="marktion-article-list">
             {`${timeFormat(article.createAt)}. ${getMarktionTitle(article.content)}`}
           </div>
         }

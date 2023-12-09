@@ -1,4 +1,8 @@
 .marktion-themes .ProseMirror {
+  .components-codeblock {
+    position: relative;
+  }
+
   .cm-editor {
     padding: var(--space-1);
     background-color: var(--black-a11);

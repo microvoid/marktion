@@ -43,3 +43,7 @@ export function getPortal(state: EditorState, key: string | Plugin | PluginKey) 
 export function getPortalMap(state: EditorState) {
   return getPortalSet(state).getPortalMap();
 }
+
+export function getPortalRoot(state: EditorState) {
+  return getPortalSet(state).getPortalRoot();
+}

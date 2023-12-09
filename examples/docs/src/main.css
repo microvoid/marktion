@@ -8,8 +8,8 @@ html, body {
   width: 100vw;
 }
 
-.marktion-editor > .wrapper-source .cm-editor,
-.marktion-editor > .wrapper-wysiwyg .wysiwyg-editor {
+.marktion-editor > .wrapper-source > .cm-editor,
+.marktion-editor > .wrapper-wysiwyg > .wysiwyg-editor {
   min-height: 400px;
 }
 
@@ -21,4 +21,11 @@ html, body {
   position: absolute;
   top: 10px;
   right: 10px;
+}
+
+.marktion-article-list {
+  overflow: hidden;
+  cursor: pointer;
+  text-overflow: ellipsis;
+  text-wrap: nowrap;
 }

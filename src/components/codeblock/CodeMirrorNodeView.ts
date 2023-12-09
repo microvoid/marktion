@@ -92,7 +92,12 @@ export class CodeMirrorNodeView implements NodeView {
     });
 
     // The editor's outer node is our DOM representation
-    this.dom = this.cm.dom;
+    const wrapper = view.dom.ownerDocument.createElement('div');
+
+    wrapper.classList.add('components-codeblock');
+    wrapper.appendChild(this.cm.dom);
+
+    this.dom = wrapper;
 
     // Try to find and load the language
     this.updateLanguage();
