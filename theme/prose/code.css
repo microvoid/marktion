@@ -8,4 +8,21 @@
     background-color: var(--black-a11);
     outline: none;
   }
+
+  .components-codeblock-setting {
+    position: absolute;
+    top: var(--space-1);
+    right: var(--space-1);
+  }
+
+  .components-codeblock-setting select {
+    width: var(--space-10);
+
+    border: 1px solid var(--white-a4);
+    border-radius: var(--radius-1);
+    outline: none;
+
+    color: var(--white-a10);
+    background-color: transparent;
+  }
 }

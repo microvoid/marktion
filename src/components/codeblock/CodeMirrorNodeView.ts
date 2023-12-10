@@ -10,6 +10,7 @@ import { EditorView, NodeView } from 'prosemirror-view';
 import { Selection, TextSelection } from 'prosemirror-state';
 import { Schema as EditorSchema, Node as ProsemirrorNode } from 'prosemirror-model';
 
+import { languages } from '@codemirror/language-data';
 import type { LanguageSupport } from '@codemirror/language';
 import {
   Compartment,
@@ -25,6 +26,8 @@ import {
 } from '@codemirror/view';
 import { indentWithTab } from '@codemirror/commands';
 import { replaceNodeAtPosition, assert } from '../../core/utils';
+import { SettingViewContext, createSettingView } from './view-setting';
+import { updateCodeblock } from './commands';
 
 type LoadLanguage = (lang: string) => Promise<LanguageSupport> | LanguageSupport | void;
 
@@ -41,6 +44,8 @@ export class CodeMirrorNodeView implements NodeView {
   private readonly languageConf: Compartment;
   private languageName: string;
   private readonly toggleName: string;
+
+  private settingViewContext: SettingViewContext;
 
   constructor({
     node,
@@ -93,14 +98,24 @@ export class CodeMirrorNodeView implements NodeView {
 
     // The editor's outer node is our DOM representation
     const wrapper = view.dom.ownerDocument.createElement('div');
+    this.settingViewContext = createSettingView({
+      langs: languages,
+      onLangChange: lang => {
+        updateCodeblock(node.type, {
+          language: lang
+        })(view.state, view.dispatch);
+      }
+    });
 
     wrapper.classList.add('components-codeblock');
     wrapper.appendChild(this.cm.dom);
+    wrapper.appendChild(this.settingViewContext.wrapperEl);
 
     this.dom = wrapper;
 
     // Try to find and load the language
     this.updateLanguage();
+    this.settingViewContext.update(node);
   }
 
   update(node: ProsemirrorNode): boolean {
@@ -110,6 +125,7 @@ export class CodeMirrorNodeView implements NodeView {
 
     this.node = node;
     this.updateLanguage();
+    this.settingViewContext.update(node);
     const change = computeChange(this.cm.state.doc.toString(), node.textContent);
 
     if (change) {
@@ -123,9 +139,7 @@ export class CodeMirrorNodeView implements NodeView {
     return true;
   }
 
-  private updateLanguage() {
-    const languageName = this.node.attrs.language;
-
+  private updateLanguage(languageName = this.node.attrs.language) {
     if (languageName === this.languageName) {
       return;
     }
@@ -179,6 +193,7 @@ export class CodeMirrorNodeView implements NodeView {
 
   destroy(): void {
     this.cm.destroy();
+    this.settingViewContext.destory();
   }
 
   /**
