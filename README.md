@@ -4,17 +4,18 @@
 
 ![](https://github.com/microvoid/marktion/blob/main/public/recorder.gif)
 
-Marktion is a WYSIWYG Markdown editor based on [tiptap](https://tiptap.dev/). It provides an intuitive way to edit and preview Markdown text, making it easier for users to create visually appealing documents.
+Marktion is a WYSIWYG Markdown editor based on ProseMirror, dedicated to enhancing the editing experience of Markdown.
 
 See our website [marktion.io](https://marktion.io) in action.
 
 ## Features
 
-- [NEW] ✨ AI Integration: Ready to use AI to assist in writing Markdown? Built-in AI Chat Panel UI, supports AI plugin extensions;
-- [NEW] SSR: Supports server-side high-performance rendering."
+- **\[NEW] ✨ AI integration**: Built-in AI conversation interface, supporting AI plugin extensions, invoked at the beginning of a line by pressing Space;
 
-- **WYSIWYG Editing**: Real-time preview of Markdown rendering for a more intuitive editing experience.
-- **Slash Menu** & **Bubble Menu**: Access commonly used formatting options and commands using a slash command menu, inspired by Notion's editor.
+- **WYSIWYG editing**: Real-time preview of Markdown rendering results, providing an intuitive editing experience, and you can switch between source code mode and WYSIWYG editing mode with Ctrl + /;
+
+- **Slash menu and Bubble menu**: Quickly inspired by the editor of Notion using /; Dark mode support: Support for turning on or off Dark mode.
+
 - **Dark Mode Support**: Enable Dark Mode to provide a visually comfortable editing experience in low-light environments.
 
 ## Installation and Usage
@@ -28,11 +29,11 @@ npm intall marktion
 2. Usage
 
 ```tsx
-import { Marktion } from 'marktion';
+import { ReactEditor } from 'marktion';
 import 'marktion/dist/style.css';
 
 function Editor() {
-  return <Marktion darkMode={isDarkMode} markdown={`# Hello World`} />;
+  return <ReactEditor content={`# Hello World`} />;
 }
 ```
 
@@ -42,40 +43,41 @@ Have a look at the examples to see [marktion.io](https://marktion.io) in action.
 
 ## API
 
-### MarktionProps
+### ReactEditorProps
 
-| **Property**  | **Description**                              | **Type**                                       | Default |
-| ------------- | -------------------------------------------- | ---------------------------------------------- | ------- |
-| markdown      | The initial Markdown content for the editor. | string                                         | -       |
-| darkmode      | Enable or disable Dark Mode in the editor.   | boolean                                        | false   |
-| onUploadImage | Callback function for uploading images.      | `(file: File, editor: Editor) => Promise<url>` | -       |
+| **Property**           | **Description**                              | **Type**                                                                                   | Default |
+| ---------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------ | ------- |
+| content                | The initial Markdown content for the editor. | string                                                                                     | -       |
+| dark                   | Enable or disable Dark Mode in the editor.   | boolean                                                                                    | false   |
+| uploadOptions.uploader | Callback function for uploading images.      | `(file: File, event: ClipboardEvent \| InputEvent, view: ProsemirrorView) => Promise<url>` | -       |
+| render                 | renderer mode                                | `WYSIWYG`\| `SOURCE`                                                                       |         |
+| onChange               | editor content change callback               | `(editor: Marktion) => void`                                                               |         |
 
 Consult [tiptap's documentation](https://tiptap.dev/installation/react) to find more APIs.
 
 ### MarktionRef
 
-| **Property** | **Description**                                                              | **Type**       | Default |
-| ------------ | ---------------------------------------------------------------------------- | -------------- | ------- |
-| getMarkdown  | A callback function that returns the current Markdown content of the editor. | `() => string` | -       |
-| editor       | tiptap editor instance, [read more](https://tiptap.dev/installation/react).  | Editor         | -       |
+| **Property** | **Description**   | **Type** | Default |
+| ------------ | ----------------- | -------- | ------- |
+| editor       | marktion instance | Marktion | -       |
 
 Example usage:
 
 ```tsx
-import { MarktionRef, Marktion } from 'marktion';
+import { ReactEditor, ReactEditorRef } from 'marktion';
 
 function App() {
-  const marktionRef = useRef<MarktionRef>(null);
+  const editorRef = useRef<ReactEditorRef>(null);
 
   const onExport = () => {
-    const content = marktionRef.current?.getMarkdown();
+    const content = editorRef.current?.editor.getContent();
     console.log(content);
   };
 
   return (
     <>
       <button onClick={onExport}>export</button>
-      <Marktion ref={marktionRef} />
+      <ReactEditor ref={editorRef} />
     </>
   );
 }
@@ -90,12 +92,15 @@ function App() {
 Example usage:
 
 ```tsx
-AIPlugin({
-  openai: {
-    basePath: 'https://api.openai.com/v1',
-    apiKey: 'KEY'
-  }
-});
+function Editor() {
+  const ai = useAI({
+    basePath: import.meta.env.VITE_OPENAI_BASE_URL
+  });
+
+  return (
+    <ReactEditor ref={editorRef} plugins={[ai.plugin]} />
+  )
+}
 ```
 
 ## Contributing
@@ -135,5 +140,6 @@ This project is licensed under the MIT License. See the [LICENSE](https://github
 
 If you have any questions, suggestions, or issues, feel free to reach out to us through the following channels:
 
-- Email: whistleryz@gmail.com
+- Email: <whistleryz@gmail.com>
+
 - Issue Tracker: Project Issues (Please specify the issue type in the issue title)
