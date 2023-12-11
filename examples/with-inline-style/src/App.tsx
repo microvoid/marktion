@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { MarktionSSR } from '../../../dist';
+import { ReactSSR } from 'marktion';
 
-import '../../../dist/style.css';
+import 'marktion/dist/style.css';
 
 const INIT_MARKDOWN = [import.meta.env.VITE_README_ZH, import.meta.env.VITE_README_EN];
 
@@ -21,7 +21,7 @@ function App() {
         中文/English
       </button>
 
-      <MarktionSSR markdown={INIT_MARKDOWN[lang]} className="inline-style" />
+      <ReactSSR content={INIT_MARKDOWN[lang]} data-scaling="90%" className="inline-style" />
     </div>
   );
 }

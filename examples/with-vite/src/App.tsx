@@ -1,15 +1,13 @@
-import { useMemo, useRef, useState } from 'react';
-import { getPlugins } from './plugins';
-import { Marktion, MarktionRef } from '../../../dist';
+import { useRef, useState } from 'react';
+import { ReactEditor, ReactEditorRef } from 'marktion';
 
-import '../../../dist/style.css';
+import 'marktion/dist/style.css';
 
 const INIT_MARKDOWN = [import.meta.env.VITE_README_ZH, import.meta.env.VITE_README_EN];
 
 function App() {
   const [lang, setLang] = useState(0);
-  const plugins = useMemo(() => getPlugins(), []);
-  const marktionRef = useRef<MarktionRef>(null);
+  const marktionRef = useRef<ReactEditorRef>(null);
 
   return (
     <div style={{ padding: 25 }}>
@@ -20,14 +18,14 @@ function App() {
 
           setLang(index);
 
-          marktionRef.current?.editor.commands.setMarkdwon(INIT_MARKDOWN[index]);
+          marktionRef.current?.editor.setContent(INIT_MARKDOWN[index]);
         }}
       >
         中文/English
       </button>
 
       <div>
-        <Marktion ref={marktionRef} markdown={INIT_MARKDOWN[lang]} plugins={plugins} />
+        <ReactEditor ref={marktionRef} content={INIT_MARKDOWN[lang]} />
       </div>
     </div>
   );

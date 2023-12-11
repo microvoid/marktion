@@ -9,7 +9,7 @@ import { useSlash } from '../slash';
 import { getPortalRoot } from '../../plugin-portal';
 
 export type ReactEditorProps = React.PropsWithChildren<
-  MarktionOptions & {
+  Partial<MarktionOptions> & {
     className?: string;
     dark?: boolean;
   }
@@ -31,6 +31,8 @@ export const ReactEditor = React.forwardRef<ReactEditorRef, ReactEditorProps>((p
 
     return new Marktion({
       ...options,
+      content: options.content || '',
+      renderer: options.renderer || 'WYSIWYG',
       plugins: internalPlugins.concat(options.plugins || [])
     });
   }, []);

@@ -319,6 +319,9 @@ importers:
 
   examples/with-inline-style:
     dependencies:
+      marktion:
+        specifier: workspace:^
+        version: link:../..
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -362,6 +365,9 @@ importers:
 
   examples/with-vite:
     dependencies:
+      marktion:
+        specifier: workspace:^
+        version: link:../..
       react:
         specifier: ^18.2.0
         version: 18.2.0

@@ -25,10 +25,21 @@ export function createSettingView(options: CreateSettingViewOptions): SettingVie
   langSelectorWrapperEl.classList.add('components-codeblock-setting');
   langSelectorWrapperEl.appendChild(langSelectorEl);
 
-  options.langs.forEach(lang => {
+  const langs = options.langs
+    .map(lang => {
+      const alias = lang.alias[0] || lang.name.toLowerCase();
+
+      return {
+        label: alias,
+        value: alias
+      };
+    })
+    .sort((a, b) => (a.value > b.value ? 1 : -1));
+
+  langs.forEach(lang => {
     const optionEl = document.createElement('option');
-    optionEl.value = lang.name.toLowerCase();
-    optionEl.text = lang.name;
+    optionEl.text = lang.label;
+    optionEl.value = lang.value;
 
     langSelectorEl.appendChild(optionEl);
   });

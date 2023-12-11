@@ -38,4 +38,12 @@
   &[data-renderer='SOURCE'] .wrapper-source {
     display: block;
   }
+
+  &.inline-style {
+    .wysiwyg-editor {
+      min-height: unset;
+      box-shadow: none;
+      padding: 0;
+    }
+  }
 }

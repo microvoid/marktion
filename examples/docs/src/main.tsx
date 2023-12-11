@@ -9,7 +9,7 @@ import { MarktionEditor } from './editor';
 import { Articles } from './article-list';
 import { MainContextProvider, useMainContextSelector } from './hooks';
 
-import 'marktion/dist/marktion.css';
+import 'marktion/dist/style.css';
 import './main.css';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
