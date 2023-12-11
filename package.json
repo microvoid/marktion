@@ -27,7 +27,6 @@
     "dist/"
   ],
   "dependencies": {
-    "@ant-design/cssinjs": "^1.11.1",
     "@codemirror/commands": "^6.3.0",
     "@codemirror/lang-markdown": "^6.2.2",
     "@codemirror/language": "^6.9.2",
@@ -83,6 +82,7 @@
     "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.27.1",
     "@tailwindcss/typography": "^0.5.9",
     "@types/file-saver": "^2.0.5",
     "@types/lodash": "^4.14.200",

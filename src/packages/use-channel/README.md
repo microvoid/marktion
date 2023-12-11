@@ -15,12 +15,11 @@ function Editor() {
     if (followArticle && followArticle != current) {
       setCurrent(followArticle);
     }
-
-  }, [channel, article])
+  }, [channel, article]);
 
   useEffect(() => {
     channel.message(props.value);
-  }, [props.value])
+  }, [props.value]);
 }
 ```
 
@@ -30,6 +29,6 @@ function ArticleList() {
 
   const onEditItem = () => {
     channel.message(props.value);
-  }
+  };
 }
 ```

@@ -23,6 +23,6 @@
     outline: none;
 
     color: var(--white-a10);
-    background-color: transparent;
+    background-color: var(--black-a11);
   }
 }

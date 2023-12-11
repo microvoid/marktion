@@ -87,7 +87,7 @@ AIPlugin({
     basePath: 'https://api.openai.com/v1',
     apiKey: 'KEY'
   }
-})
+});
 ```
 
 ## 贡献
