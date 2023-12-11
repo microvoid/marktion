@@ -1,13 +1,14 @@
 # Marktion
 
-Marktion 是一个基于 [tiptap](https://tiptap.dev/) 的所见即所得 Markdown 编辑器。它提供了一种直观的方式来编辑和预览 Markdown 文本，使用户能够创建具有视觉吸引力的文档。
+Marktion 是一个基于 prosemirror 的所见即所得 Markdown 编辑器，致力于 Markdown 的编辑体验提升。
 
-- **[NEW] ✨ AI 集成**：准备好使用 AI 辅助编写 Markdown 了吗？内置 AI 对话界面，支持 AI 插件扩展；
-- **[NEW]支持 SSR**：支持服务端高性能渲染
+- **\[NEW] ✨ AI 集成**：内置 AI 对话界面，支持 AI 插件扩展，在行首通过 `Space` 唤起；
 
-- **所见即所得编辑**：实时预览 Markdown 渲染结果，提供直观的编辑体验。
-- **Slash 菜单**和 **Bubble 菜单**：通过 Slash 命令菜单和 Bubble 菜单访问常用的格式化选项和命令，灵感来自 Notion 的编辑器。
-- **暗黑模式支持**：支持开启或关闭 Dark 模式，以提供在低光环境下的舒适编辑体验。
+- **所见即所得编辑**：实时预览 Markdown 渲染结果，提供直观的编辑体验，您可以通过 `Ctrl + /` 切换源码模式与所见即所得编辑模式。
+
+- **Slash 菜单**和 **Bubble 菜单**：通过 `/`  来快速灵感来自 Notion 的编辑器。
+
+- **暗黑模式支持**：支持开启或关闭 Dark 模式。
 
 ## 安装和使用
 
@@ -20,54 +21,56 @@ npm intall marktion
 2. 使用方法
 
 ```tsx
-import { Marktion } from 'marktion';
+import { ReactEditor } from 'marktion';
 import 'marktion/dist/style.css';
 
 function Editor() {
-  return <Marktion darkMode={isDarkMode} markdown={`# Hello World`} />;
+  return <ReactEditor content={`# Hello World`} />;
 }
 ```
 
 3. 示例
 
-您可以查看示例以查看 marktion.io 的实际应用。
+您可以查看示例以查看 [marktion.io](https://marktion.io/)  的实际应用。
 
 ## API
 
-### MarktionProps
+### ReactEditorProps
 
-| **属性**      | **描述**                   | **类型**                                       | **默认值** |
-| ------------- | -------------------------- | ---------------------------------------------- | ---------- |
-| markdown      | 编辑器的初始 Markdown 内容 | string                                         | -          |
-| darkmode      | 是否启用 Dark 模式         | boolean                                        | false      |
-| onUploadImage | 处理上传图片的回调函数     | `(file: File, editor: Editor) => Promise<url>` | -          |
+| **属性**                 | **描述**             | **类型**                                                                                     | **默认值** |
+| ---------------------- | ------------------ | ------------------------------------------------------------------------------------------ | ------- |
+| content                | 编辑器的初始 Markdown 内容 | string                                                                                     | -       |
+| dark                   | 是否启用 Dark 模式       | boolean                                                                                    | false   |
+| uploadOptions.uploader | 处理上传图片的回调函数        | `(file: File, event: ClipboardEvent \| InputEvent, view: ProsemirrorView) => Promise<url>` | -       |
+| renderer               | 渲染模式               | `WYSIWYG` \| `SOURCE`                                                                      |         |
+| onChange               | 当文档内容变化时回调         | `(editor: Marktion) => void`                                                               |         |
 
 请参考 [tiptap 的文档](https://tiptap.dev/installation/react) 以获取更多 API 信息。
 
 ### MarktionRef
 
-| **属性**    | **描述**                                                                 | **类型**       | **默认值** |
-| ----------- | ------------------------------------------------------------------------ | -------------- | ---------- |
-| getMarkdown | 返回当前编辑器中的 Markdown 内容                                         | `() => string` | -          |
-| editor      | tiptap 编辑器实例，[**了解更多**](https://tiptap.dev/installation/react) | Editor         | -          |
+| **属性**      | **描述**                    | **类型**         | **默认值** |
+| ----------- | ------------------------- | -------------- | ------- |
+| getMarkdown | 返回当前编辑器中的 Markdown 内容     | `() => string` | -       |
+| editor      | tiptap 编辑器实例，[**了解更多**]() | Editor         | -       |
 
 使用示例：
 
 ```tsx
-import { MarktionRef, Marktion } from 'marktion';
+import { ReactEditor, ReactEditorRef } from 'marktion';
 
 function App() {
-  const marktionRef = useRef<MarktionRef>(null);
+  const editorRef = useRef<ReactEditorRef>(null);
 
   const onExport = () => {
-    const content = marktionRef.current?.getMarkdown();
+    const content = editorRef.current?.getContent();
     console.log(content);
   };
 
   return (
     <>
       <button onClick={onExport}>export</button>
-      <Marktion ref={marktionRef} />
+      <ReactEditor ref={editorRef} />
     </>
   );
 }
@@ -82,12 +85,15 @@ function App() {
 使用示例:
 
 ```tsx
-AIPlugin({
-  openai: {
-    basePath: 'https://api.openai.com/v1',
-    apiKey: 'KEY'
-  }
+const ai = useAI({
+  basePath: import.meta.env.VITE_OPENAI_BASE_URL
 });
+
+function Editor() {
+  return (
+    <ReactEditor ref={editorRef} plugins={[ai.plugin]} />
+  )
+}
 ```
 
 ## 贡献
@@ -95,6 +101,7 @@ AIPlugin({
 感谢您考虑为 Marktion 做出贡献！如果您希望参与项目，请按照以下步骤：
 
 1. 将仓库 Fork 到您的 GitHub 账户。
+
 2. 将 Fork 的仓库克隆到本地机器。
 
 ```bash
@@ -109,7 +116,9 @@ pnpm i
 ```
 
 4. 进行更改并测试您的修改。
+
 5. 提交您的更改。
+
 6. 创建一个拉取请求。
 
 转到原始仓库并点击“New Pull Request”。填写必要的细节并描述您所做的更改。
@@ -124,5 +133,6 @@ pnpm i
 
 如果您有任何疑问、建议或问题，请随时通过以下方式联系我们：
 
-- 电子邮件：whistleryz@gmail.com
+- 电子邮件：<whistleryz@gmail.com>
+
 - Issue Tracker: 项目问题（请在问题标题中注明问题类型）
