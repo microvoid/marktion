@@ -63,7 +63,7 @@ function App() {
   const editorRef = useRef<ReactEditorRef>(null);
 
   const onExport = () => {
-    const content = editorRef.current?.getContent();
+    const content = editorRef.current?.editor.getContent();
     console.log(content);
   };
 
@@ -85,11 +85,11 @@ function App() {
 使用示例:
 
 ```tsx
-const ai = useAI({
-  basePath: import.meta.env.VITE_OPENAI_BASE_URL
-});
-
 function Editor() {
+  const ai = useAI({
+    basePath: import.meta.env.VITE_OPENAI_BASE_URL
+  });
+
   return (
     <ReactEditor ref={editorRef} plugins={[ai.plugin]} />
   )
