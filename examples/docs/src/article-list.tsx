@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { Divider, List, Space } from 'antd';
+import { Divider, List } from 'antd';
 import { PencilLineIcon, Trash2Icon } from 'lucide-react';
 
 import type { Article } from './api';

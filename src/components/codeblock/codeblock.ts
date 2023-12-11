@@ -22,7 +22,7 @@ export const codeblock: NodeViewConstructor = (node, view, getPos) => {
 };
 
 function loadLanguage(name: string) {
-  const lang = languageMap[name.toLowerCase()];
+  const lang = name && languageMap[name.toLowerCase()];
 
   if (!lang) {
     return;
