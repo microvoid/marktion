@@ -1,8 +1,9 @@
 import debounce from 'lodash/debounce';
 import ReactDOM from 'react-dom/client';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDarkMode } from 'usehooks-ts';
-import { ConfigProvider, theme as AntdTheme, Row, Col } from 'antd';
+import { GitHubLogoIcon } from '@radix-ui/react-icons';
+import { ConfigProvider, theme as AntdTheme, Row, Col, Tooltip, Button } from 'antd';
 
 import { Settings } from './settings';
 import { MarktionEditor } from './editor';
@@ -25,15 +26,36 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 function App() {
   const { isDarkMode } = useDarkMode();
   const token = AntdTheme.useToken();
+  const [tooltipOpen, setTooltipOpen] = useState(false);
   const articles = useMainContextSelector(ctx => ctx.articles);
   const refreshArticles = useMainContextSelector(ctx => ctx.refreshArticles);
   const debouceRefreshArticles = useMemo(() => debounce(refreshArticles, 2000), []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setTooltipOpen(true);
+    }, 2000);
+  }, []);
 
   return (
     <div className="marktion" style={{ backgroundColor: token.token.colorBgBase }}>
       <Row justify="center" align="middle" style={{ height: 80 }}>
         <Col md={20} xs={22}>
-          <Row justify="end">
+          <Row justify="space-between">
+            <Tooltip open={tooltipOpen} title="Star on Github" placement="right" color="purple">
+              <Button
+                type="default"
+                href="https://github.com/microvoid/marktion"
+                target="_blank"
+                icon={<GitHubLogoIcon />}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              ></Button>
+            </Tooltip>
+
             <Settings />
           </Row>
         </Col>
