@@ -118,6 +118,22 @@ export function buildKeymap(schema: MarkdownSchema, mapKeys?: { [key: string]: f
     chainCommands(sinkListItem(schema.nodes.list_item), sinkListItem(schema.nodes.task_item))
   );
 
+  bind('Tab', (state, dispatch) => {
+    chainCommands(sinkListItem(schema.nodes.list_item), sinkListItem(schema.nodes.task_item))(
+      state,
+      dispatch
+    );
+    return true;
+  });
+
+  bind('Shift-Tab', (state, dispatch) => {
+    chainCommands(liftListItem(schema.nodes.list_item), liftListItem(schema.nodes.task_item))(
+      state,
+      dispatch
+    );
+    return true;
+  });
+
   bind('Shift-Ctrl-0', setBlockType(schema.nodes.paragraph));
   bind('Shift-Ctrl-\\', setBlockType(schema.nodes.code_block));
 
