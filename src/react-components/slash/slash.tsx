@@ -86,16 +86,24 @@ export function Slash(props: SlashProps) {
           minWidth: 200
         },
         activeKey: items[selectedIndex]?.key,
-        onClick: ({ key }) => {
+        onSelect({ key }) {
           const index = items.findIndex(item => item.title === key);
           onSelectItem(index);
         },
-        items: items.map(item => {
+        onKeyDown: e => {
+          e.preventDefault();
+          e.stopPropagation();
+        },
+        items: items.map((item, index) => {
           return {
-            icon: <div className="slash-item-icon">{item.icon}</div>,
+            icon: (
+              <div className="slash-item-icon" onClick={() => onSelectItem(index)}>
+                {item.icon}
+              </div>
+            ),
             key: item.key,
             label: (
-              <div className="slash-item-caption">
+              <div className="slash-item-caption" onClick={() => onSelectItem(index)}>
                 <div className="slash-item-caption-title">
                   {item.title}
 
