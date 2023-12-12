@@ -1,7 +1,8 @@
 import { isActive } from '../../core';
 import { EditorState } from 'prosemirror-state';
-import { getDefaultSlashItems } from './getDefaultSlashItems';
+import { SlashItem, getDefaultSlashItems } from './getDefaultSlashItems';
 import { getTableSlashItems } from './getTableSlashItems';
+import { SlashItemKey } from '.';
 
 export const getSlashItems = (query?: string, state?: EditorState) => {
   if (!query || !state) {
@@ -25,3 +26,19 @@ export const getSlashItems = (query?: string, state?: EditorState) => {
     return true;
   });
 };
+
+export const SlashItemMap = (() => {
+  const items = getDefaultSlashItems();
+  const tableItems = getTableSlashItems();
+  const map = {} as Record<SlashItemKey, SlashItem>;
+
+  items.forEach(item => {
+    map[item.key] = item;
+  });
+
+  tableItems.forEach(item => {
+    map[item.key] = item;
+  });
+
+  return map;
+})();

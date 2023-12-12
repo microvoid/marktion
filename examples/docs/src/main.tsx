@@ -12,6 +12,7 @@ import { MainContextProvider, useMainContextSelector } from './hooks';
 
 import 'marktion/dist/style.css';
 import './main.css';
+import { FloatHelperBtn } from 'marktion';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -80,6 +81,8 @@ function App() {
           </div>
         </Col>
       </Row>
+
+      <FloatHelperBtn />
     </div>
   );
 }
