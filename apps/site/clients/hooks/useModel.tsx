@@ -8,7 +8,13 @@ export type ModelContextType = {
   model: {
     posts: Post[];
     postCount: number;
-    postsSearchParams: { page: number; pageSize: number };
+    postsFetchLoading: boolean;
+    postsSearchParams: {
+      page: number;
+      pageSize: number;
+      orderBy: 'createdAt' | 'updatedAt';
+      order: 'desc';
+    };
   };
   dispatch: Updater<ModelContextType['model']>;
   refreshPosts: () => void;
@@ -24,7 +30,10 @@ export function ModelContextProvider(props: React.PropsWithChildren) {
   const [model, dispatch] = useImmer<ModelContextType['model']>({
     posts: [],
     postCount: 0,
+    postsFetchLoading: false,
     postsSearchParams: {
+      orderBy: 'updatedAt',
+      order: 'desc',
       page: 0,
       pageSize: 10
     }
@@ -34,19 +43,31 @@ export function ModelContextProvider(props: React.PropsWithChildren) {
   modelRef.current = model;
 
   const refreshPosts = useCallback(async () => {
-    const res = await fetch<{ data: { posts: Post[]; count: number } }>({
-      url: '/api/post',
-      params: modelRef.current.postsSearchParams,
-      method: 'get'
-    });
-
-    const posts = res.data.data.posts || [];
-    const count = res.data.data.count || posts.length;
-
     dispatch(draft => {
-      draft.posts = posts;
-      draft.postCount = count;
+      draft.postsFetchLoading = true;
     });
+
+    try {
+      const res = await fetch<{ data: { posts: Post[]; count: number } }>({
+        url: '/api/post',
+        params: modelRef.current.postsSearchParams,
+        method: 'get'
+      });
+
+      const posts = res.data.data.posts || [];
+      const count = res.data.data.count || posts.length;
+
+      dispatch(draft => {
+        draft.posts = posts;
+        draft.postCount = count;
+        draft.postsFetchLoading = false;
+      });
+    } catch (err) {
+      console.error(err);
+      dispatch(draft => {
+        draft.postsFetchLoading = false;
+      });
+    }
   }, []);
 
   return (

@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid';
-import { Post } from '@prisma/client';
+import { Post, Prisma } from '@prisma/client';
 import { UserFirstMarkdown, ErrorUtils, prisma } from '@/libs';
 
 export async function initUserFirstPost(userId: string) {
@@ -48,17 +48,30 @@ export async function upsert(post: Partial<Post>, userId: string) {
   }
 }
 
-export function getPostsByUserId(userId: string, page = 0, pageSize = 10) {
+export const defaultGetPostsByUserIdOptions = {
+  page: 0,
+  pageSize: 10,
+  orderBy: {
+    createdAt: 'desc'
+  } as Prisma.PostOrderByWithRelationInput
+};
+export function getPostsByUserId(
+  userId: string,
+  input: Partial<typeof defaultGetPostsByUserIdOptions> = defaultGetPostsByUserIdOptions
+) {
+  const options = {
+    ...defaultGetPostsByUserIdOptions,
+    ...input
+  };
+
   return Promise.all([
     prisma.post.findMany({
-      take: pageSize,
-      skip: page * pageSize,
+      take: options.pageSize,
+      skip: options.page * options.pageSize,
       where: {
         userId
       },
-      orderBy: {
-        createdAt: 'desc'
-      },
+      orderBy: options.orderBy,
       include: {
         user: true
       }
