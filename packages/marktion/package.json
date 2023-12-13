@@ -9,16 +9,11 @@
   "author": "whistleryz@gmail.com",
   "contributors": [],
   "scripts": {
-    "dev": "pnpm run build && run-p dev:ts dev:docs dev:css",
+    "dev": "pnpm run build && run-p dev:ts dev:css",
     "dev:ts": "tsc -w",
     "dev:css": "postcss -w -o dist/style.css ./theme/index.css",
-    "dev:docs": "cd examples/docs && pnpm run dev",
-    "test": "vitest",
     "build": "tsc && postcss -o dist/style.css ./theme/index.css",
-    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "format": "pnpm run format:source && pnpm run format:other",
-    "format:other": "prettier ./**/*.{md,json,html} --write",
-    "format:source": "prettier ./**/*.{ts,tsx,js} --write"
+    "test": "vitest"
   },
   "type": "module",
   "module": "./dist/index.js",
