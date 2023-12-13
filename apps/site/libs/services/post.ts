@@ -1,8 +1,6 @@
 import { nanoid } from 'nanoid';
 import { Post } from '@prisma/client';
-import { prisma } from '@/libs';
-import { ErrorUtils } from '@/utils';
-import { UserFirstMarkdown } from '@/constants-server';
+import { UserFirstMarkdown, ErrorUtils, prisma } from '@/libs';
 
 export async function initUserFirstPost(userId: string) {
   return upsert(

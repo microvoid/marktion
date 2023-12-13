@@ -1,7 +1,8 @@
-import { UserService } from '@/services';
 import { User } from '@prisma/client';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
+
+import { UserService } from './services';
 
 const GUEST_SESSION_KEY = 'marktion-auth.guest-id';
 

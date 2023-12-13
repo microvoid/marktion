@@ -1,5 +1,5 @@
 import { PostService } from '@/services';
-import { MarktionSSR } from 'marktion/dist/marktion-ssr';
+import { ReactSSR } from 'marktion';
 
 export default async function PostDetail({ params: { slug } }: { params: { slug: string } }) {
   const post = await PostService.getPostBySlugId(slug);
@@ -9,7 +9,7 @@ export default async function PostDetail({ params: { slug } }: { params: { slug:
       <div className="max-w-screen-lg w-full mt-10">
         {/* <div className="mt-[50px] pb-[100px]"> */}
         <div className="mb-6">
-          <MarktionSSR markdown={post?.markdown!} />
+          <ReactSSR content={post?.markdown!} />
         </div>
       </div>
     </main>

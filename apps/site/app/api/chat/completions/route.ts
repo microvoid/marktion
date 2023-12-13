@@ -1,9 +1,9 @@
 import { CreateChatCompletionRequest, OpenAIApi } from 'openai-edge';
 import { StreamingTextResponse, OpenAIStream } from 'ai';
-import { limitFree } from '@/utils';
-import { getConfig } from './config';
+import { limitFree } from '@/libs/utils/ratelimit';
+import { getOpenAIConfig } from './config';
 
-const openai = new OpenAIApi(getConfig()!);
+const openai = new OpenAIApi(getOpenAIConfig()!);
 
 export const runtime = 'edge';
 

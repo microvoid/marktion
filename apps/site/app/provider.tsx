@@ -5,9 +5,9 @@ import { ThemeProvider, useTheme } from 'next-themes';
 import { ConfigProvider, theme as AntdTheme } from 'antd';
 import { StyleProvider, createCache, extractStyle } from '@ant-design/cssinjs';
 import { setCookie } from 'cookies-next';
-import { useLayoutEffect } from 'react';
+import React, { useLayoutEffect } from 'react';
 import dayjs from 'dayjs';
-import { GUEST_SESSION_KEY } from '@/constants';
+import { GUEST_SESSION_KEY } from '@/clients';
 import { User } from '@prisma/client';
 import { LoginUserContext } from './hooks';
 

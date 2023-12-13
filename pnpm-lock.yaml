@@ -108,6 +108,9 @@ importers:
       '@prisma/client':
         specifier: 5.0.0
         version: 5.0.0(prisma@5.0.0)
+      '@radix-ui/react-icons':
+        specifier: ^1.3.0
+        version: 1.3.0(react@18.2.0)
       '@types/node':
         specifier: 20.4.1
         version: 20.4.1
@@ -157,8 +160,8 @@ importers:
         specifier: ^4.17.21
         version: 4.17.21
       marktion:
-        specifier: link:../..
-        version: link:../..
+        specifier: workspace:*
+        version: link:../../packages/marktion
       nanoid:
         specifier: ^4.0.2
         version: 4.0.2
@@ -168,6 +171,9 @@ importers:
       next-themes:
         specifier: ^0.2.1
         version: 0.2.1(next@13.4.9)(react-dom@18.2.0)(react@18.2.0)
+      openai-edge:
+        specifier: ^1.2.2
+        version: 1.2.2
       postcss:
         specifier: 8.4.25
         version: 8.4.25
@@ -183,7 +189,13 @@ importers:
       typescript:
         specifier: 5.1.6
         version: 5.1.6
+      use-context-selector:
+        specifier: ^1.4.1
+        version: 1.4.1(react-dom@18.2.0)(react@18.2.0)(scheduler@0.23.0)
     devDependencies:
+      '@types/file-saver':
+        specifier: ^2.0.5
+        version: 2.0.5
       '@types/lodash':
         specifier: ^4.14.195
         version: 4.14.200
@@ -8619,6 +8631,11 @@ packages:
 
   /openai-edge@1.2.0:
     resolution: {integrity: sha512-eaQs+O/1k6OZMUibNlBzWPXdHFxpUNLMy4BwhtXCFDub5iz7ve/PxOJTL8GBG3/1S1j6LIL93xjdlzCPQpbdgQ==}
+    engines: {node: '>=18'}
+    dev: false
+
+  /openai-edge@1.2.2:
+    resolution: {integrity: sha512-C3/Ao9Hkx5uBPv9YFBpX/x59XMPgPUU4dyGg/0J2sOJ7O9D98kD+lfdOc7v/60oYo5xzMGct80uFkYLH+X2qgw==}
     engines: {node: '>=18'}
     dev: false
 

@@ -1,5 +1,4 @@
-import { AuthHandler } from '@/libs';
-import { PostService } from '@/services';
+import { PostService, AuthHandler } from '@/libs';
 
 export const DELETE = AuthHandler.validate<{ id: string }>(async (req, ctx) => {
   const postId = ctx.params.id;

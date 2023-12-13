@@ -1,5 +1,4 @@
-import { AuthHandler } from '@/libs';
-import { PostService } from '@/services';
+import { PostService, AuthHandler } from '@/libs';
 import { Post } from '@prisma/client';
 
 export const GET = AuthHandler.validate(async (req, ctx) => {

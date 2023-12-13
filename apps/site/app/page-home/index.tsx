@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import fetch from 'axios';
 import { Post } from '@prisma/client';
+import { useEffect, useState } from 'react';
 import { AntdProvider } from '../provider';
 import { Editor } from './editor';
 import { Header } from './header';
