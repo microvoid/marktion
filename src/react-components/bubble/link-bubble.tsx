@@ -6,7 +6,7 @@ import { Popover, PopoverProps, Button, Form, Input, Space } from 'antd';
 import { LinkBubbleState, linkBubble } from '../../plugin-link-bubble';
 import { useEditorState, usePMRenderer } from '../../react-hooks';
 
-const defaultPopoverAlign: PopoverProps['align'] = { offset: [0, -10] };
+const defaultPopoverAlign: PopoverProps['align'] = { offset: [0, 10] };
 
 export function useLinkBubble() {
   const [open, setOpen] = useState(false);
@@ -65,6 +65,7 @@ export function LinkBubble({ changeState, ...popoverProps }: LinkBubbleProps) {
     <Popover
       destroyTooltipOnHide
       trigger="click"
+      placement="bottom"
       arrow={false}
       content={
         <LinkBubbleContent

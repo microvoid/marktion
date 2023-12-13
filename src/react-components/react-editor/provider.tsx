@@ -1,5 +1,5 @@
 import { ConfigProvider, theme } from 'antd';
-import { violetA } from '@radix-ui/colors';
+import { violet } from '@radix-ui/colors';
 
 import { Marktion } from '../../marktion';
 import { MarktionContext } from '../../react-hooks';
@@ -13,10 +13,7 @@ export function ReactEditorProvider({ editor, dark, children }: ReactEditorProvi
       getPopupContainer={() => getPortalRoot(editor.pmRenderer.state) || document.body}
       theme={{
         token: {
-          colorLinkHover: violetA.violetA5,
-          colorLinkActive: violetA.violetA5,
-          colorLink: violetA.violetA6,
-          colorPrimary: violetA.violetA6
+          colorPrimary: '#722ed1'
         },
         algorithm: dark ? theme.darkAlgorithm : theme.defaultAlgorithm
       }}
