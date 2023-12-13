@@ -9,7 +9,7 @@
   "author": "whistleryz@gmail.com",
   "contributors": [],
   "scripts": {
-    "dev": "pnpm run build && run-p dev:ts dev:css",
+    "dev": "run-p dev:ts dev:css",
     "dev:ts": "tsc -w",
     "dev:css": "postcss -w -o dist/style.css ./theme/index.css",
     "build": "tsc && postcss -o dist/style.css ./theme/index.css",
