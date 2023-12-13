@@ -1,4 +1,4 @@
-import { PostService } from '@/services';
+import { PostService } from '@/libs';
 import { ReactSSR } from 'marktion';
 
 export default async function PostDetail({ params: { slug } }: { params: { slug: string } }) {

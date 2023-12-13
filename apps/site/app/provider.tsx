@@ -7,15 +7,14 @@ import { StyleProvider, createCache, extractStyle } from '@ant-design/cssinjs';
 import { setCookie } from 'cookies-next';
 import React, { useLayoutEffect } from 'react';
 import dayjs from 'dayjs';
-import { GUEST_SESSION_KEY } from '@/clients';
+import { LoginUserContext, GUEST_SESSION_ID, ModelContextProvider } from '@/clients';
 import { User } from '@prisma/client';
-import { LoginUserContext } from './hooks';
 
 export function Provider({ children, user }: React.PropsWithChildren<{ user: User }>) {
   useLayoutEffect(() => {
     if (user.anonymous) {
-      setCookie(GUEST_SESSION_KEY, user.id, {
-        expires: dayjs().add(2, 'year').toDate(),
+      setCookie(GUEST_SESSION_ID, user.id, {
+        expires: dayjs().add(5, 'year').toDate(),
         path: '/'
       });
     }
@@ -30,7 +29,19 @@ export function Provider({ children, user }: React.PropsWithChildren<{ user: Use
 
 export function AntdProvider({ children }: React.PropsWithChildren) {
   const cache = createCache();
-  const withConfig = <AntdConfigProvider>{children}</AntdConfigProvider>;
+  const { theme } = useTheme();
+
+  const darkMode = theme === 'dark';
+
+  const withConfig = (
+    <ConfigProvider
+      theme={{
+        algorithm: darkMode ? AntdTheme.darkAlgorithm : AntdTheme.defaultAlgorithm
+      }}
+    >
+      <ModelContextProvider>{children}</ModelContextProvider>
+    </ConfigProvider>
+  );
 
   renderToString(<StyleProvider cache={cache}>{withConfig}</StyleProvider>);
 
@@ -40,20 +51,5 @@ export function AntdProvider({ children }: React.PropsWithChildren) {
 
       {withConfig}
     </>
-  );
-}
-
-function AntdConfigProvider({ children }: React.PropsWithChildren) {
-  const { theme } = useTheme();
-  const darkMode = theme === 'dark';
-
-  return (
-    <ConfigProvider
-      theme={{
-        algorithm: darkMode ? AntdTheme.darkAlgorithm : AntdTheme.defaultAlgorithm
-      }}
-    >
-      {children}
-    </ConfigProvider>
   );
 }

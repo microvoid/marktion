@@ -1,10 +1,9 @@
 import { User } from '@prisma/client';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
+import { GUEST_SESSION_ID } from '@/common';
 
 import { UserService } from './services';
-
-const GUEST_SESSION_KEY = 'marktion-auth.guest-id';
 
 type AuthUserhandlerCtx<T> = {
   user: User;
@@ -41,12 +40,13 @@ export function error(message: string, code = -1) {
 
 export async function isAuthorized() {
   const cookieStore = cookies();
-  const guestCookie = cookieStore.get(GUEST_SESSION_KEY);
+  const guestCookie = cookieStore.get(GUEST_SESSION_ID);
 
   if (guestCookie?.value) {
     const guest = await UserService.getUser(guestCookie?.value);
     return guest;
   }
+
   return null;
 }
 

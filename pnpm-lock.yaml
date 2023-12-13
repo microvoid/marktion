@@ -103,7 +103,7 @@ importers:
   apps/site:
     dependencies:
       '@ant-design/cssinjs':
-        specifier: ^1.11.1
+        specifier: ^1.17.5
         version: 1.17.5(react-dom@18.2.0)(react@18.2.0)
       '@prisma/client':
         specifier: 5.0.0
