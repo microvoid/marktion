@@ -1,6 +1,6 @@
 import { User } from '@prisma/client';
 import { cookies } from 'next/headers';
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import { GUEST_SESSION_ID } from '@/common';
 
 import { UserService } from './services';
@@ -10,10 +10,10 @@ type AuthUserhandlerCtx<T> = {
   params: T;
 };
 
-type AuthUserhandler<T = any> = (req: Request, ctx: AuthUserhandlerCtx<T>) => any;
+type AuthUserhandler<T = any> = (req: NextRequest, ctx: AuthUserhandlerCtx<T>) => any;
 
 export function validate<T>(handler: AuthUserhandler<T>) {
-  return async (req: Request, { params }: { params: T }) => {
+  return async (req: NextRequest, { params }: { params: T }) => {
     const user = await isAuthorized();
 
     if (!user) {

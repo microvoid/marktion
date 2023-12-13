@@ -1,6 +1,5 @@
 'use client';
 
-import { renderToString } from 'react-dom/server';
 import { ThemeProvider, useTheme } from 'next-themes';
 import { ConfigProvider, theme as AntdTheme } from 'antd';
 import { StyleProvider, createCache, extractStyle } from '@ant-design/cssinjs';
@@ -9,6 +8,8 @@ import React, { useLayoutEffect } from 'react';
 import dayjs from 'dayjs';
 import { LoginUserContext, GUEST_SESSION_ID, ModelContextProvider } from '@/clients';
 import { User } from '@prisma/client';
+import type Entity from '@ant-design/cssinjs/es/Cache';
+import { useServerInsertedHTML } from 'next/navigation';
 
 export function Provider({ children, user }: React.PropsWithChildren<{ user: User }>) {
   useLayoutEffect(() => {
@@ -22,18 +23,35 @@ export function Provider({ children, user }: React.PropsWithChildren<{ user: Use
 
   return (
     <ThemeProvider attribute="class">
-      <LoginUserContext.Provider value={user}>{children}</LoginUserContext.Provider>
+      <StyledComponentsRegistry>
+        <AntdProvider>
+          <LoginUserContext.Provider value={user}>{children}</LoginUserContext.Provider>
+        </AntdProvider>
+      </StyledComponentsRegistry>
     </ThemeProvider>
   );
 }
 
-export function AntdProvider({ children }: React.PropsWithChildren) {
-  const cache = createCache();
-  const { theme } = useTheme();
+function StyledComponentsRegistry({ children }: React.PropsWithChildren) {
+  const cache = React.useMemo<Entity>(() => createCache(), []);
+  const isServerInserted = React.useRef<boolean>(false);
 
+  useServerInsertedHTML(() => {
+    if (isServerInserted.current) {
+      return;
+    }
+    isServerInserted.current = true;
+    return <style id="antd" dangerouslySetInnerHTML={{ __html: extractStyle(cache, true) }} />;
+  });
+
+  return <StyleProvider cache={cache}>{children}</StyleProvider>;
+}
+
+export function AntdProvider({ children }: React.PropsWithChildren) {
+  const { theme } = useTheme();
   const darkMode = theme === 'dark';
 
-  const withConfig = (
+  return (
     <ConfigProvider
       theme={{
         algorithm: darkMode ? AntdTheme.darkAlgorithm : AntdTheme.defaultAlgorithm
@@ -41,15 +59,5 @@ export function AntdProvider({ children }: React.PropsWithChildren) {
     >
       <ModelContextProvider>{children}</ModelContextProvider>
     </ConfigProvider>
-  );
-
-  renderToString(<StyleProvider cache={cache}>{withConfig}</StyleProvider>);
-
-  return (
-    <>
-      <style id="antd" dangerouslySetInnerHTML={{ __html: extractStyle(cache, true) }}></style>
-
-      {withConfig}
-    </>
   );
 }

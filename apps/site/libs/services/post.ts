@@ -48,22 +48,29 @@ export async function upsert(post: Partial<Post>, userId: string) {
   }
 }
 
-export function getPostsByUserId(userId: string, cursorId?: string, take = 15) {
-  return prisma.post.findMany({
-    cursor: cursorId
-      ? {
-          id: cursorId
-        }
-      : undefined,
-    take,
+export function getPostsByUserId(userId: string, page = 0, pageSize = 10) {
+  return Promise.all([
+    prisma.post.findMany({
+      take: pageSize,
+      skip: page * pageSize,
+      where: {
+        userId
+      },
+      orderBy: {
+        createdAt: 'desc'
+      },
+      include: {
+        user: true
+      }
+    }),
+    countPostsByUserId(userId)
+  ]);
+}
+
+export function countPostsByUserId(userId: string) {
+  return prisma.post.count({
     where: {
       userId
-    },
-    orderBy: {
-      createdAt: 'desc'
-    },
-    include: {
-      user: true
     }
   });
 }
