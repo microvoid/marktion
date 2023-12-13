@@ -103,8 +103,20 @@ export function Editor({ defaultPost, onResetEditor }: EditorProps) {
         plugins={[ai.plugin]}
         content={post?.markdown || ''}
         uploadOptions={{
-          uploader(files, event, view) {
-            return defaultUploader(files, event, view);
+          async uploader(files, event, view) {
+            const data = new FormData();
+            data.set('file', files[0]);
+            data.set('filename', files[0].name);
+
+            const response = await fetch<{ data: { url: string } }>(`/api/upload`, {
+              method: 'POST',
+              data
+            });
+
+            return view.state.schema.nodes.image.createAndFill({
+              src: response.data.data.url,
+              alt: files[0].name
+            })!;
           }
         }}
         onChange={marktion => {
