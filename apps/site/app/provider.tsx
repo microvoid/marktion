@@ -40,7 +40,9 @@ function StyledComponentsRegistry({ children }: React.PropsWithChildren) {
     if (isServerInserted.current) {
       return;
     }
+
     isServerInserted.current = true;
+
     return <style id="antd" dangerouslySetInnerHTML={{ __html: extractStyle(cache, true) }} />;
   });
 
@@ -54,6 +56,9 @@ export function AntdProvider({ children }: React.PropsWithChildren) {
   return (
     <ConfigProvider
       theme={{
+        token: {
+          colorPrimary: '#722ed1'
+        },
         algorithm: darkMode ? AntdTheme.darkAlgorithm : AntdTheme.defaultAlgorithm
       }}
     >

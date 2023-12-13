@@ -7,14 +7,15 @@ import { Post } from '@prisma/client';
 import { debounce } from 'lodash';
 import fetch from 'axios';
 import { PostHandler } from '@/clients';
+import { RocketIcon } from '@radix-ui/react-icons';
+import { Button } from 'antd';
 
 export type EditorProps = {
   defaultPost?: Post;
-  mode?: 'create' | 'preview';
   onResetEditor?: () => void;
 };
 
-export function Editor({ defaultPost, mode = 'preview', onResetEditor }: EditorProps) {
+export function Editor({ defaultPost, onResetEditor }: EditorProps) {
   const marktionRef = useRef<ReactEditorRef>(null);
   const { theme } = useTheme();
   const [isSaving, setIsSaving] = React.useState(false);
@@ -34,8 +35,8 @@ export function Editor({ defaultPost, mode = 'preview', onResetEditor }: EditorP
     setPost(undefined);
     setIsSaving(false);
 
-    onResetEditor?.();
     marktionRef.current?.editor.setContent('');
+    onResetEditor?.();
   };
 
   const onUpdateOrCreatePost = useMemo(
@@ -71,26 +72,51 @@ export function Editor({ defaultPost, mode = 'preview', onResetEditor }: EditorP
     [postId]
   );
 
-  return (
-    <ReactEditor
-      ref={marktionRef}
-      dark={isDarkMode}
-      plugins={[ai.plugin]}
-      content={post?.markdown || ''}
-      uploadOptions={{
-        uploader(files, event, view) {
-          return defaultUploader(files, event, view);
-        }
-      }}
-      onChange={marktion => {
-        const content = marktion.getContent();
-        const title = getMarktionTitle(content);
+  const postUrl = post ? `${location.origin}/p/${post.slug}` : '';
 
-        onUpdateOrCreatePost(content, title);
-      }}
-    >
-      {ai.element}
-    </ReactEditor>
+  return (
+    <>
+      {!defaultPost && (
+        <div className="h-[40px] flex justify-end items-center mb-1">
+          {postUrl && (
+            <Button
+              type="text"
+              loading={isSaving}
+              className="underline"
+              target="_blank"
+              onClick={onReset}
+              icon={<RocketIcon className="inline-block" />}
+            >
+              {/* {postId && (
+              <>
+                <OpenInNewWindowIcon className="inline mr-1" />
+                Link({post?.slug})
+              </>
+            )} */}
+            </Button>
+          )}
+        </div>
+      )}
+      <ReactEditor
+        ref={marktionRef}
+        dark={isDarkMode}
+        plugins={[ai.plugin]}
+        content={post?.markdown || ''}
+        uploadOptions={{
+          uploader(files, event, view) {
+            return defaultUploader(files, event, view);
+          }
+        }}
+        onChange={marktion => {
+          const content = marktion.getContent();
+          const title = getMarktionTitle(content);
+
+          onUpdateOrCreatePost(content, title);
+        }}
+      >
+        {ai.element}
+      </ReactEditor>
+    </>
   );
 }
 

@@ -25,7 +25,7 @@ export function Home() {
       <div className="max-w-screen-lg w-full mt-10">
         {/* <div className="mt-[50px] pb-[100px]"> */}
         <div className="mb-6">
-          <Editor mode="create" onResetEditor={refreshPosts} />
+          <Editor onResetEditor={refreshPosts} />
         </div>
 
         {posts.length > 0 && (
