@@ -1,4 +1,4 @@
-import { AuthHandler, uploadR2 } from '@/libs';
+import { AuthHandler, fileService } from '@/libs';
 
 export const POST = AuthHandler.validate(async (req, ctx) => {
   const form = await req.formData();
@@ -7,9 +7,12 @@ export const POST = AuthHandler.validate(async (req, ctx) => {
   const file = form.get('file') as File;
 
   const buffer = await file.arrayBuffer();
-  const url = await uploadR2(filename, buffer as Buffer);
-
-  return AuthHandler.success({
-    url
+  const result = await fileService.createFile(buffer as Buffer, {
+    filename,
+    size: file.size,
+    userId: ctx.user.id,
+    projectId: null
   });
+
+  return AuthHandler.success(result);
 });

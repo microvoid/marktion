@@ -46,6 +46,8 @@ model User {
   Post      Post[]
 
   anonymous Boolean @default(false)
+  File      File[]
+  Tag       Tag[]
 }
 
 model Session {
@@ -85,6 +87,7 @@ model Project {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  File      File[]
 }
 
 model ProjectUsers {
@@ -110,11 +113,13 @@ model Post {
   image       String?
   publicStats PostPublicStats @default(public)
 
-  project   Project? @relation(fields: [projectId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  projectId String?
-
+  // User who created the post
   user   User?   @relation(fields: [userId], references: [id])
   userId String?
+
+  // Project that the post belongs to
+  project   Project? @relation(fields: [projectId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  projectId String?
 
   clicks Int @default(0) // number of clicks
 
@@ -136,8 +141,13 @@ model Tag {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  project   Project @relation(fields: [projectId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  projectId String
+  // User who created the tag
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String?
+
+  // Project that the tag belongs to
+  project   Project? @relation(fields: [projectId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  projectId String?
 
   @@unique([name, projectId])
   @@index(projectId)
@@ -154,11 +164,31 @@ model SentEmail {
   id        String    @id @default(cuid())
   type      EmailType
   createdAt DateTime  @default(now())
-  user      User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String?
-  project   Project?  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  project   Project? @relation(fields: [projectId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   projectId String?
 
-  @@index([userId])
+  User   User?   @relation(fields: [userId], references: [id])
+  userId String?
+
   @@index([projectId])
+}
+
+enum FileUploader {
+  cloudflareR2
+}
+
+model File {
+  id       String @id @default(cuid())
+  filename String
+  url      String
+  size     Float
+
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String?
+
+  project   Project? @relation(fields: [projectId], references: [id])
+  projectId String?
+
+  uploader FileUploader @default(cloudflareR2)
 }
