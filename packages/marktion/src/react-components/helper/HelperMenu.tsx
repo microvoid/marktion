@@ -1,6 +1,6 @@
 import type { MenuProps, DropdownProps } from 'antd';
 import { Dropdown, Tag } from 'antd';
-import { SystemShortcutKey, SystemShortcutMap } from './constants';
+import { SystemShortcutType, SystemShortcuts } from './constants';
 import { SlashItem, getDefaultSlashItems } from '../slash';
 
 const defaultSlashItems = getDefaultSlashItems().filter(item => item.syntax);
@@ -10,7 +10,7 @@ const items: MenuProps['items'] = [
     key: 'system-syntax',
     type: 'group',
     label: 'System Shortcut',
-    children: [getSystemMenuItem(SystemShortcutKey.ToggleSourceMode)]
+    children: SystemShortcuts.map(getSystemMenuItem)
   },
   {
     key: '2',
@@ -30,9 +30,7 @@ export function HelperMenu(props: Omit<DropdownProps, 'menu'>) {
   );
 }
 
-function getSystemMenuItem(key: SystemShortcutKey): NonNullable<MenuProps['items']>[number] {
-  const item = SystemShortcutMap[key];
-
+function getSystemMenuItem(item: SystemShortcutType): NonNullable<MenuProps['items']>[number] {
   return {
     key: item.key,
     label: (

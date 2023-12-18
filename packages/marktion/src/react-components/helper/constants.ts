@@ -1,5 +1,6 @@
 export enum SystemShortcutKey {
-  ToggleSourceMode
+  ToggleSourceMode,
+  AIChat
 }
 
 export type SystemShortcutType = {
@@ -10,6 +11,12 @@ export type SystemShortcutType = {
 };
 
 export const SystemShortcuts: SystemShortcutType[] = [
+  {
+    key: SystemShortcutKey.AIChat,
+    title: 'Ask AI(at the line beginning)',
+    description: 'Ask AI',
+    syntax: 'Space'
+  },
   {
     key: SystemShortcutKey.ToggleSourceMode,
     title: 'Toggle source mode',
