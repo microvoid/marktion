@@ -1,5 +1,7 @@
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { CloudflareR2Constants } from '@/libs';
+import * as path from 'path';
+import { nanoid } from 'nanoid';
 
 const r2 = new S3Client({
   region: 'auto',
@@ -11,7 +13,7 @@ const r2 = new S3Client({
 });
 
 export async function uploadR2(filename: string, file: Buffer, basePath = 'static/uploaded/') {
-  const Key = basePath + filename;
+  const Key = basePath + `${nanoid()}${path.extname(filename)}`;
 
   await r2.send(
     new PutObjectCommand({

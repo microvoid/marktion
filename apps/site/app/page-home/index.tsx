@@ -1,10 +1,12 @@
 'use client';
 
 import { useEffect } from 'react';
-import { Editor } from './editor';
-import { Header } from './header';
 import { Pagination, Select, Spin } from 'antd';
 import { useModelSelector } from '@/clients';
+import { FloatHelperBtn } from 'marktion';
+
+import { Editor } from './editor';
+import { Header } from './header';
 
 export function Home() {
   const posts = useModelSelector(ctx => ctx.model.posts);
@@ -67,6 +69,8 @@ export function Home() {
             );
           })}
         </Spin>
+
+        <FloatHelperBtn />
       </div>
     </>
   );
