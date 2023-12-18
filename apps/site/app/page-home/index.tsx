@@ -18,6 +18,7 @@ export function Home() {
 
   useEffect(() => {
     refreshPosts();
+    document.documentElement.scrollTop = 0;
   }, [postsSearchParams]);
 
   return (
@@ -67,6 +68,20 @@ export function Home() {
               </section>
             );
           })}
+
+          <div className="flex justify-end">
+            <Pagination
+              defaultCurrent={postsSearchParams.page + 1}
+              pageSize={postsSearchParams.pageSize}
+              total={postCount}
+              onChange={(page, pageSize) => {
+                dispatch(draft => {
+                  draft.postsSearchParams.page = Math.max(page - 1, 0);
+                  draft.postsSearchParams.pageSize = pageSize;
+                });
+              }}
+            />
+          </div>
         </Spin>
       </div>
 

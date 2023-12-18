@@ -80,19 +80,14 @@ export function Editor({ defaultPost, onResetEditor }: EditorProps) {
         <div className="h-[40px] flex justify-end items-center mb-1">
           {postUrl && (
             <Button
-              type="text"
+              type="default"
               loading={isSaving}
               className="underline"
               target="_blank"
               onClick={onReset}
               icon={<RocketIcon className="inline-block" />}
             >
-              {/* {postId && (
-              <>
-                <OpenInNewWindowIcon className="inline mr-1" />
-                Link({post?.slug})
-              </>
-            )} */}
+              Save
             </Button>
           )}
         </div>
