@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useDarkMode } from 'usehooks-ts';
 import { GitHubLogoIcon } from '@radix-ui/react-icons';
 import { ConfigProvider, theme as AntdTheme, Row, Col, Tooltip, Button } from 'antd';
+import { FloatHelperBtn } from 'marktion';
 
 import { Settings } from './settings';
 import { MarktionEditor } from './editor';
@@ -12,7 +13,6 @@ import { MainContextProvider, useMainContextSelector } from './hooks';
 
 import 'marktion/dist/style.css';
 import './main.css';
-import { FloatHelperBtn } from 'marktion';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>

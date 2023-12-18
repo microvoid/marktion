@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { Pagination, Select, Spin } from 'antd';
 import { useModelSelector } from '@/clients';
-import { FloatHelperBtn } from 'marktion';
+import { Footer } from '@/components';
 
 import { Editor } from './editor';
 import { Header } from './header';
@@ -24,7 +24,7 @@ export function Home() {
     <>
       <Header />
 
-      <div className="max-w-screen-lg w-full mt-10">
+      <div className="w-full mt-10">
         {/* <div className="mt-[50px] pb-[100px]"> */}
         <div className="mb-6">
           <Editor onResetEditor={refreshPosts} />
@@ -59,7 +59,6 @@ export function Home() {
             />
           </div>
         )}
-
         <Spin spinning={postsFetchLoading}>
           {posts.map(post => {
             return (
@@ -69,9 +68,9 @@ export function Home() {
             );
           })}
         </Spin>
-
-        <FloatHelperBtn />
       </div>
+
+      <Footer />
     </>
   );
 }
