@@ -5,7 +5,7 @@ import type { Metadata } from 'next';
 import React from 'react';
 import { Inter } from 'next/font/google';
 import { AuthHandler } from '@/libs';
-import { BasicLayout } from '@/components';
+import { BasicLayout } from '@/clients/components';
 
 import { Provider } from './provider';
 

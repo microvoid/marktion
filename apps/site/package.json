@@ -31,6 +31,7 @@
     "immer": "^10.0.3",
     "jsdom": "^22.1.0",
     "lodash": "^4.17.21",
+    "lucide-react": "^0.264.0",
     "marktion": "workspace:*",
     "nanoid": "^4.0.2",
     "next": "13.4.9",

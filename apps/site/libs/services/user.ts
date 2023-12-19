@@ -1,23 +1,39 @@
-import { prisma } from '@/libs';
+import { UserStatistics, prisma } from '@/libs';
 import { initUserFirstPost } from './post';
 
-export async function createGuest() {
-  const guest = await prisma.user.create({
-    data: {
-      name: 'guest',
-      anonymous: true
-    }
-  });
+class UserService {
+  async createGuest() {
+    const guest = await prisma.user.create({
+      data: {
+        name: 'guest',
+        anonymous: true
+      }
+    });
 
-  await initUserFirstPost(guest.id);
+    await initUserFirstPost(guest.id);
 
-  return guest;
+    return guest;
+  }
+
+  getUser(id: string) {
+    return prisma.user.findFirst({
+      where: {
+        id
+      }
+    });
+  }
+
+  async getUserStatistics(id: string): Promise<UserStatistics> {
+    const postCount = await prisma.post.count({
+      where: {
+        userId: id
+      }
+    });
+
+    return {
+      postCount
+    };
+  }
 }
 
-export function getUser(id: string) {
-  return prisma.user.findFirst({
-    where: {
-      id
-    }
-  });
-}
+export const userService = new UserService();

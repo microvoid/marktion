@@ -2,7 +2,7 @@ import { File } from '@prisma/client';
 import { uploadR2 } from '@/libs';
 import { prisma } from '@/libs';
 
-export class FileService {
+class FileService {
   async createFile(
     buffer: Buffer,
     options: Pick<File, 'filename' | 'size' | 'userId' | 'projectId'>
@@ -23,3 +23,5 @@ export class FileService {
     return url;
   }
 }
+
+export const fileService = new FileService();

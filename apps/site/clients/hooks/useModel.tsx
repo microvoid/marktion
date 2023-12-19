@@ -1,11 +1,17 @@
-import fetch from 'axios';
 import { Post } from '@prisma/client';
 import { useImmer, Updater } from 'use-immer';
-import React, { useCallback, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { createContext, useContextSelector } from 'use-context-selector';
+import { type User } from '@prisma/client';
+import { UserStatistics } from '..';
+import { ExtraModifier } from './utils-types';
+import { ModelModifier } from './modifier';
+
+export type LoginUser = User;
 
 export type ModelContextType = {
   model: {
+    user: User;
     posts: Post[];
     postCount: number;
     postsFetchLoading: boolean;
@@ -15,19 +21,18 @@ export type ModelContextType = {
       orderBy: 'createdAt' | 'updatedAt';
       order: 'desc';
     };
+
+    userStatisticsLoading: boolean;
+    userStatistics: UserStatistics;
   };
   dispatch: Updater<ModelContextType['model']>;
-  refreshPosts: () => void;
 };
 
 export const ModelContext = createContext({} as ModelContextType);
 
-export function useModelSelector<S>(selector: (ctx: ModelContextType) => S): S {
-  return useContextSelector(ModelContext, selector);
-}
-
-export function ModelContextProvider(props: React.PropsWithChildren) {
+export function ModelContextProvider({ children, user }: React.PropsWithChildren<{ user: User }>) {
   const [model, dispatch] = useImmer<ModelContextType['model']>({
+    user,
     posts: [],
     postCount: 0,
     postsFetchLoading: false,
@@ -36,50 +41,58 @@ export function ModelContextProvider(props: React.PropsWithChildren) {
       order: 'desc',
       page: 0,
       pageSize: 10
+    },
+
+    userStatisticsLoading: false,
+    userStatistics: {
+      postCount: 0
     }
   });
   const modelRef = useRef(model);
 
   modelRef.current = model;
 
-  const refreshPosts = useCallback(async () => {
-    dispatch(draft => {
-      draft.postsFetchLoading = true;
-    });
-
-    try {
-      const res = await fetch<{ data: { posts: Post[]; count: number } }>({
-        url: '/api/post',
-        params: modelRef.current.postsSearchParams,
-        method: 'get'
-      });
-
-      const posts = res.data.data.posts || [];
-      const count = res.data.data.count || posts.length;
-
-      dispatch(draft => {
-        draft.posts = posts;
-        draft.postCount = count;
-        draft.postsFetchLoading = false;
-      });
-    } catch (err) {
-      console.error(err);
-      dispatch(draft => {
-        draft.postsFetchLoading = false;
-      });
-    }
+  useEffect(() => {
+    // @ts-ignore
+    window['model'] = modelRef;
   }, []);
 
   return (
     <ModelContext.Provider
       value={{
         model,
-        dispatch,
-
-        refreshPosts
+        dispatch
       }}
     >
-      {props.children}
+      {children}
     </ModelContext.Provider>
   );
+}
+
+export function useModelSelector<S>(selector: (ctx: ModelContextType) => S): S {
+  return useContextSelector(ModelContext, selector);
+}
+
+type UseModelModifierReturn = ExtraModifier<typeof ModelModifier>;
+
+export function useModelModifier(): UseModelModifierReturn {
+  const ref = useRef<ModelContextType>();
+
+  useModelSelector(ctx => {
+    ref.current = ctx;
+    return null;
+  });
+
+  return useMemo(() => {
+    const modifier = {} as UseModelModifierReturn;
+
+    Object.keys(ModelModifier).forEach(key => {
+      modifier[key as keyof UseModelModifierReturn] = (...args: any[]) => {
+        // @ts-ignore
+        return ModelModifier[key as keyof UseModelModifierReturn](ref.current, ...args);
+      };
+    });
+
+    return modifier;
+  }, []);
 }

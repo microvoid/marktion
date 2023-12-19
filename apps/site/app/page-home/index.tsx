@@ -2,22 +2,21 @@
 
 import { useEffect } from 'react';
 import { Pagination, Select, Spin } from 'antd';
-import { useModelSelector } from '@/clients';
-import { Footer } from '@/components';
+import { useModelModifier, useModelSelector } from '@/clients';
+import { Header, Footer } from '@/clients/components';
 
 import { Editor } from './editor';
-import { Header } from './header';
 
 export function Home() {
   const posts = useModelSelector(ctx => ctx.model.posts);
   const postCount = useModelSelector(ctx => ctx.model.postCount);
   const postsSearchParams = useModelSelector(ctx => ctx.model.postsSearchParams);
   const postsFetchLoading = useModelSelector(ctx => ctx.model.postsFetchLoading);
-  const refreshPosts = useModelSelector(ctx => ctx.refreshPosts);
+  const modifier = useModelModifier();
   const dispatch = useModelSelector(ctx => ctx.dispatch);
 
   useEffect(() => {
-    refreshPosts();
+    modifier.refreshPosts();
     document.documentElement.scrollTop = 0;
   }, [postsSearchParams]);
 
@@ -28,7 +27,7 @@ export function Home() {
       <div className="w-full mt-10">
         {/* <div className="mt-[50px] pb-[100px]"> */}
         <div className="mb-6">
-          <Editor onResetEditor={refreshPosts} />
+          <Editor onResetEditor={modifier.refreshPosts} />
         </div>
 
         {posts.length > 0 && (
@@ -64,7 +63,7 @@ export function Home() {
           {posts.map(post => {
             return (
               <section className="mb-4" key={post.id}>
-                <Editor defaultPost={post} onResetEditor={refreshPosts} />
+                <Editor defaultPost={post} onResetEditor={modifier.refreshPosts} />
               </section>
             );
           })}

@@ -6,7 +6,7 @@ import { StyleProvider, createCache, extractStyle } from '@ant-design/cssinjs';
 import { setCookie } from 'cookies-next';
 import React, { useLayoutEffect } from 'react';
 import dayjs from 'dayjs';
-import { LoginUserContext, GUEST_SESSION_ID, ModelContextProvider } from '@/clients';
+import { GUEST_SESSION_ID, ModelContextProvider } from '@/clients';
 import { User } from '@prisma/client';
 import type Entity from '@ant-design/cssinjs/es/Cache';
 import { useServerInsertedHTML } from 'next/navigation';
@@ -25,7 +25,7 @@ export function Provider({ children, user }: React.PropsWithChildren<{ user: Use
     <ThemeProvider attribute="class">
       <StyledComponentsRegistry>
         <AntdProvider>
-          <LoginUserContext.Provider value={user}>{children}</LoginUserContext.Provider>
+          <ModelContextProvider user={user}>{children}</ModelContextProvider>
         </AntdProvider>
       </StyledComponentsRegistry>
     </ThemeProvider>
@@ -62,7 +62,7 @@ export function AntdProvider({ children }: React.PropsWithChildren) {
         algorithm: darkMode ? AntdTheme.darkAlgorithm : AntdTheme.defaultAlgorithm
       }}
     >
-      <ModelContextProvider>{children}</ModelContextProvider>
+      {children}
     </ConfigProvider>
   );
 }

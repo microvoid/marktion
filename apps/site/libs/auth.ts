@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 import { NextResponse, NextRequest } from 'next/server';
 import { GUEST_SESSION_ID } from '@/common';
 
-import { UserService } from './services';
+import { userService } from './services';
 
 type AuthUserhandlerCtx<T> = {
   user: User;
@@ -43,7 +43,7 @@ export async function isAuthorized() {
   const guestCookie = cookieStore.get(GUEST_SESSION_ID);
 
   if (guestCookie?.value) {
-    const guest = await UserService.getUser(guestCookie?.value);
+    const guest = await userService.getUser(guestCookie?.value);
     return guest;
   }
 
@@ -57,5 +57,5 @@ export async function autoGuestAuth() {
     return guest;
   }
 
-  return UserService.createGuest();
+  return userService.createGuest();
 }
