@@ -37,7 +37,7 @@ export function ModelContextProvider({ children, user }: React.PropsWithChildren
     postCount: 0,
     postsFetchLoading: false,
     postsSearchParams: {
-      orderBy: 'updatedAt',
+      orderBy: 'createdAt',
       order: 'desc',
       page: 0,
       pageSize: 10

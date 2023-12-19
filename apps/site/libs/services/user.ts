@@ -1,5 +1,5 @@
 import { UserStatistics, prisma } from '@/libs';
-import { initUserFirstPost } from './post';
+import { postService } from './post';
 
 class UserService {
   async createGuest() {
@@ -10,7 +10,7 @@ class UserService {
       }
     });
 
-    await initUserFirstPost(guest.id);
+    await postService.initUserFirstPost(guest.id);
 
     return guest;
   }

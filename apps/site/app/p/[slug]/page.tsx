@@ -1,8 +1,8 @@
-import { PostService } from '@/libs';
+import { postService } from '@/libs';
 import { ReactSSR } from 'marktion';
 
 export default async function PostDetail({ params: { slug } }: { params: { slug: string } }) {
-  const post = await PostService.getPostBySlugId(slug);
+  const post = await postService.getPostBySlugId(slug);
 
   return (
     <main className="flex min-h-screen flex-col items-center">
