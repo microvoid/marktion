@@ -1,6 +1,6 @@
-import { AuthHandler, fileService } from '@/libs';
+import { ApiUtils, AuthHelper, fileService } from '@/libs';
 
-export const POST = AuthHandler.validate(async (req, ctx) => {
+export const POST = AuthHelper.validate(async (req, ctx) => {
   const form = await req.formData();
 
   const filename = form.get('filename') as string;
@@ -14,5 +14,5 @@ export const POST = AuthHandler.validate(async (req, ctx) => {
     projectId: null
   });
 
-  return AuthHandler.success(result);
+  return ApiUtils.success(result);
 });

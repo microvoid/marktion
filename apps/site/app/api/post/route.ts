@@ -1,7 +1,7 @@
-import { postService, AuthHandler, defaultGetPostsByUserIdOptions } from '@/libs';
+import { postService, AuthHelper, defaultGetPostsByUserIdOptions, ApiUtils } from '@/libs';
 import { Post } from '@prisma/client';
 
-export const GET = AuthHandler.validate(async (req, ctx) => {
+export const GET = AuthHelper.validate(async (req, ctx) => {
   const query = req.nextUrl.searchParams;
 
   const pageSize = Number(query.get('pageSize')) || 10;
@@ -15,15 +15,15 @@ export const GET = AuthHandler.validate(async (req, ctx) => {
     orderBy: orderBy ? { [orderBy]: order } : defaultGetPostsByUserIdOptions.orderBy
   });
 
-  return AuthHandler.success({
+  return ApiUtils.success({
     posts,
     count
   });
 });
 
-export const POST = AuthHandler.validate(async (req, ctx) => {
+export const POST = AuthHelper.validate(async (req, ctx) => {
   const post = (await req.json()) as Post;
   const result = await postService.upsert(post, ctx.user.id);
 
-  return AuthHandler.success(result);
+  return ApiUtils.success(result);
 });

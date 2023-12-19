@@ -6,4 +6,4 @@ export * from './constants';
 export * from './utils';
 export * from './uploader';
 
-export * as AuthHandler from './auth';
+export * as AuthHelper from './auth';

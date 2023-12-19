@@ -111,6 +111,12 @@ importers:
       '@aws-sdk/s3-request-presigner':
         specifier: ^3.472.0
         version: 3.472.0
+      '@lucia-auth/adapter-prisma':
+        specifier: ^3.0.2
+        version: 3.0.2(@prisma/client@5.0.0)(lucia@2.7.5)
+      '@lucia-auth/oauth':
+        specifier: ^3.5.0
+        version: 3.5.0(lucia@2.7.5)
       '@prisma/client':
         specifier: 5.0.0
         version: 5.0.0(prisma@5.0.0)
@@ -159,6 +165,9 @@ importers:
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
+      lucia:
+        specifier: ^2.7.5
+        version: 2.7.5
       lucide-react:
         specifier: ^0.264.0
         version: 0.264.0(react@18.2.0)
@@ -3534,6 +3543,24 @@ packages:
     dependencies:
       '@messageformat/parser': 5.1.0
     dev: true
+
+  /@lucia-auth/adapter-prisma@3.0.2(@prisma/client@5.0.0)(lucia@2.7.5):
+    resolution: {integrity: sha512-EyJWZene1/zasPwPctv8wwNErZt5mwwm5JATbhg+kXr3R8pbC7lJfVzDTAeeFClVH5k/FywRcsBl3JkPaNIcow==}
+    peerDependencies:
+      '@prisma/client': ^4.2.0 || ^5.0.0
+      lucia: ^2.0.0
+    dependencies:
+      '@prisma/client': 5.0.0(prisma@5.0.0)
+      lucia: 2.7.5
+    dev: false
+
+  /@lucia-auth/oauth@3.5.0(lucia@2.7.5):
+    resolution: {integrity: sha512-JSwAMVwlDJtbvfcJV1nbkv41OD830pgICrx8zFT71SYd5I1MnEQ+GqMTXBGRyxzc5XlLatT8ZS1Jt0k81487xg==}
+    peerDependencies:
+      lucia: ^2.0.0
+    dependencies:
+      lucia: 2.7.5
+    dev: false
 
   /@manypkg/find-root@1.1.0:
     resolution: {integrity: sha512-mki5uBvhHzO8kYYix/WRy2WX8S3B5wdVSc9D6KcU5lQNglP2yt58/VfLuAK49glRXChosY8ap2oJ1qgma3GUVA==}
@@ -8675,6 +8702,10 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       yallist: 4.0.0
+
+  /lucia@2.7.5:
+    resolution: {integrity: sha512-2e/Oezb+b2qjQLyP28CraBlad2s9GAp22bfPLn05IsXi99FEX/oTo2TGMM4Gn9nJT7ow15kEFkwL3lBUpknopA==}
+    dev: false
 
   /lucide-react@0.264.0(react@18.2.0):
     resolution: {integrity: sha512-BmQTimZDhAy2vH9aCeQa+TLrkWwWd8FP5GRMoK3hKEvO1eS/llGXe4RxrZGSTdOjhw1JuDLpvtS8VmNCKxhL5A==}

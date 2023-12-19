@@ -4,7 +4,7 @@ import 'marktion/dist/style.css';
 import type { Metadata } from 'next';
 import React from 'react';
 import { Inter } from 'next/font/google';
-import { AuthHandler } from '@/libs';
+import { AuthHelper } from '@/libs';
 import { BasicLayout } from '@/clients/components';
 
 import { Provider } from './provider';
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: React.PropsWithChildren) {
-  const user = await AuthHandler.autoGuestAuth();
+  const user = await AuthHelper.guestAuth.autoGuest();
 
   return (
     <html lang="en">
