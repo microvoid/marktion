@@ -32,16 +32,28 @@ function UserCardContent({ user }: { user: LoginUser }) {
   return (
     <div className="w-[240px] rounded-md">
       <div className="flex flex-col gap-[7px]">
-        <Image className="block h-[60px] w-[60px] rounded-full" src={ANONYMOUS_ICON} alt="user" />
+        <div className="h-[60px] w-[60px] rounded-full dark:bg-stone-300">
+          <Image
+            className="block h-[60px] w-[60px] rounded-full"
+            width={60}
+            height={60}
+            src={user.avatar || ANONYMOUS_ICON}
+            alt="user"
+          />
+        </div>
         <div className="flex flex-col gap-[15px]">
           <div>
-            <div className="text-mauve12">Anonymouse</div>
-            {/* <div className="text-mauve10">@radix_ui</div> */}
+            <div className="text-mauve12">{user.anonymous ? 'anonymouse' : user.name}</div>
+            {user.email && <div className="text-mauve10">{user.email}</div>}
           </div>
 
           {user.anonymous && (
             <Alert
-              message="您当前为匿名登陆状态，可能会丢失部分内容，建议登陆后使用"
+              message={
+                <>
+                  您当前为匿名登陆状态，可能会丢失部分内容，建议<a href="/login">登陆</a>后使用
+                </>
+              }
               type="warning"
             />
           )}

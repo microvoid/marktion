@@ -12,6 +12,7 @@ class GuestAuth {
       const guest = await userService.getUser(guestCookie?.value);
       return guest;
     }
+
     return null;
   }
 

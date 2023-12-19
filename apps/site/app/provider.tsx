@@ -46,7 +46,11 @@ function StyledComponentsRegistry({ children }: React.PropsWithChildren) {
     return <style id="antd" dangerouslySetInnerHTML={{ __html: extractStyle(cache, true) }} />;
   });
 
-  return <StyleProvider cache={cache}>{children}</StyleProvider>;
+  return (
+    <StyleProvider cache={cache} hashPriority="high">
+      {children}
+    </StyleProvider>
+  );
 }
 
 export function AntdProvider({ children }: React.PropsWithChildren) {
@@ -57,6 +61,7 @@ export function AntdProvider({ children }: React.PropsWithChildren) {
     <ConfigProvider
       theme={{
         token: {
+          borderRadius: 4,
           colorPrimary: '#722ed1'
         },
         algorithm: darkMode ? AntdTheme.darkAlgorithm : AntdTheme.defaultAlgorithm

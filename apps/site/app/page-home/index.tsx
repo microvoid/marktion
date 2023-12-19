@@ -70,17 +70,19 @@ export function Home({ defaultPosts }: { defaultPosts?: Post[] }) {
           })}
 
           <div className="flex justify-end">
-            <Pagination
-              defaultCurrent={postsSearchParams.page + 1}
-              pageSize={postsSearchParams.pageSize}
-              total={postCount}
-              onChange={(page, pageSize) => {
-                dispatch(draft => {
-                  draft.postsSearchParams.page = Math.max(page - 1, 0);
-                  draft.postsSearchParams.pageSize = pageSize;
-                });
-              }}
-            />
+            {posts.length > 0 && (
+              <Pagination
+                defaultCurrent={postsSearchParams.page + 1}
+                pageSize={postsSearchParams.pageSize}
+                total={postCount}
+                onChange={(page, pageSize) => {
+                  dispatch(draft => {
+                    draft.postsSearchParams.page = Math.max(page - 1, 0);
+                    draft.postsSearchParams.pageSize = pageSize;
+                  });
+                }}
+              />
+            )}
           </div>
         </Spin>
       </div>

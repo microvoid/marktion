@@ -1,17 +1,13 @@
-import { luciaAuth } from '@/libs';
+import { LoginModal } from '@/clients/components/login';
+import { AuthHelper } from '@/libs';
 import { redirect } from 'next/navigation';
 
 const Page = async () => {
-  const session = await luciaAuth.getSession();
+  const session = await AuthHelper.luciaAuth.getSession();
 
   if (session) redirect('/');
 
-  return (
-    <>
-      <h1>Sign in</h1>
-      <a href="/login/github">Sign in with GitHub</a>
-    </>
-  );
+  return <LoginModal open={true} />;
 };
 
 export default Page;

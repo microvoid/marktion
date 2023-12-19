@@ -15,7 +15,7 @@ model User {
   name          String?
   email         String?   @unique
   emailVerified DateTime?
-  image         String?
+  avatar        String?
   anonymous     Boolean   @default(false)
   createdAt     DateTime  @default(now())
 

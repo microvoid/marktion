@@ -23,11 +23,11 @@ export function validate<T>(handler: AuthUserhandler<T>) {
   };
 }
 
-export async function getSessionUser(): Promise<User | null> {
+export async function getSessionUser(): Promise<User> {
   const [luciaUser, guestUser] = await Promise.all([
-    luciaAuth.getSession(),
-    guestAuth.getSession()
+    luciaAuth.getSessionUser(),
+    guestAuth.autoGuest()
   ]);
 
-  return luciaUser || guestUser;
+  return (luciaUser || guestUser) as User;
 }

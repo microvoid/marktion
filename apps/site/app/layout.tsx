@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: React.PropsWithChildren) {
-  const user = await AuthHelper.guestAuth.autoGuest();
+  const user = await AuthHelper.getSessionUser();
 
   return (
     <html lang="en">

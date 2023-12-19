@@ -18,6 +18,51 @@ class LuciaAuth {
     const request = this.lucia.handleRequest('GET', context);
     return request.validate();
   });
+
+  async getSessionUser() {
+    const session = await this.getSession();
+
+    return session?.user || null;
+  }
+
+  async getGithubAuthUrl() {
+    return this.providers.github.getAuthorizationUrl();
+  }
+
+  async loginWithGithub(code: string) {
+    const { getExistingUser, githubUser, createUser } =
+      await this.providers.github.validateCallback(code);
+
+    const getOrCreateUser = async () => {
+      const exist = await getExistingUser();
+
+      if (exist) {
+        return await this.lucia.updateUserAttributes(exist.id, {
+          avatar: githubUser.avatar_url,
+          name: githubUser.name!
+        });
+      }
+
+      const user = await createUser({
+        attributes: {
+          name: githubUser.login,
+          email: githubUser.email || undefined,
+          avatar: githubUser.avatar_url,
+          anonymous: false
+        }
+      });
+
+      return user;
+    };
+
+    const user = await getOrCreateUser();
+    const session = await this.lucia.createSession({
+      userId: user.userId,
+      attributes: {}
+    });
+
+    return session;
+  }
 }
 
 export const luciaAuth = new LuciaAuth();
@@ -31,9 +76,7 @@ function createLucia() {
       expires: false
     },
     getUserAttributes: data => {
-      return {
-        githubUsername: data.username
-      };
+      return data;
     }
   });
 }
