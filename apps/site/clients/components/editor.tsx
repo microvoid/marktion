@@ -9,7 +9,7 @@ import fetch from 'axios';
 import cls from 'classnames';
 
 import { renderSubmitBar } from './editor-submit-bar';
-import { renderPreviewBar } from './editor-preview-bar';
+import { EditorPreviewBar } from './editor-preview-bar';
 
 export type EditorProps = {
   defaultPost?: Post;
@@ -81,16 +81,10 @@ export function Editor({ defaultPost, onResetEditor }: EditorProps) {
       <ReactEditor
         ref={marktionRef}
         className={cls({
-          ['!pt-8']: defaultPost
+          ['!pt-10']: defaultPost
         })}
         dark={isDarkMode}
-        prefix={
-          defaultPost &&
-          renderPreviewBar({
-            post: defaultPost,
-            onReset
-          })
-        }
+        prefix={defaultPost && <EditorPreviewBar post={defaultPost} onReset={onReset} />}
         plugins={[ai.plugin]}
         content={post?.markdown || ''}
         uploadOptions={{

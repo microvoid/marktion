@@ -46,7 +46,7 @@ export function Home({ defaultPosts }: { defaultPosts?: Post[] }) {
             />
             <Pagination
               simple
-              defaultCurrent={postsSearchParams.page + 1}
+              current={postsSearchParams.page + 1}
               pageSize={postsSearchParams.pageSize}
               total={postCount}
               onChange={(page, pageSize) => {
@@ -70,7 +70,7 @@ export function Home({ defaultPosts }: { defaultPosts?: Post[] }) {
           <div className="flex justify-end">
             {posts.length > 0 && (
               <Pagination
-                defaultCurrent={postsSearchParams.page + 1}
+                current={postsSearchParams.page + 1}
                 pageSize={postsSearchParams.pageSize}
                 total={postCount}
                 onChange={(page, pageSize) => {
