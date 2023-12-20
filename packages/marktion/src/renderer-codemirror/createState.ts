@@ -13,7 +13,12 @@ import type { CodemirrorRenderer } from '../renderer-codemirror';
 const DEFAULT_KEYMAP = [...defaultKeymap, indentWithTab];
 const languageConf = new Compartment();
 
-const internalExtensions = [keymap.of(DEFAULT_KEYMAP), languageConf.of([markdown()]), minimalSetup];
+const internalExtensions = [
+  keymap.of(DEFAULT_KEYMAP),
+  languageConf.of([markdown()]),
+  minimalSetup,
+  EditorView.lineWrapping
+];
 
 export function createState(codemirror: CodemirrorRenderer) {
   const props = codemirror.getProps();

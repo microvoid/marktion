@@ -1,6 +1,5 @@
 import { EditorState } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
-import isUndefined from 'lodash/isUndefined';
 
 import type { SourceRenderer, RendererProps } from '../renderer';
 import { RendererEnum, Theme } from '../types';
