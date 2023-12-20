@@ -1,9 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-// import { GithubIcon, SunIcon, MoonIcon, UserIcon } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { Tooltip } from 'antd';
+import { Tag, Tooltip } from 'antd';
 import { UserCard } from './user-card';
 import { Icon } from './icon';
 
@@ -31,7 +30,9 @@ export function Header() {
           </a>
         </Tooltip>
 
-        <div className="rounded-lg cursor-pointer p-2 transition-colors duration-200 hover:bg- hover:text-base sm:bottom-auto sm:top-5">
+        <div className="flex items-center rounded-lg cursor-pointer p-2 transition-colors duration-200 hover:bg- hover:text-base sm:bottom-auto sm:top-5">
+          <Tag color="magenta">Upgrade to Pro</Tag>
+
           <UserCard>
             <button className="rounded-lg cursor-pointer p-2 transition-colors duration-200 hover:bg-stone-100 hover:dark:bg-stone-700 sm:bottom-auto sm:top-5">
               <Icon name="user" size={18} />

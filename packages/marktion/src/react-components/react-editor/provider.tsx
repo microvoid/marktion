@@ -1,5 +1,5 @@
+import React from 'react';
 import { ConfigProvider, theme } from 'antd';
-import { violet } from '@radix-ui/colors';
 
 import { Marktion } from '../../marktion';
 import { MarktionContext } from '../../react-hooks';
