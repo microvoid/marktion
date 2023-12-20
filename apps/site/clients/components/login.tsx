@@ -1,4 +1,6 @@
-import { Button, Divider, Input, Modal, ModalProps, Space } from 'antd';
+'use client';
+
+import { Button, Divider, Input, Modal, ModalProps } from 'antd';
 import Image from 'next/image';
 import LogoHeroPng from '@/public/logo-hero.png';
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useLayoutEffect } from 'react';
+import { useEffect } from 'react';
 import { Post } from '@prisma/client';
 import { Pagination, Select, Spin } from 'antd';
 import { Header, Footer } from '@/clients/components';
