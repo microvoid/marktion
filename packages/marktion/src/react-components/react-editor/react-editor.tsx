@@ -9,6 +9,7 @@ import { ReactEditorProvider } from './provider';
 
 export type ReactEditorProps = React.PropsWithChildren<
   Partial<MarktionOptions> & {
+    prefix?: React.ReactNode;
     className?: string;
     dark?: boolean;
   }
@@ -19,7 +20,7 @@ export type ReactEditorRef = {
 };
 
 export const ReactEditor = React.forwardRef<ReactEditorRef, ReactEditorProps>((props, ref) => {
-  const { children, dark = false, className, ...options } = props;
+  const { children, dark = false, className, prefix, ...options } = props;
   const rootRef = useRef<HTMLDivElement>(null);
   const slash = useSlash();
   const bubble = useBubble();
@@ -78,10 +79,11 @@ export const ReactEditor = React.forwardRef<ReactEditorRef, ReactEditorProps>((p
       ref={rootRef}
     >
       <ReactEditorProvider editor={editor} dark={dark}>
+        {prefix}
+
         {linkBubble.element}
         {bubble.element}
         {slash.element}
-
         {children}
       </ReactEditorProvider>
     </div>
