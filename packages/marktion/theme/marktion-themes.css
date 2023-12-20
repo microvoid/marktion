@@ -11,6 +11,12 @@
 .marktion-themes {
   position: relative;
   box-sizing: border-box;
+
+  min-height: var(--space-10);
+  box-shadow: var(--shadow-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-2);
+  
   overflow-wrap: break-word;
   font-family: var(--default-font-family);
   font-size: var(--default-font-size);

@@ -1,7 +1,7 @@
 .marktion-themes .wrapper-source .cm-editor {
-  min-height: var(--space-10);
-  box-shadow: var(--shadow-3);
-  padding: var(--space-4);
-  border-radius: var(--radius-2);
   outline: none;
+  background-color: transparent;
+
+  /* counteract padding-left(6px) of cm-line */
+  margin-left: -6px;
 }

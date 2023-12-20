@@ -14,9 +14,5 @@
 @import './plugins/placeholder.css';
 
 .marktion-themes .wysiwyg-editor {
-  min-height: var(--space-10);
-  box-shadow: var(--shadow-3);
-  padding: var(--space-4);
-  border-radius: var(--radius-2);
   outline: none;
 }
