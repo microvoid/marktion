@@ -1,14 +1,15 @@
 'use client';
 
 import React, { useMemo, useRef } from 'react';
-import { ReactEditor, ReactEditorRef, useAI, defaultUploader } from 'marktion';
+import { ReactEditor, ReactEditorRef, useAI } from 'marktion';
 import { useTheme } from 'next-themes';
 import { Post } from '@prisma/client';
 import { debounce } from 'lodash';
 import fetch from 'axios';
-import { PostHandler } from '@/clients';
-import { RocketIcon } from '@radix-ui/react-icons';
-import { Button } from 'antd';
+import cls from 'classnames';
+
+import { renderSubmitBar } from './editor-submit-bar';
+import { renderPreviewBar } from './editor-preview-bar';
 
 export type EditorProps = {
   defaultPost?: Post;
@@ -26,10 +27,6 @@ export function Editor({ defaultPost, onResetEditor }: EditorProps) {
 
   const isDarkMode = theme === 'dark';
   const postId = post?.id;
-
-  const onExport = () => {
-    PostHandler.handle('download', post!);
-  };
 
   const onReset = () => {
     setPost(undefined);
@@ -72,29 +69,28 @@ export function Editor({ defaultPost, onResetEditor }: EditorProps) {
     [postId]
   );
 
-  const postUrl = post ? `${location.origin}/p/${post.slug}` : '';
-
   return (
     <>
-      {!defaultPost && (
-        <div className="h-[40px] flex justify-end items-center mb-1">
-          {postUrl && (
-            <Button
-              type="default"
-              loading={isSaving}
-              className="underline"
-              target="_blank"
-              onClick={onReset}
-              icon={<RocketIcon className="inline-block" />}
-            >
-              Save
-            </Button>
-          )}
-        </div>
-      )}
+      {!defaultPost &&
+        renderSubmitBar({
+          post,
+          isSaving,
+          onReset
+        })}
+
       <ReactEditor
         ref={marktionRef}
+        className={cls({
+          ['!pt-8']: defaultPost
+        })}
         dark={isDarkMode}
+        prefix={
+          defaultPost &&
+          renderPreviewBar({
+            post: defaultPost,
+            onReset
+          })
+        }
         plugins={[ai.plugin]}
         content={post?.markdown || ''}
         uploadOptions={{

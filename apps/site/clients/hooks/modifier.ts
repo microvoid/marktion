@@ -3,7 +3,41 @@ import { ModelContextType } from './useModel';
 import { Post } from '@prisma/client';
 import { UserStatistics } from '..';
 
+const PostModifier = {
+  async downloadPost(ctx: ModelContextType, post: Post) {
+    const filename = `${post.title || 'untitled'}.md`;
+    const content = post.markdown;
+
+    const FileSaver = (await import('file-saver')).default;
+    const blob = new Blob([content], {
+      type: 'text/plain;charset=utf-8'
+    });
+
+    return FileSaver.saveAs(blob, filename);
+  },
+
+  async delPost(ctx: ModelContextType, id: string) {
+    return await fetch({
+      url: `/api/post/${id}`,
+      method: 'delete'
+    });
+  },
+
+  async publishPost(ctx: ModelContextType, id: string) {
+    return await fetch({
+      url: '/api/post',
+      method: 'post',
+      data: {
+        id,
+        publicStats: 'public'
+      }
+    });
+  }
+};
+
 export const ModelModifier = {
+  ...PostModifier,
+
   async refreshPosts({ dispatch, model }: ModelContextType) {
     dispatch(draft => {
       draft.postsFetchLoading = true;

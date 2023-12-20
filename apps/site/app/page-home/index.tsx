@@ -3,10 +3,8 @@
 import { useEffect } from 'react';
 import { Post } from '@prisma/client';
 import { Pagination, Select, Spin } from 'antd';
-import { Header, Footer } from '@/clients/components';
+import { Header, Footer, Editor } from '@/clients/components';
 import { useModelModifier, useModelSelector } from '@/clients';
-
-import { Editor } from './editor';
 
 export function Home({ defaultPosts }: { defaultPosts?: Post[] }) {
   const posts = useModelSelector(ctx => ctx.model.posts);
