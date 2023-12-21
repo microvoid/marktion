@@ -10,7 +10,7 @@ export function LoginModal(props: ModalProps) {
       title={
         <div className="text-center">
           <div>
-            <div className="flex justify-center my-10">
+            <div className="flex justify-center my-4">
               <Image
                 src={LogoHeroPng}
                 alt="logo-hero"
