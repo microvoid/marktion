@@ -75,6 +75,10 @@ export function AIChatPanel({ children, gptConfig, selection, ...popoverProps }:
   }, [isLoading]);
 
   useEffect(() => {
+    if (!popoverProps.open) {
+      return;
+    }
+
     const onKeydown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         popoverProps.onOpenChange?.(false);
@@ -86,7 +90,7 @@ export function AIChatPanel({ children, gptConfig, selection, ...popoverProps }:
     return () => {
       window.removeEventListener('keydown', onKeydown);
     };
-  }, [popoverProps.onOpenChange]);
+  }, [popoverProps.onOpenChange, popoverProps.open]);
 
   const onSubmit = (e?: React.KeyboardEvent | React.MouseEvent) => {
     if (isComposingInput) return;
