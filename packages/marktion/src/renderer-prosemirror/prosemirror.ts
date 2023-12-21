@@ -123,6 +123,10 @@ export class ProseMirrorRenderer implements WysiwygRenderer {
     });
   }
 
+  hasFocus() {
+    return this.view.hasFocus();
+  }
+
   attach(root: HTMLElement, props: Partial<WysiwygProps>) {
     if (!this.view) {
       const document = root.ownerDocument;

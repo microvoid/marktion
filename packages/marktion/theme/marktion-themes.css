@@ -34,6 +34,7 @@
 .marktion-themes {
   .wrapper-wysiwyg,
   .wrapper-source {
+    position: relative;
     display: none;
   }
 

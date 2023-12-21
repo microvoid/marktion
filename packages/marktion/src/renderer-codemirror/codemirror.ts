@@ -61,6 +61,10 @@ export class CodemirrorRenderer implements SourceRenderer {
     });
   }
 
+  hasFocus() {
+    return this.view.hasFocus;
+  }
+
   attach(root: HTMLElement, props: Partial<RendererProps>) {
     if (!this.view) {
       const div = document.createElement('div');

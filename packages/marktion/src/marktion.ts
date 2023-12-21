@@ -51,6 +51,10 @@ export class Marktion {
     });
   }
 
+  hasFocus() {
+    return this.getRenderer().hasFocus();
+  }
+
   getTheme() {
     return this.theme;
   }

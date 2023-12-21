@@ -59,7 +59,7 @@ export const ReactEditor = React.forwardRef<ReactEditorRef, ReactEditorProps>((p
 
   useEffect(() => {
     const onKeydown = (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.key === '/') {
+      if (e.ctrlKey && e.key === '/' && editor.hasFocus()) {
         editor.setRenderer(editor.renderer === 'SOURCE' ? 'WYSIWYG' : 'SOURCE');
       }
     };
@@ -68,7 +68,7 @@ export const ReactEditor = React.forwardRef<ReactEditorRef, ReactEditorProps>((p
     return () => {
       window.removeEventListener('keydown', onKeydown);
     };
-  }, []);
+  }, [editor]);
 
   return (
     <div
