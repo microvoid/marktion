@@ -47,7 +47,7 @@ export function Header() {
             onClick={() => setTheme(isDarkMode ? 'light' : 'dark')}
             className="rounded-lg cursor-pointer p-2 transition-colors duration-200 hover:bg-stone-100 hover:dark:bg-stone-700 sm:bottom-auto sm:top-5"
           >
-            {isDarkMode ? <Icon name="moon" size={18} /> : <Icon name="sun" size={18} />}
+            <Icon name={isDarkMode ? 'moon' : 'sun'} size={18} />
           </button>
         </div>
       </div>
