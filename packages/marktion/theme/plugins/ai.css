@@ -5,10 +5,8 @@
   }
 
   &.plugin-ai-inline-message-content {
-    .wysiwyg-editor {
-      min-height: unset;
-      box-shadow: none;
-      padding: 0;
-    }
+    min-height: unset;
+    box-shadow: none;
+    padding: 0;
   }
 }

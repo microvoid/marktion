@@ -1,9 +1,8 @@
 import { EditorView } from 'prosemirror-view';
 import { EditorState, Selection, Plugin, PluginKey } from 'prosemirror-state';
-import { getEditable } from '../core/meta';
-import { GptOptions } from '../react-components/ai/type';
 import { DEFAULT_CONTINUE_WRITING, DEFAULT_GPT_PROMPT } from './constants';
 import { getTextContentFromNodes, posToOffsetRect } from '../core';
+import { getEditable } from '../core/meta';
 import { createPortal, getPortal } from '../plugin-portal';
 
 export type AIOptions = {
@@ -116,16 +115,16 @@ export function AI(options: AIOptions = defaultAIOptions) {
   });
 }
 
+type GptOptions = {};
+
 function AIContinueWriting(view: EditorView, message: string, config?: GptOptions) {
   dispathAICommand(view, message, {
-    config: config?.config,
     systemMessage: DEFAULT_CONTINUE_WRITING
   });
 }
 
 function AIAsking(view: EditorView, message: string, config?: GptOptions) {
   dispathAICommand(view, message, {
-    config: config?.config,
     systemMessage: DEFAULT_GPT_PROMPT
   });
 }

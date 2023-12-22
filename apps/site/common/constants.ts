@@ -2,6 +2,11 @@ export const GUEST_SESSION_ID = 'marktion-auth.guest';
 
 export const SESSION_KEY = process.env.SESSION_KEY || 'marktion';
 
+export const PLANS_AI_LIMIT = {
+  Pro: 300,
+  Free: 20
+};
+
 export const PLANS = [
   {
     name: 'Pro',
@@ -25,7 +30,7 @@ export const PLANS = [
     features: [
       'Unlimited Posts',
       '20 GB Storage',
-      'AI Request 300 / day',
+      `AI Request ${PLANS_AI_LIMIT.Pro} / day`,
       'Gpt4 Support(Comming soon)',
       'Unlimited Projects Users(Comming soon)'
     ]
@@ -53,7 +58,7 @@ export const PLANS = [
       '1 GB Storage',
       'Unlimited Posts',
       'Project Users 10(Comming soon)',
-      'AI Request 30 / day'
+      `AI Request ${PLANS_AI_LIMIT.Pro} / day`
     ]
   }
 ];

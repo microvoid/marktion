@@ -34,6 +34,7 @@
     "immer": "^10.0.3",
     "jsdom": "^22.1.0",
     "lodash": "^4.17.21",
+    "lru-cache": "^10.1.0",
     "lucia": "^2.7.5",
     "lucide-react": "^0.264.0",
     "marktion": "workspace:*",

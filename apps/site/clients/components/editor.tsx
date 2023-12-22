@@ -7,6 +7,7 @@ import { Post } from '@prisma/client';
 import { debounce } from 'lodash';
 import fetch from 'axios';
 import cls from 'classnames';
+import { message } from 'antd';
 
 import { renderSubmitBar } from './editor-submit-bar';
 import { EditorPreviewBar } from './editor-preview-bar';
@@ -22,7 +23,11 @@ export function Editor({ defaultPost, onResetEditor }: EditorProps) {
   const [isSaving, setIsSaving] = React.useState(false);
   const [post, setPost] = React.useState(defaultPost);
   const ai = useAI({
-    basePath: '/api'
+    onError(error) {
+      message.error(error.message);
+    },
+
+    api: `/api/chat/completions`
   });
 
   const isDarkMode = theme === 'dark';

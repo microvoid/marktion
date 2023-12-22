@@ -4,15 +4,15 @@ import { SparklesIcon, SendHorizonalIcon } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { PopoverProps, Popover, Input, InputRef, Button, theme } from 'antd';
 
-import { GptOptions } from './type';
 import { DEBUG_MESSAGE } from './DEBUG_utils';
 import { usePMRenderer } from '../../react-hooks';
 import { ChatMessages } from './ai-chat-messages';
 import { ChatMenu, ChatMenuKey, ChatMenuProps } from './ai-chat-menu';
 import { insertMessages } from './helper';
+import { GptConfig } from './type';
 
 export type AIChatPanelProps = PopoverProps & {
-  gptConfig: GptOptions['config'];
+  gptConfig?: GptConfig;
   selection: Selection | null;
 };
 
@@ -29,7 +29,6 @@ export function AIChatPanel({ children, gptConfig, selection, ...popoverProps }:
   const { messages, input, isLoading, handleInputChange, handleSubmit, setMessages, stop } =
     useChat({
       initialMessages: defaultInitialMessages,
-      api: `${gptConfig?.basePath}/chat/completions`,
       body: {
         temperature: 0.7,
         top_p: 1,
@@ -40,8 +39,9 @@ export function AIChatPanel({ children, gptConfig, selection, ...popoverProps }:
         model: 'gpt-3.5-turbo'
       },
       headers: {
-        Authorization: `Bearer ${gptConfig?.apiKey}`
-      }
+        Authorization: `Bearer ${gptConfig?.apiKey || ''}`
+      },
+      ...gptConfig
     });
 
   const [isComposingInput, setIsComposingInput] = useState(false);

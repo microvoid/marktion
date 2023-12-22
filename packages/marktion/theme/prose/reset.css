@@ -28,9 +28,9 @@
     margin: var(--space-3) 0;
   }
 
-  p:nth-child(1) {
+  /* p:nth-child(1) {
     margin-top: 0;
-  }
+  } */
 
   a {
     cursor: var(--cursor-link);

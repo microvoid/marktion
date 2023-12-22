@@ -3,10 +3,10 @@ import { useMemo, useState } from 'react';
 import { Selection } from 'prosemirror-state';
 
 import { AI } from '../../plugin-ai';
-import { GptOptions } from './type';
-import { AIChatPanel } from './ai-chat-panel';
+import { AIChatPanel, AIChatPanelProps } from './ai-chat-panel';
+import { GptConfig } from './type';
 
-export function useAI(gptConfig?: GptOptions['config']) {
+export function useAI(gptConfig?: GptConfig) {
   const [open, setOpen] = useState(false);
   const [selection, setSelection] = useState<Selection | null>(null);
   const [portalEl, setPortalEl] = useState<HTMLElement | null>(null);

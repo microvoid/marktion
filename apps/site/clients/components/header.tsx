@@ -10,7 +10,7 @@ import { UpgradeToPro } from './upgrade-to-pro';
 export function Header() {
   const { theme, setTheme } = useTheme();
   const [tooltipOpen, setTooltipOpen] = useState(false);
-  const [upgradeModalOpen, setUpgradeModalOpen] = useState(true);
+  const [upgradeModalOpen, setUpgradeModalOpen] = useState(false);
   const isDarkMode = theme === 'dark';
 
   useEffect(() => {

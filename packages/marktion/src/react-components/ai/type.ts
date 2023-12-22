@@ -1,4 +1,4 @@
-import { ConfigurationParameters, CreateChatCompletionRequest } from 'openai-edge';
+import { type UseChatOptions } from 'ai/react';
 
 export type Role = 'user' | 'assistant' | 'system';
 
@@ -19,9 +19,8 @@ export interface CreateChatCompletionDeltaResponse {
   ];
 }
 
-export type GptOptions = {
-  systemMessage?: string;
-  config?: ConfigurationParameters;
-  completionConfig?: CreateChatCompletionRequest;
-  onProgress?: (event: CreateChatCompletionDeltaResponse) => void;
-};
+export type GptConfig = Partial<
+  UseChatOptions & {
+    apiKey: string;
+  }
+>;
