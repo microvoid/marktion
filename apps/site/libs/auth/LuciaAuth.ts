@@ -5,6 +5,7 @@ import { prisma as PrismaAdapter } from '@lucia-auth/adapter-prisma';
 import * as context from 'next/headers';
 import { prisma } from '@/libs';
 import { cache } from 'react';
+import { User } from '@prisma/client';
 
 export type Auth = LuciaAuth['lucia'];
 
@@ -19,7 +20,7 @@ class LuciaAuth {
     return request.validate();
   });
 
-  async getSessionUser() {
+  async getSessionUser(): Promise<User | null> {
     const session = await this.getSession();
 
     return session?.user || null;

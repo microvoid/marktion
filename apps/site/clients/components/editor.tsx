@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { ReactEditor, ReactEditorRef, useAI } from 'marktion';
 import { useTheme } from 'next-themes';
 import { Post } from '@prisma/client';
 import { debounce } from 'lodash';
 import fetch from 'axios';
 import cls from 'classnames';
-import { message } from 'antd';
+import { message, Skeleton } from 'antd';
 
 import { renderSubmitBar } from './editor-submit-bar';
 import { EditorPreviewBar } from './editor-preview-bar';
@@ -21,6 +21,7 @@ export function Editor({ defaultPost, onResetEditor }: EditorProps) {
   const marktionRef = useRef<ReactEditorRef>(null);
   const { theme } = useTheme();
   const [isSaving, setIsSaving] = React.useState(false);
+  const [isMounted, setIsMounted] = React.useState(false);
   const [post, setPost] = React.useState(defaultPost);
   const ai = useAI({
     onError(error) {
@@ -32,6 +33,10 @@ export function Editor({ defaultPost, onResetEditor }: EditorProps) {
 
   const isDarkMode = theme === 'dark';
   const postId = post?.id;
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const onReset = () => {
     setPost(undefined);
@@ -74,9 +79,12 @@ export function Editor({ defaultPost, onResetEditor }: EditorProps) {
     [postId]
   );
 
+  const isDraftEditor = !defaultPost;
+  const isPreviewEditor = Boolean(defaultPost);
+
   return (
     <>
-      {!defaultPost &&
+      {isDraftEditor &&
         renderSubmitBar({
           post,
           isSaving,
@@ -86,10 +94,10 @@ export function Editor({ defaultPost, onResetEditor }: EditorProps) {
       <ReactEditor
         ref={marktionRef}
         className={cls({
-          ['!pt-10']: defaultPost
+          ['!pt-10']: isPreviewEditor
         })}
         dark={isDarkMode}
-        prefix={defaultPost && <EditorPreviewBar post={defaultPost} onReset={onReset} />}
+        prefix={isPreviewEditor && <EditorPreviewBar post={defaultPost!} onReset={onReset} />}
         plugins={[ai.plugin]}
         content={post?.markdown || ''}
         uploadOptions={{
@@ -116,6 +124,7 @@ export function Editor({ defaultPost, onResetEditor }: EditorProps) {
           onUpdateOrCreatePost(content, title);
         }}
       >
+        {!isMounted && isPreviewEditor && <Skeleton />}
         {ai.element}
       </ReactEditor>
     </>

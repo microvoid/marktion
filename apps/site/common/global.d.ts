@@ -1,13 +1,9 @@
 /// <reference types="lucia" />
+import { User } from '@prisma/client';
+
 declare namespace Lucia {
   type Auth = import('@/libs/auth').Auth;
 
-  type DatabaseUserAttributes = {
-    name: string;
-    email?: string;
-    avatar: string;
-    anonymous: boolean;
-  };
-
+  type DatabaseUserAttributes = User;
   type DatabaseSessionAttributes = {};
 }

@@ -32,6 +32,7 @@ export function Home() {
           <div className="mb-2 flex justify-between">
             <Select<(typeof postsSearchParams)['orderBy']>
               value={postsSearchParams.orderBy}
+              loading={postsFetchLoading}
               onChange={value => {
                 dispatch(draft => {
                   draft.postsSearchParams.orderBy = value;
@@ -57,31 +58,29 @@ export function Home() {
             />
           </div>
         )}
-        <Spin spinning={postsFetchLoading}>
-          {posts.map(post => {
-            return (
-              <section className="mb-4" key={post.id}>
-                <Editor defaultPost={post} onResetEditor={modifier.refreshPosts} />
-              </section>
-            );
-          })}
+        {posts.map(post => {
+          return (
+            <section className="mb-4" key={post.id}>
+              <Editor defaultPost={post} onResetEditor={modifier.refreshPosts} />
+            </section>
+          );
+        })}
 
-          <div className="flex justify-end">
-            {posts.length > 0 && (
-              <Pagination
-                current={postsSearchParams.page + 1}
-                pageSize={postsSearchParams.pageSize}
-                total={postCount}
-                onChange={(page, pageSize) => {
-                  dispatch(draft => {
-                    draft.postsSearchParams.page = Math.max(page - 1, 0);
-                    draft.postsSearchParams.pageSize = pageSize;
-                  });
-                }}
-              />
-            )}
-          </div>
-        </Spin>
+        <div className="flex justify-end">
+          {posts.length > 0 && (
+            <Pagination
+              current={postsSearchParams.page + 1}
+              pageSize={postsSearchParams.pageSize}
+              total={postCount}
+              onChange={(page, pageSize) => {
+                dispatch(draft => {
+                  draft.postsSearchParams.page = Math.max(page - 1, 0);
+                  draft.postsSearchParams.pageSize = pageSize;
+                });
+              }}
+            />
+          )}
+        </div>
       </div>
 
       <Footer />
