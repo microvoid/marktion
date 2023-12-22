@@ -1,12 +1,11 @@
 'use client';
 
 import { useEffect } from 'react';
-import { Post } from '@prisma/client';
 import { Pagination, Select, Spin } from 'antd';
 import { Header, Footer, Editor } from '@/clients/components';
 import { useModelModifier, useModelSelector } from '@/clients';
 
-export function Home({ defaultPosts }: { defaultPosts?: Post[] }) {
+export function Home() {
   const posts = useModelSelector(ctx => ctx.model.posts);
   const postCount = useModelSelector(ctx => ctx.model.postCount);
   const postsSearchParams = useModelSelector(ctx => ctx.model.postsSearchParams);

@@ -1,32 +1,17 @@
 'use client';
 
+import React, { useEffect, useState } from 'react';
 import { ThemeProvider, useTheme } from 'next-themes';
-import { ConfigProvider, theme as AntdTheme } from 'antd';
-import { StyleProvider, createCache, extractStyle } from '@ant-design/cssinjs';
-import { setCookie } from 'cookies-next';
-import React, { useLayoutEffect } from 'react';
-import dayjs from 'dayjs';
-import { GUEST_SESSION_ID, ModelContextProvider } from '@/clients';
-import { User } from '@prisma/client';
 import type Entity from '@ant-design/cssinjs/es/Cache';
 import { useServerInsertedHTML } from 'next/navigation';
+import { ConfigProvider, theme as AntdTheme } from 'antd';
+import { StyleProvider, createCache, extractStyle } from '@ant-design/cssinjs';
 
-export function Provider({ children, user }: React.PropsWithChildren<{ user: User }>) {
-  useLayoutEffect(() => {
-    if (user.anonymous) {
-      setCookie(GUEST_SESSION_ID, user.id, {
-        expires: dayjs().add(5, 'year').toDate(),
-        path: '/'
-      });
-    }
-  }, [user]);
-
+export function Provider({ children }: React.PropsWithChildren) {
   return (
     <ThemeProvider attribute="class">
       <StyledComponentsRegistry>
-        <AntdProvider>
-          <ModelContextProvider user={user}>{children}</ModelContextProvider>
-        </AntdProvider>
+        <AntdProvider>{children}</AntdProvider>
       </StyledComponentsRegistry>
     </ThemeProvider>
   );
@@ -55,7 +40,11 @@ function StyledComponentsRegistry({ children }: React.PropsWithChildren) {
 
 export function AntdProvider({ children }: React.PropsWithChildren) {
   const { theme } = useTheme();
-  const darkMode = theme === 'dark';
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    setDarkMode(theme === 'dark');
+  }, [theme]);
 
   return (
     <ConfigProvider

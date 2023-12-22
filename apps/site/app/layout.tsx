@@ -1,10 +1,9 @@
 import './globals.css';
 import 'marktion/dist/style.css';
 
-import type { Metadata } from 'next';
 import React from 'react';
+import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { AuthHelper } from '@/libs';
 import { BasicLayout } from '@/clients/components';
 
 import { Provider } from './provider';
@@ -18,13 +17,11 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: React.PropsWithChildren) {
-  const user = await AuthHelper.getSessionUser();
-
   return (
     <html lang="en">
       <body className={`${inter.className} bg-white dark:bg-black`}>
         <BasicLayout>
-          <Provider user={user}>{children}</Provider>
+          <Provider>{children}</Provider>
         </BasicLayout>
       </body>
     </html>

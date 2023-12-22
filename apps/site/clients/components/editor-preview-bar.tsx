@@ -43,6 +43,9 @@ export const EditorPreviewBar = ({ post, onReset }: { post: Post; onReset: () =>
           type="text"
           size="small"
           className="flex items-center justify-center"
+          style={{
+            display: 'flex'
+          }}
           icon={<Icon name="more-horizontal" size={18} />}
         />
       </Dropdown>
