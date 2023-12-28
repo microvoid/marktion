@@ -18,8 +18,6 @@ export const GET = async (request: NextRequest) => {
 
   const [url, state] = await AuthHelper.luciaAuth.getGithubAuthUrl();
 
-  console.log('url', url);
-
   const cookieStore = context.cookies();
 
   cookieStore.set('github_oauth_state', state, {
