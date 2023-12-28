@@ -3,6 +3,13 @@
     position: relative;
   }
 
+  > pre {
+    padding: var(--space-2) 8px var(--space-2) 10px;
+    background-color: var(--black-a11);
+    line-height: 1.4;
+    color: #fff;
+  }
+
   .cm-editor {
     padding: var(--space-1);
     background-color: var(--black-a11);
