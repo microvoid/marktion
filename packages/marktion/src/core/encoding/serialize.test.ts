@@ -79,6 +79,6 @@ describe('marktion - encoding', () => {
   test('serialize', () => {
     const result = serialize(PMDoc);
 
-    console.log(result);
+    // console.log(result);
   });
 });

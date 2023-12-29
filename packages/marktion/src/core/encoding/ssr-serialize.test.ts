@@ -11,7 +11,18 @@ const markdown = fs.readFileSync(path.resolve('./README.md'), {
 describe('marktion - encoding', () => {
   test('html', () => {
     const html = new HtmlSerializer(schema);
-    const result = html.serialize(`**html**1111`);
+    const result = html.serialize(`
+2. Usage
+
+\`\`\`tsx
+import { ReactEditor } from 'marktion';
+import 'marktion/dist/style.css';
+
+function Editor() {
+  return <ReactEditor content={\`# Hello World\`} />;
+}
+\`\`\`
+    `);
 
     console.log(result);
   });

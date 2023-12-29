@@ -1,11 +1,17 @@
 import isArray from 'lodash/isArray';
 import isString from 'lodash/isString';
 import isPlainObject from 'lodash/isPlainObject';
-import { h, fragment, Props } from 'snabbdom';
+import { h, fragment, VNodeData, VNode } from 'snabbdom';
 import toHTML from 'snabbdom-to-html';
 import { VNodeChildren, VNodeChildElement } from 'snabbdom/build/h';
 import { DOMOutputSpec, Schema, Fragment, Node, Mark } from 'prosemirror-model';
 import { parse } from './parse';
+import { highlight } from './highlight';
+
+export type StoreComponent = Record<
+  string,
+  (node: Node, children: VNodeChildren, serializer: HtmlSerializer) => VNodeChildren
+>;
 
 export class HtmlSerializer {
   static renderSpec(structure: DOMOutputSpec, wraps?: VNodeChildren): VNodeChildren {
@@ -16,7 +22,9 @@ export class HtmlSerializer {
     if (isArray(structure)) {
       const tag = structure[0];
       const attrs = structure[1];
-      const props: Props = {};
+      const props: VNodeData = {
+        attrs: {}
+      };
 
       let children: VNodeChildElement[] = [];
       let curIndex = 1;
@@ -26,7 +34,7 @@ export class HtmlSerializer {
 
         for (const name in attrs) {
           if (attrs[name] != null) {
-            props[name] = attrs[name];
+            props.attrs![name] = attrs[name];
           }
         }
       }
@@ -51,7 +59,10 @@ export class HtmlSerializer {
     return [];
   }
 
-  constructor(public schema: Schema) {}
+  constructor(
+    public schema: Schema,
+    public storeComponent: StoreComponent = defaultStoreCompent
+  ) {}
 
   serialize(markdown: string) {
     const doc = parse(markdown);
@@ -88,8 +99,12 @@ export class HtmlSerializer {
 
     if (node.content.childCount > 0) {
       const root = this.fragment(node.content);
-
       children = root.children;
+    }
+
+    const component = this.storeComponent[node.type.name];
+    if (component) {
+      return component(node, children, this);
     }
 
     return toDOM && HtmlSerializer.renderSpec(toDOM(node), children);
@@ -98,11 +113,28 @@ export class HtmlSerializer {
   mark(mark: Mark, inline: boolean, children: VNodeChildren) {
     const toDOM = mark.type.spec.toDOM;
 
-    console.log(toDOM?.(mark, inline));
-
     return toDOM && HtmlSerializer.renderSpec(toDOM(mark, inline), children);
   }
 }
+
+export const defaultStoreCompent: StoreComponent = {
+  code_block: (node, children) => {
+    const toDOM = node.type.spec.toDOM;
+
+    if (Array.isArray(children)) {
+      children.forEach(item => {
+        const vnode = item as VNode;
+        const language = node.attrs.language;
+
+        if (vnode.text && language) {
+          vnode.text = highlight(language, vnode.text);
+        }
+      });
+    }
+
+    return toDOM && HtmlSerializer.renderSpec(toDOM(node), children);
+  }
+};
 
 function defaultTextToDOM(node: Node): DOMOutputSpec {
   return node.text!;

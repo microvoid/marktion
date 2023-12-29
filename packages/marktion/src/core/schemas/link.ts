@@ -3,6 +3,9 @@ import { MarkSpec } from 'prosemirror-model';
 export const link: MarkSpec = {
   attrs: {
     href: {},
+    target: {
+      default: '__blank'
+    },
     title: { default: null }
   },
   inclusive: false,
