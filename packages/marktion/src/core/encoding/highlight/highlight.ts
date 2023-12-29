@@ -6,7 +6,12 @@ export const lowlight = createLowlight(all);
 
 export function highlight(language: string, value: string, parser = lowlight) {
   const tree = parser.highlight(language, value);
+  return toString(tree);
+}
 
+type Root = ReturnType<(typeof lowlight)['highlight']>;
+
+export function toString(tree: Root) {
   const u = unified()
     .use(function () {
       const parser: Parser = () => {
@@ -23,7 +28,3 @@ export function highlight(language: string, value: string, parser = lowlight) {
 
   return String(result);
 }
-
-type Root = ReturnType<(typeof lowlight)['highlight']>;
-
-export function toString(tree: Root) {}

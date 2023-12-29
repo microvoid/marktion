@@ -127,7 +127,18 @@ export const defaultStoreCompent: StoreComponent = {
         const language = node.attrs.language;
 
         if (vnode.text && language) {
-          vnode.text = highlight(language, vnode.text);
+          const html = highlight(language, vnode.text);
+          const props = {
+            ...vnode.data?.props,
+            innerHTML: html
+          }
+
+          vnode.data = {
+            ...vnode.data,
+            props
+          }
+
+          vnode.text = undefined;
         }
       });
     }
@@ -139,3 +150,4 @@ export const defaultStoreCompent: StoreComponent = {
 function defaultTextToDOM(node: Node): DOMOutputSpec {
   return node.text!;
 }
+
