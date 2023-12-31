@@ -20,7 +20,7 @@ export function Header() {
   }, []);
 
   return (
-    <header className="container dark:text-gray-100">
+    <header className="dark:text-gray-100">
       <div className="flex justify-between items-center h-16 mx-auto">
         <Tooltip open={tooltipOpen} title="Star on Github" placement="right" color="purple">
           <a

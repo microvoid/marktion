@@ -1,5 +1,4 @@
 import { UserStatistics, prisma } from '@/libs';
-import { postService } from './post';
 
 class UserService {
   async createGuest() {
@@ -9,8 +8,6 @@ class UserService {
         anonymous: true
       }
     });
-
-    await postService.initUserFirstPost(guest.id);
 
     return guest;
   }

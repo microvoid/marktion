@@ -1,3 +1,5 @@
+'use client';
+
 import { useModelSelector } from './useModel';
 
 export function useLoginUser() {

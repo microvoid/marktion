@@ -1,21 +1,10 @@
 import { nanoid } from 'nanoid';
 import { Post, Prisma } from '@prisma/client';
-import { UserFirstMarkdown, ErrorUtils, prisma } from '@/libs';
+import { ErrorUtils, prisma } from '@/libs';
 
 class PostService {
-  async initUserFirstPost(userId: string) {
-    return this.upsert(
-      {
-        markdown: UserFirstMarkdown,
-        title: 'Hello World',
-        publicStats: 'private'
-      },
-      userId
-    );
-  }
-
-  async upsert(post: Partial<Post>, userId: string) {
-    const { markdown, slug = nanoid(5), id, title, publicStats } = post;
+  async upsert(post: Partial<Post>) {
+    const { markdown, slug = nanoid(5), id, title, publicStats, userId, projectId } = post;
 
     if (!markdown) {
       return new Error('markdown is required');
@@ -41,6 +30,7 @@ class PostService {
           title,
           markdown,
           publicStats,
+          projectId,
           userId
         }
       });

@@ -6,6 +6,7 @@ import * as context from 'next/headers';
 import { prisma } from '@/libs';
 import { cache } from 'react';
 import { User } from '@prisma/client';
+import { seedHelper } from '../helpers';
 
 export type Auth = LuciaAuth['lucia'];
 
@@ -52,6 +53,8 @@ class LuciaAuth {
           anonymous: false
         }
       });
+
+      await seedHelper.seedUserDefaultProject(user);
 
       return user;
     };

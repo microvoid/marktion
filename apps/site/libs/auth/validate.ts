@@ -13,7 +13,7 @@ type AuthUserhandler<T = any> = (req: NextRequest, ctx: AuthUserhandlerCtx<T>) =
 
 export function validate<T>(handler: AuthUserhandler<T>) {
   return async (req: NextRequest, { params }: { params: T }) => {
-    let user: User | null = await getSessionUser();
+    let { user } = await getSessionUser();
 
     if (!user) {
       return ApiUtils.error('Unauthorized');
@@ -23,12 +23,15 @@ export function validate<T>(handler: AuthUserhandler<T>) {
   };
 }
 
-export async function getSessionUser(): Promise<User> {
+export async function getSessionUser(): Promise<{ user: User, sessionId: string | null }> {
   const luciaUser = await luciaAuth.getSessionUser();
 
   if (luciaUser) {
-    return luciaUser;
+    return {
+      user: luciaUser,
+      sessionId: null
+    };
   }
 
-  return guestAuth.autoGuest();
+  return guestAuth.autoGuestSession()
 }

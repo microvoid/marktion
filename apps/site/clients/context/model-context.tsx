@@ -13,6 +13,7 @@ import { UserStatistics } from '@/common';
 export type ModelContextType = {
   model: {
     user: User;
+    sessionId: string | null;
     posts: Post[];
     postCount: number;
     postsFetchLoading: boolean;
@@ -42,6 +43,7 @@ export function ModelContextProvider({
   const [model, dispatch] = useImmer<ModelContextType['model']>({
     posts: [],
     postCount: 0,
+    sessionId: null,
     postsFetchLoading: false,
     postsSearchParams: {
       orderBy: 'createdAt',
@@ -69,13 +71,13 @@ export function ModelContextProvider({
   }, []);
 
   useLayoutEffect(() => {
-    if (model.user.anonymous) {
-      setCookie(GUEST_SESSION_ID, model.user.id, {
-        expires: dayjs().add(5, 'year').toDate(),
+    if (model.sessionId) {
+      setCookie(GUEST_SESSION_ID, model.sessionId, {
+        expires: dayjs().add(10, 'year').toDate(),
         path: '/'
       });
     }
-  }, [model.user]);
+  }, [model.sessionId]);
 
   return (
     <ModelContext.Provider

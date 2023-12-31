@@ -23,7 +23,10 @@ export const GET = AuthHelper.validate(async (req, ctx) => {
 
 export const POST = AuthHelper.validate(async (req, ctx) => {
   const post = (await req.json()) as Post;
-  const result = await postService.upsert(post, ctx.user.id);
+  const result = await postService.upsert({
+    ...post,
+    userId: ctx.user.id
+  });
 
   return ApiUtils.success(result);
 });
