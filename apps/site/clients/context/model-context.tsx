@@ -8,7 +8,7 @@ import { type User } from '@prisma/client';
 import { GUEST_SESSION_ID } from '@/clients';
 import { setCookie } from 'cookies-next';
 import dayjs from 'dayjs';
-import { UserStatistics } from '@/common';
+import { ProjectStatistics, UserStatistics } from '@/common';
 
 export type ModelContextType = {
   model: {
@@ -28,6 +28,7 @@ export type ModelContextType = {
 
     userStatisticsLoading: boolean;
     userStatistics: UserStatistics;
+    projectStatistics: ProjectStatistics | null;
   };
   dispatch: Updater<ModelContextType['model']>;
 };
@@ -61,6 +62,7 @@ export function ModelContextProvider({
     userStatistics: {
       postCount: 0
     },
+    projectStatistics: null,
 
     ...defaultValue,
     user: user!

@@ -13,6 +13,14 @@ class ProjectService {
     });
   }
 
+  async getProject(projectId: string) {
+    return prisma.project.findUnique({
+      where: {
+        id: projectId
+      }
+    });
+  }
+
   async createProject(adminUserId: string, input: Pick<Project, 'name' | 'slug'>) {
     const project = await prisma.project.create({
       data: input

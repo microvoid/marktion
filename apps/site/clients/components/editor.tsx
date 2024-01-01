@@ -101,17 +101,14 @@ export function Editor({ defaultPost, onResetEditor }: EditorProps) {
         content={post?.markdown || ''}
         uploadOptions={{
           async uploader(files, event, view) {
-            const data = new FormData();
-            data.set('file', files[0]);
-            data.set('filename', files[0].name);
-
-            const response = await fetch<{ data: { url: string } }>(`/api/upload`, {
-              method: 'POST',
-              data
+            const url = await modelModifier.uploadFileInProject({
+              file: files[0],
+              filename: files[0].name,
+              projectId: project.projectId
             });
 
             return view.state.schema.nodes.image.createAndFill({
-              src: response.data.data.url,
+              src: url,
               alt: files[0].name
             })!;
           }

@@ -1,4 +1,4 @@
-import { UserStatistics, prisma } from '@/libs';
+import { prisma } from '@/libs';
 
 class UserService {
   async createGuest() {
@@ -18,18 +18,6 @@ class UserService {
         id
       }
     });
-  }
-
-  async getUserStatistics(id: string): Promise<UserStatistics> {
-    const postCount = await prisma.post.count({
-      where: {
-        userId: id
-      }
-    });
-
-    return {
-      postCount
-    };
   }
 }
 

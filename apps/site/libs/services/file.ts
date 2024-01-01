@@ -18,6 +18,20 @@ class FileService {
     return file;
   }
 
+  async sumFilesizeOfProject(projectId: string) {
+    const files = await prisma.file.findMany({
+      where: {
+        projectId: projectId
+      }
+    });
+
+    const count = files.reduce((count, file) => {
+      return count + file.size;
+    }, 0);
+
+    return count;
+  }
+
   private async upload(filename: string, buffer: Buffer) {
     const url = await uploadR2(filename, buffer);
     return url;
