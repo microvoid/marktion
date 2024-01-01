@@ -1,6 +1,6 @@
 'use client';
 
-import { Post } from '@prisma/client';
+import { Post, ProjectUsers } from '@prisma/client';
 import { useImmer, Updater } from 'use-immer';
 import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import { createContext } from 'use-context-selector';
@@ -12,12 +12,14 @@ import { UserStatistics } from '@/common';
 
 export type ModelContextType = {
   model: {
+    projects: ProjectUsers[];
     user: User;
     sessionId: string | null;
     posts: Post[];
     postCount: number;
     postsFetchLoading: boolean;
     postsSearchParams: {
+      projectId: string | null;
       page: number;
       pageSize: number;
       orderBy: 'createdAt' | 'updatedAt';
@@ -38,14 +40,17 @@ export type ModelContextProviderProps = {
 
 export function ModelContextProvider({
   children,
-  defaultValue
+  defaultValue = {}
 }: React.PropsWithChildren<ModelContextProviderProps>) {
+  const { projects, user } = defaultValue;
   const [model, dispatch] = useImmer<ModelContextType['model']>({
     posts: [],
+    projects: [],
     postCount: 0,
     sessionId: null,
     postsFetchLoading: false,
     postsSearchParams: {
+      projectId: projects![0]?.id || null,
       orderBy: 'createdAt',
       order: 'desc',
       page: 0,
@@ -58,7 +63,7 @@ export function ModelContextProvider({
     },
 
     ...defaultValue,
-    user: defaultValue?.user!
+    user: user!
   });
 
   const modelRef = useRef(model);

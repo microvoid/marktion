@@ -39,12 +39,12 @@ class PostService {
     }
   }
 
-  getPostsByUserId(
-    userId: string,
-    input: Partial<typeof defaultGetPostsByUserIdOptions> = defaultGetPostsByUserIdOptions
+  getPosts(
+    where: Prisma.PostWhereInput,
+    input: Partial<typeof defaultGetPostsOptions> = defaultGetPostsOptions
   ) {
     const options = {
-      ...defaultGetPostsByUserIdOptions,
+      ...defaultGetPostsOptions,
       ...input
     };
 
@@ -52,24 +52,16 @@ class PostService {
       prisma.post.findMany({
         take: options.pageSize,
         skip: options.page * options.pageSize,
-        where: {
-          userId
-        },
+        where: where,
         orderBy: options.orderBy,
         include: {
           user: true
         }
       }),
-      this.countPostsByUserId(userId)
+      prisma.post.count({
+        where
+      })
     ]);
-  }
-
-  countPostsByUserId(userId: string) {
-    return prisma.post.count({
-      where: {
-        userId
-      }
-    });
   }
 
   async getPostBySlugId(slug: string) {
@@ -112,7 +104,7 @@ class PostService {
 
 export const postService = new PostService();
 
-export const defaultGetPostsByUserIdOptions = {
+export const defaultGetPostsOptions = {
   page: 0,
   pageSize: 10,
   orderBy: {

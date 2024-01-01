@@ -1,5 +1,5 @@
 import fetch from 'axios';
-import { ModelContextType } from './useModel';
+import { ModelContextType } from '../context/model-context';
 import { Post } from '@prisma/client';
 import { UserStatistics } from '..';
 
