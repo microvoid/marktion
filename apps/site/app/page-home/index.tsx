@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { Pagination, Select, Spin } from 'antd';
-import { Header, Footer, Editor } from '@/clients/components';
+import { Header, Editor } from '@/clients/components';
 import { useModelModifier, useModelSelector } from '@/clients';
 
 export function Home() {
@@ -82,8 +82,6 @@ export function Home() {
           )}
         </div>
       </div>
-
-      <Footer />
     </>
   );
 }

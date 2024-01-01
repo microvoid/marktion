@@ -4,7 +4,7 @@ import 'marktion/dist/style.css';
 import React from 'react';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { BasicLayout } from '@/clients/components';
+import { BasicLayout, Footer } from '@/clients/components';
 
 import { Provider } from './provider';
 
@@ -21,7 +21,11 @@ export default async function RootLayout({ children }: React.PropsWithChildren) 
     <html lang="en">
       <body className={`${inter.className} bg-white dark:bg-black`}>
         <BasicLayout>
-          <Provider>{children}</Provider>
+          <Provider>
+            {children}
+
+            <Footer />
+          </Provider>
         </BasicLayout>
       </body>
     </html>

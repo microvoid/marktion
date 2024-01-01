@@ -64,6 +64,19 @@ class PostService {
     ]);
   }
 
+  async getPostById(id: string) {
+    const post = await prisma.post.findFirst({
+      where: {
+        id
+      },
+      include: {
+        user: true
+      }
+    });
+
+    return post;
+  }
+
   async getPostBySlugId(slug: string) {
     const post = await prisma.post.findFirst({
       where: {

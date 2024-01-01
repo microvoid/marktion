@@ -14,7 +14,7 @@ export async function POST(req: Request): Promise<Response> {
 
   const ip = req.headers.get('x-forwarded-for');
 
-  const { success, limit, remaining } = await limitFree.check(`novel_ratelimit_${ip}`);
+  const { success, limit, remaining } = await limitFree.check(`marktion_ratelimit_${ip}`);
 
   if (!success) {
     return new Response('You have reached your request limit for the day.', {

@@ -28,7 +28,12 @@ export const EditorPreviewBar = ({ post, onReset }: { post: Post; onReset: () =>
 
   return (
     <div className="absolute top-1 left-3 right-3 flex justify-between items-center text-sm text-gray-500">
-      <div>2022-12-10 21:28:57</div>
+      <div className="flex items-center gap-1">
+        2022-12-10 21:28:57
+        <a href={`/p/${post.id}`} target="_blank">
+          <Icon name="link" size={14} />
+        </a>
+      </div>
 
       <Dropdown
         menu={{
