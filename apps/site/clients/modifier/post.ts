@@ -1,9 +1,8 @@
 import fetch from 'axios';
 import { ModelContextType } from '../context/model-context';
 import { Post } from '@prisma/client';
-import { UserStatistics } from '..';
 
-const PostModifier = {
+export const PostModifier = {
   async downloadPost(ctx: ModelContextType, post: Post) {
     const filename = `${post.title || 'untitled'}.md`;
     const content = post.markdown;
@@ -32,11 +31,19 @@ const PostModifier = {
         publicStats: 'public'
       }
     });
-  }
-};
+  },
 
-export const ModelModifier = {
-  ...PostModifier,
+  async upsertPost(ctx: ModelContextType, post: Partial<Post>) {
+    const res = await fetch({
+      url: '/api/post',
+      method: 'post',
+      data: post
+    });
+
+    const result: Post = res.data.data;
+
+    return result;
+  },
 
   async refreshPosts({ dispatch, model }: ModelContextType) {
     dispatch(draft => {
@@ -62,28 +69,6 @@ export const ModelModifier = {
       console.error(err);
       dispatch(draft => {
         draft.postsFetchLoading = false;
-      });
-    }
-  },
-
-  async getUserStatistics({ dispatch, model }: ModelContextType) {
-    dispatch(draft => {
-      draft.userStatisticsLoading = true;
-    });
-
-    try {
-      const res = await fetch<{ data: UserStatistics }>({
-        url: `/api/statistics/user/${model.user.id}`
-      });
-
-      dispatch(draft => {
-        draft.userStatisticsLoading = false;
-        draft.userStatistics.postCount = res.data.data.postCount;
-      });
-    } catch (err) {
-      console.error(err);
-      dispatch(draft => {
-        draft.userStatisticsLoading = false;
       });
     }
   }

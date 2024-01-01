@@ -11,6 +11,7 @@ import { message, Skeleton } from 'antd';
 
 import { renderSubmitBar } from './editor-submit-bar';
 import { EditorPreviewBar } from './editor-preview-bar';
+import { useModelModifier, useCurrentProject } from '../hooks';
 
 export type EditorProps = {
   defaultPost?: Post;
@@ -23,6 +24,9 @@ export function Editor({ defaultPost, onResetEditor }: EditorProps) {
   const [isSaving, setIsSaving] = React.useState(false);
   const [isMounted, setIsMounted] = React.useState(false);
   const [post, setPost] = React.useState(defaultPost);
+  const modelModifier = useModelModifier();
+  const project = useCurrentProject();
+
   const ai = useAI({
     onError(error) {
       message.error(error.message);
@@ -54,18 +58,13 @@ export function Editor({ defaultPost, onResetEditor }: EditorProps) {
         const data: Partial<Post> = {
           publicStats: 'public',
           title,
+          projectId: project.projectId,
           id: postId,
           markdown
         };
 
         try {
-          const res = await fetch({
-            url: '/api/post',
-            method: 'post',
-            data
-          });
-
-          const post: Post = res.data.data;
+          const post: Post = await modelModifier.upsertPost(data);
 
           if (!postId) {
             setPost(post);

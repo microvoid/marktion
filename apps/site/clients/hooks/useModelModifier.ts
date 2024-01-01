@@ -1,18 +1,11 @@
 'use client';
 
 import { useMemo, useRef } from 'react';
-import { useContextSelector } from 'use-context-selector';
-import { type User } from '@prisma/client';
 
 import { ExtraModifier } from './utils-types';
-import { ModelModifier } from './modifier';
-import { ModelContext, ModelContextType } from '../context/model-context';
-
-export type LoginUser = User;
-
-export function useModelSelector<S>(selector: (ctx: ModelContextType) => S): S {
-  return useContextSelector(ModelContext, selector);
-}
+import { ModelModifier } from '../modifier';
+import { ModelContextType } from '../context/model-context';
+import { useModelSelector } from './useModelSelector';
 
 type UseModelModifierReturn = ExtraModifier<typeof ModelModifier>;
 

@@ -50,7 +50,7 @@ export function ModelContextProvider({
     sessionId: null,
     postsFetchLoading: false,
     postsSearchParams: {
-      projectId: projects![0]?.id || null,
+      projectId: projects![0]?.projectId || null,
       orderBy: 'createdAt',
       order: 'desc',
       page: 0,

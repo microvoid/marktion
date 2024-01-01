@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect } from 'react';
 import { Alert, DropdownProps, Popover, Spin } from 'antd';
 import Image from 'next/image';
