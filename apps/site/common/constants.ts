@@ -7,10 +7,9 @@ export const PLANS_AI_LIMIT = {
   Free: 20
 };
 
-// unit: MB
 export const PLANS_PROJECT_SPACE_SIZI = {
-  Pro: 20 * 1024,
-  Free: 1 * 1024
+  Pro: 20 * 1024 * 1024,
+  Free: 1 * 1024 * 1024
 };
 
 export const PLANS = [
@@ -35,7 +34,7 @@ export const PLANS = [
     },
     features: [
       'Unlimited Posts',
-      `${PLANS_PROJECT_SPACE_SIZI.Pro} GB Storage`,
+      `${gbFormat(PLANS_PROJECT_SPACE_SIZI.Pro)} GB Storage`,
       `AI Request ${PLANS_AI_LIMIT.Pro} / day`,
       'Gpt4 Support(Comming soon)',
       'Unlimited Projects Users'
@@ -62,7 +61,7 @@ export const PLANS = [
     },
     features: [
       'Unlimited Posts',
-      `${PLANS_PROJECT_SPACE_SIZI.Free} GB Storage`,
+      `${gbFormat(PLANS_PROJECT_SPACE_SIZI.Free)} GB Storage`,
       `AI Request ${PLANS_AI_LIMIT.Pro} / day`,
       'Gpt4 Support(Comming soon)',
       'Project Users 10'
@@ -72,3 +71,7 @@ export const PLANS = [
 
 export const ProPlan = PLANS[0];
 export const FreePlan = PLANS[1];
+
+function gbFormat(n: number) {
+  return Math.floor(n / 1024 / 1024);
+}

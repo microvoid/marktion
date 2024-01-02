@@ -56,11 +56,15 @@ model Project {
   slug String  @unique
   logo String?
 
-  users             ProjectUsers[]
-  usage             Int            @default(0)
-  usageLimit        Int            @default(1000)
-  plan              String         @default("free")
-  stripeId          String?        @unique // Stripe subscription ID
+  users ProjectUsers[]
+
+  plan        ProjectPlanItem @default(Free)
+  planComment String?
+
+  sizeLimit   Int @default(1048576)
+  aiChatLimit Int @default(20)
+
+  stripeId          String? @unique // Stripe subscription ID
   billingCycleStart Int? // day of the month when the billing cycle starts
 
   Post      Post[]
@@ -70,6 +74,12 @@ model Project {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   File      File[]
+}
+
+enum ProjectPlanItem {
+  Custom
+  Free
+  Pro
 }
 
 model ProjectUsers {

@@ -46,8 +46,6 @@ export function rateLimit({ uniqueTokenPerInterval, interval, limit }: Options) 
         success: !isRateLimited,
         remaining: isRateLimited ? 0 : limit - usage
       };
-    },
-
-    setHeader(res: NextApiResponse) {}
+    }
   };
 }
