@@ -1,13 +1,10 @@
 import { CreateChatCompletionRequest, OpenAIApi } from 'openai-edge';
 import { StreamingTextResponse, OpenAIStream } from 'ai';
-import { limitFree } from '@/libs/utils/rate-limit';
-import { AuthHelper } from '@/libs';
+import { limitHelper, AuthHelper } from '@/libs/helpers';
 
 import { getOpenAIConfig } from './config';
 
 const openai = new OpenAIApi(getOpenAIConfig()!);
-
-export const runtime = 'edge';
 
 export const POST = AuthHelper.validate(async (req: Request): Promise<Response> => {
   const body = (await req.json()) as CreateChatCompletionRequest & { projectId?: string };
@@ -15,7 +12,9 @@ export const POST = AuthHelper.validate(async (req: Request): Promise<Response> 
 
   const ip = req.headers.get('x-forwarded-for');
 
-  const { success, limit, remaining } = await limitFree.check(`marktion_ratelimit_${ip}`);
+  const { success, limit, remaining } = projectId
+    ? await limitHelper.checkAIChatLimit(projectId)
+    : await limitHelper.checkAIChatLimitByIp(ip || '');
 
   if (!success) {
     return new Response('You have reached your request limit for the day.', {

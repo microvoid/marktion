@@ -1,16 +1,18 @@
-import { PLANS_AI_LIMIT } from '@/common';
-import { rateLimit } from '@/libs/utils/rate-limit';
-
-const limitFree = rateLimit({
-  interval: 1000 * 60 * 60 * 24,
-  limit: PLANS_AI_LIMIT.Free
-});
+import { getAIChatRatelimit } from '@/libs/utils/rate-limit';
+import { projectService } from '../services';
 
 class LimitHelper {
-  checkAIChatLimit(projectId: string) {}
+  async checkAIChatLimit(projectId: string) {
+    const project = await projectService.getProject(projectId);
+    const limiter = getAIChatRatelimit(project?.plan!, project?.aiChatLimit);
 
-  checkAIChatLimitByIp(ip: string) {
-    return limitFree.check(ip);
+    return limiter.limit(projectId);
+  }
+
+  async checkAIChatLimitByIp(ip: string) {
+    const limiter = getAIChatRatelimit('IP', 10);
+
+    return limiter.limit(ip);
   }
 }
 

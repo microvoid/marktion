@@ -1,51 +1,27 @@
-import type { NextApiResponse } from 'next';
-import { LRUCache } from 'lru-cache';
-import { PLANS_AI_LIMIT } from '@/common';
+import { Redis } from '@upstash/redis';
+import { Ratelimit } from '@upstash/ratelimit';
+import { ProjectPlanItem } from '@prisma/client';
 
-type Options = {
-  uniqueTokenPerInterval?: number;
-  interval?: number;
-  limit: number;
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_URL!,
+  token: process.env.UPSTASH_REDIS_TOKEN!
+});
+
+const limiterCache = new Map<string, Ratelimit>();
+
+export const getAIChatRatelimit = (prefix: ProjectPlanItem | 'IP', limit: number = 20) => {
+  const key = prefix + limit;
+
+  if (!limiterCache.has(key)) {
+    const limiter = new Ratelimit({
+      redis,
+      analytics: true,
+      prefix: `marktion_ratelimit_ai_chat_${prefix}`,
+      limiter: Ratelimit.slidingWindow(limit, '1 d')
+    });
+
+    limiterCache.set(key, limiter);
+  }
+
+  return limiterCache.get(key)!;
 };
-
-export const limitFree = rateLimit({
-  interval: 1000 * 60 * 60 * 24,
-  limit: PLANS_AI_LIMIT.Free
-});
-
-export const limitPro = rateLimit({
-  interval: 1000 * 60 * 60 * 24,
-  limit: PLANS_AI_LIMIT.Pro
-});
-
-export function rateLimit({ uniqueTokenPerInterval, interval, limit }: Options) {
-  const store = new LRUCache({
-    max: uniqueTokenPerInterval || 500,
-    ttl: interval || 60000
-  });
-
-  const increase = (token: string) => {
-    const current = (store.get(token) as number[]) || [0];
-
-    if (current[0] === 0) {
-      store.set(token, current);
-    }
-
-    current[0] += 1;
-
-    return current[0];
-  };
-
-  return {
-    async check(token: string) {
-      const usage = increase(token);
-      const isRateLimited = usage >= limit;
-
-      return {
-        limit,
-        success: !isRateLimited,
-        remaining: isRateLimited ? 0 : limit - usage
-      };
-    }
-  };
-}
