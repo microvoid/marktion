@@ -67,13 +67,14 @@ model Project {
   stripeId          String? @unique // Stripe subscription ID
   billingCycleStart Int? // day of the month when the billing cycle starts
 
-  Post      Post[]
-  tags      Tag[]
-  SentEmail SentEmail[]
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  File      File[]
+
+  File        File[]
+  ProjectPlan ProjectPlan[]
+  Post        Post[]
+  tags        Tag[]
+  SentEmail   SentEmail[]
 }
 
 enum ProjectPlanItem {
@@ -94,6 +95,30 @@ model ProjectUsers {
 
   @@unique([userId, projectId])
   @@index([projectId])
+}
+
+model ProjectPlan {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  payMethod   ProjectPlanPayMethod
+  period      ProjectPlanPeriod
+  periodCount Int
+
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String
+}
+
+enum ProjectPlanPeriod {
+  monthly
+  yearly
+}
+
+enum ProjectPlanPayMethod {
+  Weixin
+  Alipay
+  CDkey
 }
 
 enum ProjectUserRole {

@@ -1,5 +1,12 @@
-import { prisma } from '@/libs';
-import { Project, ProjectUserRole } from '@prisma/client';
+import { PLANS_AI_LIMIT, PLANS_PROJECT_SPACE_SIZI, prisma } from '@/libs';
+import {
+  Prisma,
+  Project,
+  ProjectPlan,
+  ProjectPlanItem,
+  ProjectPlanPayMethod,
+  ProjectUserRole
+} from '@prisma/client';
 
 class ProjectService {
   getProjectsByUserId(userId: string) {
@@ -18,6 +25,38 @@ class ProjectService {
       where: {
         id: projectId
       }
+    });
+  }
+
+  async upgradeProjectToPro(projectId: string) {
+    return prisma.project.update({
+      where: {
+        id: projectId
+      },
+      data: {
+        plan: ProjectPlanItem.Pro,
+        sizeLimit: PLANS_PROJECT_SPACE_SIZI.Pro,
+        aiChatLimit: PLANS_AI_LIMIT.Pro
+      }
+    });
+  }
+
+  async downgradeProjectToFree(projectId: string) {
+    return prisma.project.update({
+      where: {
+        id: projectId
+      },
+      data: {
+        plan: ProjectPlanItem.Free,
+        sizeLimit: PLANS_PROJECT_SPACE_SIZI.Free,
+        aiChatLimit: PLANS_AI_LIMIT.Free
+      }
+    });
+  }
+
+  async createProjectPlan(data: Prisma.ProjectPlanCreateArgs['data']) {
+    return prisma.projectPlan.create({
+      data: data
     });
   }
 

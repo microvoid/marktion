@@ -7,7 +7,11 @@ const Page = async () => {
 
   if (session) redirect('/');
 
-  return <LoginModal open={true} />;
+  return (
+    <div className="h-screen">
+      <LoginModal open={true} />
+    </div>
+  );
 };
 
 export default Page;

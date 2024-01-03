@@ -6,10 +6,12 @@ import { UserCard } from './user-card';
 import { Icon } from './icon';
 import { UpgradeToPro } from './upgrade-to-pro';
 import { DarkModeBtn } from './setting-dark-mode-btn';
+import { useCurrentProject } from '../hooks';
 
 export function Header() {
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const [upgradeModalOpen, setUpgradeModalOpen] = useState(false);
+  const project = useCurrentProject();
 
   useEffect(() => {
     setTimeout(() => {
@@ -31,9 +33,11 @@ export function Header() {
         </Tooltip>
 
         <div className="flex items-center rounded-lg cursor-pointer p-2 transition-colors duration-200 hover:bg- hover:text-base sm:bottom-auto sm:top-5">
-          <Tag color="magenta" onClick={() => setUpgradeModalOpen(true)}>
-            Upgrade to Pro
-          </Tag>
+          {project.plan === 'Free' && (
+            <Tag color="magenta" onClick={() => setUpgradeModalOpen(true)}>
+              Upgrade to Pro
+            </Tag>
+          )}
 
           <UserCard>
             <button className="rounded-lg cursor-pointer p-2 transition-colors duration-200 hover:bg-stone-100 hover:dark:bg-stone-700 sm:bottom-auto sm:top-5">

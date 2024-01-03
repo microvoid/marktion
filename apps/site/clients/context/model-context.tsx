@@ -1,6 +1,6 @@
 'use client';
 
-import { Post, ProjectUsers } from '@prisma/client';
+import { Post, Project, ProjectUserRole } from '@prisma/client';
 import { useImmer, Updater } from 'use-immer';
 import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import { createContext } from 'use-context-selector';
@@ -12,7 +12,7 @@ import { ProjectStatistics, UserStatistics } from '@/common';
 
 export type ModelContextType = {
   model: {
-    projects: ProjectUsers[];
+    projects: { role: ProjectUserRole; project: Project }[];
     user: User;
     sessionId: string | null;
     posts: Post[];
@@ -51,7 +51,7 @@ export function ModelContextProvider({
     sessionId: null,
     postsFetchLoading: false,
     postsSearchParams: {
-      projectId: projects![0]?.projectId || null,
+      projectId: projects![0]?.project.id || null,
       orderBy: 'createdAt',
       order: 'desc',
       page: 0,

@@ -1,27 +1,35 @@
 'use client';
 
 import { useMemo } from 'react';
-import { Badge, Divider, Input, Modal, ModalProps, Segmented } from 'antd';
 import Image from 'next/image';
 import { useImmer } from 'use-immer';
+import { useRouter } from 'next/navigation';
+import capitalize from 'lodash/capitalize';
+import { PLANS, ProPlan, sleep } from '@/common';
 import LogoHeroPng from '@/public/logo-hero.png';
 import ProMonthlyQrCodeWeixin from '@/public/pro-monthly-qrcode-weixin.jpg';
 import ProMonthlyQrCodeAlipay from '@/public/pro-monthly-qrcode-alipay.jpg';
-import capitalize from 'lodash/capitalize';
-import { PLANS, ProPlan, sleep } from '@/common';
+import { Badge, Divider, Input, Modal, ModalProps, Segmented, message } from 'antd';
+import { ProjectPlanPayMethod } from '@prisma/client';
 
 import { Icon } from './icon';
+import { useCurrentProject, useLoginUser, useModelModifier, useModelSelector } from '../hooks';
 
 interface UpgradeToProState {
   plan: 'Pro' | 'Free';
   period: 'monthly' | 'yearly';
   payLoading: boolean;
-  paySegmentedValue: 'Weixin' | 'Alipay' | 'CDkey';
+  paySegmentedValue: ProjectPlanPayMethod;
 }
 
-const PaySegmented = ['Weixin', 'Alipay', 'CDkey'];
+const PaySegmented: ProjectPlanPayMethod[] = ['Weixin', 'Alipay', 'CDkey'];
 
 export function UpgradeToPro(props: ModalProps) {
+  const router = useRouter();
+  const loginUser = useLoginUser();
+  const modifier = useModelModifier();
+  const project = useCurrentProject();
+
   const [state, dispatch] = useImmer<UpgradeToProState>({
     plan: 'Pro',
     paySegmentedValue: 'Weixin',
@@ -58,17 +66,29 @@ export function UpgradeToPro(props: ModalProps) {
       closable={false}
       footer={state.plan === 'Free' ? null : undefined}
       {...props}
-      okText="Check Pay Status"
+      okText={loginUser.anonymous ? 'Login as a Real User' : 'Check Pay Status'}
       okButtonProps={{
         loading: state.payLoading,
         ...props.okButtonProps
       }}
       onOk={async e => {
+        if (loginUser.anonymous) {
+          router.push('/login');
+          return;
+        }
+
         dispatch(draft => {
           draft.payLoading = true;
         });
 
-        await sleep(1000);
+        await modifier.updateProjectPayStatus({
+          projectId: project.id,
+          period: state.period,
+          payMethod: state.paySegmentedValue,
+          periodCount: 1
+        });
+
+        message.success('success');
 
         dispatch(draft => {
           draft.payLoading = false;

@@ -5,11 +5,11 @@ import { Home } from './page-home';
 
 export default async function () {
   const { user, sessionId } = await AuthHelper.getSessionUser();
-  const projects = await projectService.getProjectsByUserId(user.id);
-  const defaultProject = projects[0];
+  const projectUsers = await projectService.getProjectsByUserId(user.id);
+  const defaultProject = projectUsers[0];
 
   const [defaultPosts] = await postService.getPosts({
-    projectId: defaultProject.id
+    projectId: defaultProject.projectId
   });
 
   return (
@@ -17,7 +17,12 @@ export default async function () {
       defaultValue={{
         user,
         sessionId,
-        projects,
+        projects: projectUsers.map(item => {
+          return {
+            role: item.role,
+            project: item.project!
+          };
+        }),
         posts: defaultPosts
       }}
     >
