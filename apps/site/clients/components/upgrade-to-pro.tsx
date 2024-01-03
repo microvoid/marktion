@@ -5,11 +5,11 @@ import Image from 'next/image';
 import { useImmer } from 'use-immer';
 import { useRouter } from 'next/navigation';
 import capitalize from 'lodash/capitalize';
-import { PLANS, ProPlan, sleep } from '@/common';
+import { PLANS, ProPlan } from '@/common';
 import LogoHeroPng from '@/public/logo-hero.png';
 import ProMonthlyQrCodeWeixin from '@/public/pro-monthly-qrcode-weixin.jpg';
 import ProMonthlyQrCodeAlipay from '@/public/pro-monthly-qrcode-alipay.jpg';
-import { Badge, Divider, Input, Modal, ModalProps, Segmented, message } from 'antd';
+import { Badge, Divider, Input, Modal, ModalProps, Segmented } from 'antd';
 import { ProjectPlanPayMethod } from '@prisma/client';
 
 import { Icon } from './icon';
@@ -19,6 +19,7 @@ interface UpgradeToProState {
   plan: 'Pro' | 'Free';
   period: 'monthly' | 'yearly';
   payLoading: boolean;
+  cdkey: string;
   paySegmentedValue: ProjectPlanPayMethod;
 }
 
@@ -32,6 +33,7 @@ export function UpgradeToPro(props: ModalProps) {
 
   const [state, dispatch] = useImmer<UpgradeToProState>({
     plan: 'Pro',
+    cdkey: '',
     paySegmentedValue: 'Weixin',
     payLoading: false,
     period: 'monthly'
@@ -68,6 +70,7 @@ export function UpgradeToPro(props: ModalProps) {
       {...props}
       okText={loginUser.anonymous ? 'Login as a Real User' : 'Check Pay Status'}
       okButtonProps={{
+        disabled: state.paySegmentedValue === 'CDkey' && !state.cdkey,
         loading: state.payLoading,
         ...props.okButtonProps
       }}
@@ -81,19 +84,21 @@ export function UpgradeToPro(props: ModalProps) {
           draft.payLoading = true;
         });
 
-        await modifier.updateProjectPayStatus({
+        const success = await modifier.updateProjectPayStatus({
           projectId: project.id,
           period: state.period,
+          cdkey: state.cdkey,
           payMethod: state.paySegmentedValue,
           periodCount: 1
         });
 
-        message.success('success');
-
         dispatch(draft => {
           draft.payLoading = false;
         });
-        // props.onOk?.(e);
+
+        if (success) {
+          props.onOk?.(e);
+        }
       }}
     >
       <div className="px-4 my-10">
@@ -174,7 +179,16 @@ export function UpgradeToPro(props: ModalProps) {
 
               {state.paySegmentedValue === 'CDkey' && (
                 <div className="mt-2">
-                  <Input width="300px" placeholder="Please enter cdkey" />
+                  <Input
+                    width="300px"
+                    placeholder="Please enter cdkey"
+                    value={state.cdkey}
+                    onChange={e => {
+                      dispatch(draft => {
+                        draft.cdkey = e.target.value;
+                      });
+                    }}
+                  />
                 </div>
               )}
             </div>

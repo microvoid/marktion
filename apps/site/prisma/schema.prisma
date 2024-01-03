@@ -102,12 +102,16 @@ model ProjectPlan {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  payMethod   ProjectPlanPayMethod
-  period      ProjectPlanPeriod
-  periodCount Int
+  payMethod   ProjectPlanPayMethod @default(CDkey)
+  period      ProjectPlanPeriod    @default(monthly)
+  periodCount Int                  @default(1)
 
-  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  projectId String
+  cdkey String? @unique
+
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String?
+
+  @@index([id, cdkey])
 }
 
 enum ProjectPlanPeriod {

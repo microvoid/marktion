@@ -60,6 +60,14 @@ class ProjectService {
     });
   }
 
+  async getProjectPlanByCDKey(cdkey: string) {
+    return prisma.projectPlan.findUnique({
+      where: {
+        cdkey
+      }
+    });
+  }
+
   async createProject(adminUserId: string, input: Pick<Project, 'name' | 'slug'>) {
     const project = await prisma.project.create({
       data: input

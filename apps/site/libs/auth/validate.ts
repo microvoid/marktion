@@ -3,6 +3,7 @@ import { NextRequest } from 'next/server';
 import { ApiUtils } from '@/libs';
 import { guestAuth } from './GuestAuth';
 import { luciaAuth } from './LuciaAuth';
+import { CodeError } from '../utils/error';
 
 type AuthUserhandlerCtx<T> = {
   user: User;
@@ -19,11 +20,21 @@ export function validate<T>(handler: AuthUserhandler<T>) {
       return ApiUtils.error('Unauthorized');
     }
 
-    return handler(req, { user, params });
+    try {
+      const result = await handler(req, { user, params });
+
+      return result;
+    } catch (err) {
+      if (err instanceof CodeError) {
+        return ApiUtils.error(err.message, err.code);
+      }
+
+      return ApiUtils.error('Server Error');
+    }
   };
 }
 
-export async function getSessionUser(): Promise<{ user: User, sessionId: string | null }> {
+export async function getSessionUser(): Promise<{ user: User; sessionId: string | null }> {
   const luciaUser = await luciaAuth.getSessionUser();
 
   if (luciaUser) {
@@ -33,5 +44,5 @@ export async function getSessionUser(): Promise<{ user: User, sessionId: string 
     };
   }
 
-  return guestAuth.autoGuestSession()
+  return guestAuth.autoGuestSession();
 }
