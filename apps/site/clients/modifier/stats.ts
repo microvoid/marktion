@@ -3,18 +3,18 @@ import { ModelContextType } from '../context/model-context';
 import { UserStatistics, ProjectStatistics } from '..';
 
 export const StatsModifier = {
-  async getUserStatistics({ dispatch, model }: ModelContextType) {
+  async getUserStatistics({ dispatch, model }: ModelContextType, projectId: string) {
     dispatch(draft => {
       draft.userStatisticsLoading = true;
     });
 
     try {
       const [userStats, projectStatistics] = await Promise.all([
-        await fetch<{ data: UserStatistics }>({
+        fetch<{ data: UserStatistics }>({
           url: `/api/statistics/user/${model.user.id}`
         }),
-        await fetch<{ data: ProjectStatistics }>({
-          url: `/api/statistics/project/${model.projects[0].projectId}`
+        fetch<{ data: ProjectStatistics }>({
+          url: `/api/statistics/project/${projectId}`
         })
       ]);
 

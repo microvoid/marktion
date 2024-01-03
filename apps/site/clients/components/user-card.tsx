@@ -5,7 +5,13 @@ import { Alert, DropdownProps, Popover, Spin } from 'antd';
 import Image from 'next/image';
 import ANONYMOUS_ICON from '@/public/user-secret-solid.svg';
 
-import { type LoginUser, useLoginUser, useModelModifier, useModelSelector } from '../hooks';
+import {
+  type LoginUser,
+  useLoginUser,
+  useModelModifier,
+  useModelSelector,
+  useCurrentProject
+} from '../hooks';
 
 export function UserCard(props: DropdownProps) {
   const user = useLoginUser();
@@ -26,9 +32,10 @@ function UserCardContent({ user }: { user: LoginUser }) {
   const modifier = useModelModifier();
   const userStatistics = useModelSelector(ctx => ctx.model.userStatistics);
   const loading = useModelSelector(ctx => ctx.model.userStatisticsLoading);
+  const project = useCurrentProject();
 
   useEffect(() => {
-    modifier.getUserStatistics();
+    modifier.getUserStatistics(project.id);
   }, []);
 
   return (
