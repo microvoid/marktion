@@ -25,9 +25,7 @@ class StatsHelper {
   async getProjectStatistics(projectId: string): Promise<ProjectStatistics> {
     const project = await projectService.getProject(projectId);
     const projectFileSize = {
-      total:
-        PLANS_PROJECT_SPACE_SIZI[project?.plan as keyof typeof PLANS_PROJECT_SPACE_SIZI] ||
-        PLANS_PROJECT_SPACE_SIZI.Free,
+      total: project?.sizeLimit || PLANS_PROJECT_SPACE_SIZI.Free,
       used: await fileService.sumFilesizeOfProject(projectId)
     };
 

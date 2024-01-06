@@ -12,11 +12,14 @@ export const FileModifier = {
     data.set('filename', options.filename);
     data.set('projectId', options.projectId);
 
-    const response = await fetch<{ data: { url: string } }>(`/api/upload`, {
-      method: 'POST',
-      data
-    });
+    const response = await fetch<{ data: { url: string }; status: number; message: string }>(
+      `/api/upload`,
+      {
+        method: 'POST',
+        data
+      }
+    );
 
-    return response.data.data.url;
+    return response.data;
   }
 };

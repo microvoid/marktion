@@ -96,19 +96,24 @@ export function Editor({ defaultPost, onResetEditor }: EditorProps) {
           ['!pt-10']: isPreviewEditor
         })}
         dark={isDarkMode}
-        prefix={isPreviewEditor && <EditorPreviewBar post={defaultPost!} onReset={onReset} />}
+        prefix={isPreviewEditor && <EditorPreviewBar post={defaultPost!} />}
         plugins={[ai.plugin]}
         content={post?.markdown || ''}
         uploadOptions={{
           async uploader(files, event, view) {
-            const url = await modelModifier.uploadFileInProject({
+            const result = await modelModifier.uploadFileInProject({
               file: files[0],
               filename: files[0].name,
               projectId: project.projectId
             });
 
+            if (result.status !== 0) {
+              message.error(result.message);
+              throw result.message;
+            }
+
             return view.state.schema.nodes.image.createAndFill({
-              src: url,
+              src: result.data.url,
               alt: files[0].name
             })!;
           }
