@@ -29,6 +29,11 @@ export function createState(codemirror: CodemirrorRenderer) {
     extensions: [
       ...internalExtensions,
       theme,
+      EditorView.theme({
+        '.cm-scroller': {
+          lineHeight: '1.5'
+        }
+      }),
       placeholder('please enter the markdown source'),
       EditorView.updateListener.of(update => {
         if (update.docChanged) {

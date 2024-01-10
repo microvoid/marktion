@@ -41,9 +41,10 @@
   &[data-renderer='WYSIWYG'] .wrapper-wysiwyg {
     display: block;
   }
-
+  
   &[data-renderer='SOURCE'] .wrapper-source {
     display: block;
+    padding: calc(var(--space-4) - 4px) 0;
   }
 
   &.inline-style {
