@@ -16,6 +16,8 @@ import {
 export function UserCard(props: DropdownProps) {
   const user = useLoginUser();
 
+  if (!user) return null;
+
   return (
     <Popover
       trigger={['click']}

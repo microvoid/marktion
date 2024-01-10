@@ -45,6 +45,10 @@ export function UpgradeToPro(props: ModalProps) {
     return p?.features || [];
   }, [state.plan]);
 
+  if (!loginUser || !project) {
+    return null;
+  }
+
   return (
     <Modal
       title={

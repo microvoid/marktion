@@ -2,19 +2,15 @@
 
 import { Post, Project, ProjectUserRole } from '@prisma/client';
 import { useImmer, Updater } from 'use-immer';
-import React, { useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { createContext } from 'use-context-selector';
 import { type User } from '@prisma/client';
-import { GUEST_SESSION_ID } from '@/clients';
-import { setCookie } from 'cookies-next';
-import dayjs from 'dayjs';
 import { ProjectStatistics, UserStatistics } from '@/common';
 
 export type ModelContextType = {
   model: {
     projects: { role: ProjectUserRole; project: Project }[];
-    user: User;
-    sessionId: string | null;
+    user?: User | null;
     posts: Post[];
     postCount: number;
     postsFetchLoading: boolean;
@@ -43,15 +39,15 @@ export function ModelContextProvider({
   children,
   defaultValue = {}
 }: React.PropsWithChildren<ModelContextProviderProps>) {
-  const { projects, user } = defaultValue;
+  const { projects = [] } = defaultValue;
+
   const [model, dispatch] = useImmer<ModelContextType['model']>({
     posts: [],
     projects: [],
     postCount: 0,
-    sessionId: null,
     postsFetchLoading: false,
     postsSearchParams: {
-      projectId: projects![0]?.project.id || null,
+      projectId: projects[0]?.project.id || null,
       orderBy: 'createdAt',
       order: 'desc',
       page: 0,
@@ -64,8 +60,7 @@ export function ModelContextProvider({
     },
     projectStatistics: null,
 
-    ...defaultValue,
-    user: user!
+    ...defaultValue
   });
 
   const modelRef = useRef(model);
@@ -76,15 +71,6 @@ export function ModelContextProvider({
     // @ts-ignore
     window['model'] = modelRef;
   }, []);
-
-  useLayoutEffect(() => {
-    if (model.sessionId) {
-      setCookie(GUEST_SESSION_ID, model.sessionId, {
-        expires: dayjs().add(10, 'year').toDate(),
-        path: '/'
-      });
-    }
-  }, [model.sessionId]);
 
   return (
     <ModelContext.Provider

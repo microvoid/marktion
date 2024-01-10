@@ -5,7 +5,6 @@ import { ReactEditor, ReactEditorRef, useAI } from 'marktion';
 import { useTheme } from 'next-themes';
 import { Post } from '@prisma/client';
 import { debounce } from 'lodash';
-import fetch from 'axios';
 import cls from 'classnames';
 import { message, Skeleton } from 'antd';
 
@@ -58,7 +57,7 @@ export function Editor({ defaultPost, onResetEditor }: EditorProps) {
         const data: Partial<Post> = {
           publicStats: 'public',
           title,
-          projectId: project.projectId,
+          projectId: project?.id,
           id: postId,
           markdown
         };
@@ -104,7 +103,7 @@ export function Editor({ defaultPost, onResetEditor }: EditorProps) {
             const result = await modelModifier.uploadFileInProject({
               file: files[0],
               filename: files[0].name,
-              projectId: project.projectId
+              projectId: project?.id
             });
 
             if (result.status !== 0) {
