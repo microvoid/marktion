@@ -1,5 +1,5 @@
+import * as PostModifier from './post';
 import { FileModifier } from './file';
-import { PostModifier } from './post';
 import { ProjectModifier } from './project';
 import { StatsModifier } from './stats';
 

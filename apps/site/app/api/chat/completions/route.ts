@@ -6,7 +6,7 @@ import { getOpenAIConfig } from './config';
 
 const openai = new OpenAIApi(getOpenAIConfig()!);
 
-export const POST = AuthHelper.validate(async (req: Request): Promise<Response> => {
+export const POST = async (req: Request): Promise<Response> => {
   const body = (await req.json()) as CreateChatCompletionRequest & { projectId?: string };
   const { messages, stream = true, projectId = null } = body;
 
@@ -36,4 +36,4 @@ export const POST = AuthHelper.validate(async (req: Request): Promise<Response> 
 
   // Respond with the stream
   return new StreamingTextResponse(aiStream);
-});
+};

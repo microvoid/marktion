@@ -1,5 +1,7 @@
 import { postService, AuthHelper, defaultGetPostsOptions, ApiUtils } from '@/libs';
+import { getSessionUser } from '@/libs/auth';
 import { Post } from '@prisma/client';
+import { NextRequest } from 'next/server';
 
 export const GET = AuthHelper.validate(async (req, ctx) => {
   const query = req.nextUrl.searchParams;
@@ -27,12 +29,24 @@ export const GET = AuthHelper.validate(async (req, ctx) => {
   });
 });
 
-export const POST = AuthHelper.validate(async (req, ctx) => {
+export const POST = async function (req: NextRequest, { params }: { params: unknown }) {
   const post = (await req.json()) as Post;
-  const result = await postService.upsert({
-    ...post,
-    userId: ctx.user.id
+  const user = await getSessionUser();
+
+  if (!user) {
+    // anonymous;
+    const result = await postService.upsert(post);
+    return ApiUtils.success(result);
+  }
+
+  const handler = AuthHelper.validate(async (req, ctx) => {
+    const result = await postService.upsert({
+      ...post,
+      userId: ctx.user.id
+    });
+
+    return ApiUtils.success(result);
   });
 
-  return ApiUtils.success(result);
-});
+  return handler(req, { params });
+};

@@ -7,13 +7,13 @@ import { CodeError } from '../utils/error';
 
 type AuthUserhandlerCtx<T> = {
   user: User;
-  params: T;
+  params?: T;
 };
 
 type AuthUserhandler<T = any> = (req: NextRequest, ctx: AuthUserhandlerCtx<T>) => any;
 
 export function validate<T>(handler: AuthUserhandler<T>) {
-  return async (req: NextRequest, { params }: { params: T }) => {
+  return async (req: NextRequest, routeCtx?: { params: T }) => {
     const user = await getSessionUser();
 
     if (!user) {
@@ -21,7 +21,7 @@ export function validate<T>(handler: AuthUserhandler<T>) {
     }
 
     try {
-      const result = await handler(req, { user, params });
+      const result = await handler(req, { user, params: routeCtx?.params });
 
       return result;
     } catch (err) {
