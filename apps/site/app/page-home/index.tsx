@@ -32,8 +32,9 @@ export function Home() {
           Modal.confirm({
             title: 'Import local post',
             content: 'Whether to import locally cached content?',
-            onOk() {
-              return execImport();
+            async onOk() {
+              await execImport();
+              return modifier.refreshPosts();
             },
             onCancel() {
               return markIgnore();

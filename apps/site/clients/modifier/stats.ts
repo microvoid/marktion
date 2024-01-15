@@ -1,9 +1,14 @@
 import fetch from 'axios';
 import { ModelContextType } from '../context/model-context';
-import { UserStatistics, ProjectStatistics } from '..';
+import { UserStatistics, ProjectStatistics, Selector } from '..';
 
 export const StatsModifier = {
-  async getUserStatistics({ dispatch, model }: ModelContextType, projectId: string) {
+  async getUserStatistics(ctx: ModelContextType, projectId: string) {
+    const { dispatch } = ctx;
+    const loginUser = Selector.getLoginUser(ctx);
+
+    if (!loginUser) return;
+
     dispatch(draft => {
       draft.userStatisticsLoading = true;
     });
@@ -11,7 +16,7 @@ export const StatsModifier = {
     try {
       const [userStats, projectStatistics] = await Promise.all([
         fetch<{ data: UserStatistics }>({
-          url: `/api/statistics/user/${model.user.id}`
+          url: `/api/statistics/user/${loginUser.id}`
         }),
         fetch<{ data: ProjectStatistics }>({
           url: `/api/statistics/project/${projectId}`
