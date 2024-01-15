@@ -114,14 +114,30 @@ class PostService {
     return res;
   }
 
-  async reownerAnonymousPosts(userId: string, ids: string[]) {
-    const promises = ids.map(id => this.reownerAnonymousPost(userId, id));
+  async reownerAnonymousPosts({
+    userId,
+    ids,
+    projectId
+  }: {
+    userId: string;
+    ids: string[];
+    projectId: string;
+  }) {
+    const promises = ids.map(id => this.reownerAnonymousPost({ userId, id, projectId }));
     const results = await Promise.all(promises);
 
     return results;
   }
 
-  async reownerAnonymousPost(userId: string, id: string) {
+  async reownerAnonymousPost({
+    userId,
+    id,
+    projectId
+  }: {
+    userId: string;
+    id: string;
+    projectId: string;
+  }) {
     const post = await prisma.post.findUnique({
       where: {
         id
@@ -133,15 +149,16 @@ class PostService {
     }
 
     if (post.userId) {
-      throw ErrorUtils.unauthorized();
+      // throw ErrorUtils.unauthorized();
     }
 
     return await prisma.post.update({
       where: {
-        id: id
+        id
       },
       data: {
-        userId: userId
+        userId,
+        projectId
       }
     });
   }

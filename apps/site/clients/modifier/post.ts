@@ -124,9 +124,11 @@ export async function importLocalPosts(ctx: ModelContextType, projectId: string)
           url: '/api/post/import',
           method: 'post',
           data: {
+            projectId,
             ids: posts.map(post => post.id)
           }
         });
+
         clearLocalPosts();
       }
     }

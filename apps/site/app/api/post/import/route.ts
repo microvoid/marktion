@@ -1,8 +1,12 @@
 import { postService, AuthHelper, ApiUtils } from '@/libs';
 
 export const POST = AuthHelper.validate(async (req, ctx) => {
-  const { ids } = (await req.json()) as { ids: string[] };
-  const res = await postService.reownerAnonymousPosts(ctx.user.id, ids);
+  const { ids, projectId } = (await req.json()) as { ids: string[]; projectId: string };
+  const res = await postService.reownerAnonymousPosts({
+    userId: ctx.user.id,
+    ids,
+    projectId
+  });
 
   return ApiUtils.success(res);
 });
