@@ -1,8 +1,9 @@
 import fetch from 'axios';
 import { Post } from '@prisma/client';
+import dayjs from 'dayjs';
 
 import { ModelContextType } from '../context/model-context';
-import { storageService } from '../services';
+import { ProjectStorage, storageService } from '../services';
 
 export async function downloadPost(ctx: ModelContextType, post: Post) {
   const filename = `${post.title || 'untitled'}.md`;
@@ -82,6 +83,56 @@ export async function refreshPosts({ dispatch, model }: ModelContextType) {
   }
 }
 
+export async function importLocalPosts(ctx: ModelContextType, projectId: string) {
+  const posts = await storageService.getPosts();
+  const projectStorage = ProjectStorage.create(projectId);
+  const localIgnoreBefore = await projectStorage.getLocalIgnoreBefore();
+
+  function getHasLocalPostsToImport() {
+    if (!localIgnoreBefore) {
+      return posts;
+    }
+
+    return posts.filter(post => {
+      if (!post || !post.id) {
+        return false;
+      }
+
+      return dayjs(post.createdAt).isAfter(localIgnoreBefore);
+    });
+  }
+
+  function clearLocalPosts() {
+    const posts = getHasLocalPostsToImport();
+
+    posts.forEach(item => {
+      deletePostByStorage(ctx, item.id);
+    });
+  }
+
+  return {
+    getHasLocalPostsToImport,
+    markIgnore() {
+      projectStorage.markLocalIgnoreBefore(Date.now());
+    },
+
+    async execImport() {
+      const posts = getHasLocalPostsToImport();
+
+      if (posts.length > 0) {
+        await fetch({
+          url: '/api/post/import',
+          method: 'post',
+          data: {
+            ids: posts.map(post => post.id)
+          }
+        });
+        clearLocalPosts();
+      }
+    }
+  };
+}
+
 async function getPostsByStorage({ dispatch, model }: ModelContextType) {
   const posts = await storageService.getPosts();
 
@@ -93,4 +144,8 @@ async function getPostsByStorage({ dispatch, model }: ModelContextType) {
 
 async function insertPostByStorage(ctx: ModelContextType, post: Post) {
   return storageService.insertPost(post);
+}
+
+async function deletePostByStorage(ctx: ModelContextType, id: string) {
+  return storageService.deletePost(id);
 }

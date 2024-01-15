@@ -113,6 +113,38 @@ class PostService {
 
     return res;
   }
+
+  async reownerAnonymousPosts(userId: string, ids: string[]) {
+    const promises = ids.map(id => this.reownerAnonymousPost(userId, id));
+    const results = await Promise.all(promises);
+
+    return results;
+  }
+
+  async reownerAnonymousPost(userId: string, id: string) {
+    const post = await prisma.post.findUnique({
+      where: {
+        id
+      }
+    });
+
+    if (!post) {
+      throw ErrorUtils.notFound();
+    }
+
+    if (post.userId) {
+      throw ErrorUtils.unauthorized();
+    }
+
+    return await prisma.post.update({
+      where: {
+        id: id
+      },
+      data: {
+        userId: userId
+      }
+    });
+  }
 }
 
 export const postService = new PostService();

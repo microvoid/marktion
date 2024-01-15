@@ -1,26 +1,64 @@
 'use client';
 
 import { useEffect } from 'react';
-import { Pagination, Select, Spin } from 'antd';
+import { Alert, Pagination, Select, Modal } from 'antd';
 import { Header, Editor } from '@/clients/components';
-import { useModelModifier, useModelSelector } from '@/clients';
+import { useCurrentProject, useModelModifier, useModelSelector } from '@/clients';
 
 export function Home() {
   const posts = useModelSelector(ctx => ctx.model.posts);
   const postCount = useModelSelector(ctx => ctx.model.postCount);
   const postsSearchParams = useModelSelector(ctx => ctx.model.postsSearchParams);
   const postsFetchLoading = useModelSelector(ctx => ctx.model.postsFetchLoading);
+  const loginUser = useModelSelector(ctx => ctx.model.user);
   const modifier = useModelModifier();
   const dispatch = useModelSelector(ctx => ctx.dispatch);
+  const currentProject = useCurrentProject();
 
   useEffect(() => {
     modifier.refreshPosts();
     document.documentElement.scrollTop = 0;
   }, [postsSearchParams]);
 
+  useEffect(function autoImportLocalPosts() {
+    if (!currentProject?.id) {
+      return;
+    }
+
+    modifier
+      .importLocalPosts(currentProject.id)
+      .then(({ getHasLocalPostsToImport, execImport, markIgnore }) => {
+        if (getHasLocalPostsToImport().length > 0) {
+          Modal.confirm({
+            title: 'Import local post',
+            content: 'Whether to import locally cached content?',
+            onOk() {
+              return execImport();
+            },
+            onCancel() {
+              return markIgnore();
+            }
+          });
+        }
+      });
+  }, []);
+
   return (
     <>
       <Header />
+
+      {!loginUser && (
+        <Alert
+          message={
+            <span>
+              Local storage may lose some data. It is recommended that you login and use it.{' '}
+              <a href="/login">Login</a>
+            </span>
+          }
+          banner
+          closable
+        />
+      )}
 
       <div className="w-full mt-10">
         {/* <div className="mt-[50px] pb-[100px]"> */}

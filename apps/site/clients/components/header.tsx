@@ -32,7 +32,7 @@ export function Header() {
           </a>
         </Tooltip>
 
-        <div className="flex items-center rounded-lg cursor-pointer p-2 transition-colors duration-200 hover:bg- hover:text-base sm:bottom-auto sm:top-5">
+        <div className="flex items-center rounded-lg cursor-pointer transition-colors duration-200 hover:bg- hover:text-base sm:bottom-auto sm:top-5">
           {project?.plan === 'Free' && (
             <Tag color="magenta" onClick={() => setUpgradeModalOpen(true)}>
               Upgrade to Pro
