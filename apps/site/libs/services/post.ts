@@ -149,7 +149,7 @@ class PostService {
     }
 
     if (post.userId) {
-      // throw ErrorUtils.unauthorized();
+      throw ErrorUtils.unauthorized();
     }
 
     return await prisma.post.update({

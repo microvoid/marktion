@@ -1,0 +1,22 @@
+{
+  "name": "use-context-immer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "use-immer": "^0.9.0"
+  },
+  "peerDependencies": {
+    "immer": "^10.0.3",
+    "react": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.15"
+  }
+}

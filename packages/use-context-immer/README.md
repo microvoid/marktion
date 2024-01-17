@@ -1,4 +1,26 @@
-# use-context-state
+# use-context-immer
+
+quick start
+
+```typescript
+const TodoContext = createContext();
+
+
+function Todo() {
+  const todos = useSelector(TodoContext, ctx => ctx.model.todos);
+  const dispath = useSelector(TodoContext, ctx => ctx.dispath);
+
+  const onCommit = () => {
+    dispath(model => {
+      model.todos[0].check = true;
+    })
+  }
+}
+
+function App() {
+  return <TodoContext.Provider><Todo /></TodoContext.Provider>
+}
+```
 
 ```typescript
 class AppState {
