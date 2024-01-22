@@ -98,7 +98,9 @@ function Editor() {
   });
 
   return (
-    <ReactEditor ref={editorRef} plugins={[ai.plugin]} />
+    <ReactEditor ref={editorRef} plugins={[ai.plugin]}>
+      {ai.element}
+    </ReactEditor/>
   )
 }
 ```
