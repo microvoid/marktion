@@ -10,7 +10,7 @@ export const EditorPreviewBar = ({ post }: { post: Post }) => {
     {
       key: 'download',
       label: `Download`,
-      handler() {
+      onClick() {
         modifier.downloadPost(post);
       }
     },
@@ -19,7 +19,7 @@ export const EditorPreviewBar = ({ post }: { post: Post }) => {
       key: 'delete',
       danger: true,
       label: 'Delete',
-      async handler() {
+      async onClick() {
         await modifier.delPost(post.id);
         modifier.refreshPosts();
       }
@@ -37,11 +37,7 @@ export const EditorPreviewBar = ({ post }: { post: Post }) => {
 
       <Dropdown
         menu={{
-          items,
-          onClick: async ({ key }) => {
-            const item = items.find(item => item.key === key);
-            item?.handler();
-          }
+          items
         }}
       >
         <Button
