@@ -31,7 +31,7 @@ export function Editor({ defaultPost, onResetEditor }: EditorProps) {
       message.error(error.message);
     },
 
-    api: `/api/chat/completions`
+    api: `/api/chat/azure-completions`
   });
 
   const isDarkMode = theme === 'dark';

@@ -1,12 +1,14 @@
-import { CreateChatCompletionRequest } from 'openai-edge';
 import { StreamingTextResponse } from 'ai';
 import { limitHelper } from '@/libs/helpers';
-
-import { createOpenAIStream } from './stream-openai';
+import { createAzureAIStream } from './stream-azure';
+import { ChatRequestMessage, GetChatCompletionsOptions } from '@azure/openai';
 
 export const POST = async (req: Request): Promise<Response> => {
-  const body = (await req.json()) as CreateChatCompletionRequest & { projectId?: string };
-  const { messages, stream = true, projectId = null, temperature } = body;
+  const body = await req.json();
+
+  const messages: ChatRequestMessage[] = body.messages;
+  const projectId = body.projectId || null;
+  const { temperature } = body as GetChatCompletionsOptions;
 
   const ip = req.headers.get('x-forwarded-for');
 
@@ -25,11 +27,8 @@ export const POST = async (req: Request): Promise<Response> => {
     });
   }
 
-  const aiStream = await createOpenAIStream({
-    model: 'gpt-3.5-turbo',
-    messages: messages,
-    temperature,
-    stream
+  const aiStream = await createAzureAIStream(messages, {
+    temperature
   });
 
   // Respond with the stream

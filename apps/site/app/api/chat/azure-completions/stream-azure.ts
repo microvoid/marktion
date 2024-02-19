@@ -8,7 +8,7 @@ import { OpenAIStream } from 'ai';
 
 // Create an OpenAI API client (that's edge friendly!)
 const client = new OpenAIClient(
-  'https://YOUR-AZURE-OPENAI-ENDPOINT',
+  process.env.AZURE_OPENAI_ENDPOINT!,
   new AzureKeyCredential(process.env.AZURE_OPENAI_API_KEY!)
 );
 
@@ -18,7 +18,7 @@ export async function createAzureAIStream(
 ) {
   // Ask Azure OpenAI for a streaming chat completion given the prompt
   const response = await client.streamChatCompletions(
-    'YOUR_DEPLOYED_INSTANCE_NAME',
+    process.env.AZURE_OPENAI_DEPLOYED_NAME!,
     messages,
     options
   );
