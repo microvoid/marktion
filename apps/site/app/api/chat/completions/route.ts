@@ -1,10 +1,7 @@
-import { CreateChatCompletionRequest, OpenAIApi } from 'openai-edge';
-import { StreamingTextResponse, OpenAIStream } from 'ai';
+import { CreateChatCompletionRequest } from 'openai-edge';
+import { StreamingTextResponse } from 'ai';
 import { limitHelper } from '@/libs/helpers';
-
-import { getOpenAIConfig } from './config';
-
-const openai = new OpenAIApi(getOpenAIConfig()!);
+import { createOpenAIStream } from './stream-openai';
 
 export const POST = async (req: Request): Promise<Response> => {
   const body = (await req.json()) as CreateChatCompletionRequest & { projectId?: string };
@@ -29,14 +26,12 @@ export const POST = async (req: Request): Promise<Response> => {
     });
   }
 
-  const response = await openai.createChatCompletion({
+  const aiStream = await createOpenAIStream({
     model: 'gpt-3.5-turbo',
     messages: messages,
     temperature,
     stream
   });
-
-  const aiStream = OpenAIStream(response);
 
   // Respond with the stream
   return new StreamingTextResponse(aiStream, {
