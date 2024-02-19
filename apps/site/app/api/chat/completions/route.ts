@@ -20,6 +20,9 @@ export const POST = async (req: Request): Promise<Response> => {
     return new Response('You have reached your request limit for the day.', {
       status: 429,
       headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': '*',
         'X-RateLimit-Limit': limit.toString(),
         'X-RateLimit-Remaining': remaining.toString()
       }
@@ -36,5 +39,11 @@ export const POST = async (req: Request): Promise<Response> => {
   const aiStream = OpenAIStream(response);
 
   // Respond with the stream
-  return new StreamingTextResponse(aiStream);
+  return new StreamingTextResponse(aiStream, {
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': '*'
+    }
+  });
 };
