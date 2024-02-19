@@ -1,5 +1,5 @@
 {
-  "name": "storybook",
+  "name": "@repo/storybook",
   "private": true,
   "scripts": {
     "dev": "storybook dev -p 6006",
