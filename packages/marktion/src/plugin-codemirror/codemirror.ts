@@ -2,14 +2,21 @@ import { Plugin, PluginKey } from 'prosemirror-state';
 import type { CodeMirrorNodeView } from './node-view/CodeMirrorNodeView';
 import { createToolbar, Toolbar } from './toolbar/createToolbar';
 
-export const CodemirrorPluginKey = new PluginKey<CodemirrorState>('plugin-codemirror');
+export type CodemirrorOptions = {
+  createToolbar: typeof createToolbar;
+};
 
-export const codemirror = () => {
+export const CodemirrorPluginKey = new PluginKey<CodemirrorState>('plugin-codemirror');
+export const deafultCodemirrorOptions = {
+  createToolbar
+};
+
+export const codemirror = (options: CodemirrorOptions = deafultCodemirrorOptions) => {
   return new Plugin<CodemirrorState>({
     key: CodemirrorPluginKey,
     state: {
-      init(state, editor) {
-        return new CodemirrorState();
+      init() {
+        return new CodemirrorState(options);
       },
       apply(tr, value) {
         return value;
@@ -19,10 +26,12 @@ export const codemirror = () => {
 };
 
 export class CodemirrorState {
+  constructor(public options: CodemirrorOptions) {}
+
   private settings = new WeakMap<CodeMirrorNodeView, Toolbar>();
 
   attach(node: CodeMirrorNodeView) {
-    this.settings.set(node, createToolbar(node));
+    this.settings.set(node, this.options.createToolbar(node));
   }
 
   destory(node: CodeMirrorNodeView) {

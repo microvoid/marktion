@@ -6,7 +6,8 @@ import { event } from '../../plugin-event';
 import { useBubble, useLinkBubble } from '../bubble';
 import { useSlash } from '../slash';
 import { ReactEditorProvider } from './provider';
-import { codemirror, CodeblockNodeView } from '../../plugin-codemirror';
+import { CodeblockNodeView } from '../../plugin-codemirror';
+import { useCodemirror } from '../codemirror/codemirror';
 
 export type ReactEditorProps = React.PropsWithChildren<
   Partial<MarktionOptions> & {
@@ -26,9 +27,16 @@ export const ReactEditor = React.forwardRef<ReactEditorRef, ReactEditorProps>((p
   const slash = useSlash();
   const bubble = useBubble();
   const linkBubble = useLinkBubble();
+  const codemirror = useCodemirror();
 
   const editor = useMemo(() => {
-    const internalPlugins = [bubble.plugin, linkBubble.plugin, slash.plugin, event(), codemirror()];
+    const internalPlugins = [
+      bubble.plugin,
+      linkBubble.plugin,
+      slash.plugin,
+      codemirror.plugin,
+      event()
+    ];
 
     return new Marktion({
       ...options,
@@ -88,6 +96,7 @@ export const ReactEditor = React.forwardRef<ReactEditorRef, ReactEditorProps>((p
         {linkBubble.element}
         {bubble.element}
         {slash.element}
+        {codemirror.element}
 
         {children}
       </ReactEditorProvider>
