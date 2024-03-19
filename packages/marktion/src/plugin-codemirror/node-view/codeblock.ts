@@ -6,7 +6,7 @@ import { oneDark } from '@codemirror/theme-one-dark';
 import { minimalSetup } from 'codemirror';
 import { CodeMirrorNodeView } from './CodeMirrorNodeView';
 
-export const codeblock: NodeViewConstructor = (node, view, getPos) => {
+export const CodeblockNodeView: NodeViewConstructor = (node, view, getPos) => {
   const languageConf = new Compartment();
 
   const nodeView = new CodeMirrorNodeView({

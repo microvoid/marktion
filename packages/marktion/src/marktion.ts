@@ -2,6 +2,7 @@ import { EditorStateConfig } from 'prosemirror-state';
 import { CodemirrorRenderer } from './renderer-codemirror';
 import { ProseMirrorRenderer } from './renderer-prosemirror';
 import { UploadOptions } from './plugin-upload';
+import { WysiwygProps } from './renderer';
 
 export type MarktionOptions = {
   content: string;
@@ -10,6 +11,7 @@ export type MarktionOptions = {
   uploadOptions?: UploadOptions;
   plugins?: EditorStateConfig['plugins'];
   onChange?: (editor: Marktion) => void;
+  nodeViews?: WysiwygProps['nodeViews'];
 };
 
 const defaultOptions: MarktionOptions = {
@@ -37,6 +39,7 @@ export class Marktion {
       content: options.content,
       plugin: options.plugins,
       uploadOptions: options.uploadOptions,
+      nodeViews: options.nodeViews,
       onChange: () => {
         options.onChange?.(this);
       }

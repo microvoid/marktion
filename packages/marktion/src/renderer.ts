@@ -1,3 +1,4 @@
+import { EditorProps } from 'prosemirror-view';
 import { EditorStateConfig } from 'prosemirror-state';
 import { RendererEnum, Theme } from './types';
 import { UploadOptions } from './plugin-upload';
@@ -30,6 +31,7 @@ export interface SourceProps extends RendererProps {}
 export interface SourceRenderer extends Renderer<SourceProps> {}
 
 export interface WysiwygProps extends RendererProps {
+  nodeViews?: EditorProps['nodeViews'];
   plugin?: EditorStateConfig['plugins'];
   uploadOptions?: UploadOptions;
 }
