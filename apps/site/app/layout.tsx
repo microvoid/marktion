@@ -5,6 +5,7 @@ import React from 'react';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { BasicLayout, Footer } from '@/clients/components';
+import { ClerkProvider } from '@clerk/nextjs';
 
 import { Provider } from './provider';
 
@@ -19,15 +20,17 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: React.PropsWithChildren) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-white dark:bg-black`}>
-        <BasicLayout>
-          <Provider>
-            {children}
+      <ClerkProvider>
+        <body className={`${inter.className} bg-white dark:bg-black`}>
+          <BasicLayout>
+            <Provider>
+              {children}
 
-            <Footer />
-          </Provider>
-        </BasicLayout>
-      </body>
+              <Footer />
+            </Provider>
+          </BasicLayout>
+        </body>
+      </ClerkProvider>
     </html>
   );
 }
