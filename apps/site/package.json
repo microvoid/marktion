@@ -23,7 +23,7 @@
     "@upstash/ratelimit": "^0.4.3",
     "@upstash/redis": "^1.22.0",
     "ai": "^2.2.35",
-    "antd": "^5.7.0",
+    "antd": "^5.15.3",
     "autoprefixer": "10.4.14",
     "axios": "^1.4.0",
     "classnames": "^2.3.2",
