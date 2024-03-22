@@ -4,7 +4,8 @@ import {
   type ModelContextProviderProps
 } from '@/clients/context/model-context';
 
-import { Home } from './page-home';
+import { Root } from './home-drawer';
+import { DraftEditor } from './home-draft-editor';
 
 export default async function () {
   const user = await AuthHelper.getSessionUser();
@@ -21,7 +22,8 @@ export default async function () {
 
   return (
     <ModelContextProvider defaultValue={defaultValue}>
-      <Home />
+      <DraftEditor />
+      <Root />
     </ModelContextProvider>
   );
 }
@@ -35,7 +37,7 @@ async function prepareSessionUser(userId: string) {
     };
   });
 
-  const defaultProject = projectUsers[0];
+  const defaultProject = projectUsers[0]!;
   const [posts] = await postService.getPosts({
     projectId: defaultProject.projectId
   });

@@ -424,16 +424,18 @@ Formatter.impl('link', {
     );
   },
   serialize(node, children, context) {
-    const linkMark = node.marks[0] || {};
+    const linkMark = node.marks[0];
 
-    return [
-      {
-        type: 'link',
-        url: linkMark.attrs.href || '',
-        title: linkMark.attrs.title,
-        children
-      }
-    ];
+    return linkMark
+      ? [
+          {
+            type: 'link',
+            url: linkMark.attrs.href || '',
+            title: linkMark.attrs.title,
+            children
+          }
+        ]
+      : [];
   }
 });
 

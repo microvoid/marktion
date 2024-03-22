@@ -131,12 +131,12 @@ export const defaultStoreCompent: StoreComponent = {
           const props = {
             ...vnode.data?.props,
             innerHTML: html
-          }
+          };
 
           vnode.data = {
             ...vnode.data,
             props
-          }
+          };
 
           vnode.text = undefined;
         }
@@ -150,4 +150,3 @@ export const defaultStoreCompent: StoreComponent = {
 function defaultTextToDOM(node: Node): DOMOutputSpec {
   return node.text!;
 }
-

@@ -287,7 +287,7 @@ export class CodeMirrorNodeView implements NodeView {
             return false;
           }
 
-          if (selection.from === this.cm.state.doc.length) {
+          if (selection?.from === this.cm.state.doc.length) {
             if (exitCode(this.view.state, this.view.dispatch)) {
               this.view.focus();
               return true;

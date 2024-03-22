@@ -11,7 +11,7 @@ import { unwrapImage } from './remark-plugin/image';
 export function parse(source: string) {
   const u = unifiedParse(source) as Root;
 
-  return toProseMirrorDoc(u)[0];
+  return toProseMirrorDoc(u)[0]!;
 }
 
 function unifiedParse(source: string) {

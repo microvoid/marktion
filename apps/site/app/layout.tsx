@@ -1,4 +1,5 @@
 import './globals.css';
+import '@marktion/ui/styles.css';
 import 'marktion/dist/style.css';
 
 import React from 'react';
@@ -23,11 +24,7 @@ export default async function RootLayout({ children }: React.PropsWithChildren) 
       <ClerkProvider>
         <body className={`${inter.className} bg-white dark:bg-black`}>
           <BasicLayout>
-            <Provider>
-              {children}
-
-              <Footer />
-            </Provider>
+            <Provider>{children}</Provider>
           </BasicLayout>
         </body>
       </ClerkProvider>

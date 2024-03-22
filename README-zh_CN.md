@@ -37,22 +37,22 @@ function Editor() {
 
 ### ReactEditorProps
 
-| **属性**                 | **描述**             | **类型**                                                                                     | **默认值** |
-| ---------------------- | ------------------ | ------------------------------------------------------------------------------------------ | ------- |
-| content                | 编辑器的初始 Markdown 内容 | string                                                                                     | -       |
-| dark                   | 是否启用 Dark 模式       | boolean                                                                                    | false   |
-| uploadOptions.uploader | 处理上传图片的回调函数        | `(file: File, event: ClipboardEvent \| InputEvent, view: ProsemirrorView) => Promise<url>` | -       |
-| renderer               | 渲染模式               | `WYSIWYG` \| `SOURCE`                                                                      |         |
-| onChange               | 当文档内容变化时回调         | `(editor: Marktion) => void`                                                               |         |
+| **属性**               | **描述**                   | **类型**                                                                                   | **默认值** |
+| ---------------------- | -------------------------- | ------------------------------------------------------------------------------------------ | ---------- |
+| content                | 编辑器的初始 Markdown 内容 | string                                                                                     | -          |
+| dark                   | 是否启用 Dark 模式         | boolean                                                                                    | false      |
+| uploadOptions.uploader | 处理上传图片的回调函数     | `(file: File, event: ClipboardEvent \| InputEvent, view: ProsemirrorView) => Promise<url>` | -          |
+| renderer               | 渲染模式                   | `WYSIWYG` \| `SOURCE`                                                                      |            |
+| onChange               | 当文档内容变化时回调       | `(editor: Marktion) => void`                                                               |            |
 
 请参考 [tiptap 的文档](https://tiptap.dev/installation/react) 以获取更多 API 信息。
 
 ### MarktionRef
 
-| **属性**      | **描述**                    | **类型**         | **默认值** |
-| ----------- | ------------------------- | -------------- | ------- |
-| getMarkdown | 返回当前编辑器中的 Markdown 内容     | `() => string` | -       |
-| editor      | tiptap 编辑器实例，[**了解更多**]() | Editor         | -       |
+| **属性**    | **描述**                            | **类型**       | **默认值** |
+| ----------- | ----------------------------------- | -------------- | ---------- |
+| getMarkdown | 返回当前编辑器中的 Markdown 内容    | `() => string` | -          |
+| editor      | tiptap 编辑器实例，[**了解更多**]() | Editor         | -          |
 
 使用示例：
 
@@ -90,9 +90,7 @@ function Editor() {
     basePath: import.meta.env.VITE_OPENAI_BASE_URL
   });
 
-  return (
-    <ReactEditor ref={editorRef} plugins={[ai.plugin]} />
-  )
+  return <ReactEditor ref={editorRef} plugins={[ai.plugin]} />;
 }
 ```
 
