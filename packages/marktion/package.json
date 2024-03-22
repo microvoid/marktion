@@ -34,7 +34,7 @@
     "@types/mdast": "^4.0.2",
     "@types/unist": "^3.0.1",
     "ai": "^2.1.28",
-    "antd": "^5.11.3",
+    "antd": "^5.15.3",
     "classnames": "^2.3.2",
     "codemirror": "^6.0.1",
     "highlight.js": "^11.9.0",

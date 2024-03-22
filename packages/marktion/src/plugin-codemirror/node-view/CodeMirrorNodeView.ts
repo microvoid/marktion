@@ -132,6 +132,10 @@ export class CodeMirrorNodeView implements NodeView {
   }
 
   setLanguage(lang: string) {
+    if (lang === this.getLanguage()) {
+      return;
+    }
+
     return updateCodeblock(this.node.type, {
       language: lang
     })(this.view.state, this.view.dispatch);
