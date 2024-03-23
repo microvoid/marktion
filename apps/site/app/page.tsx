@@ -4,8 +4,7 @@ import {
   type ModelContextProviderProps
 } from '@/clients/context/model-context';
 
-import { Root } from './home-drawer';
-import { DraftEditor } from './home-draft-editor';
+import { Root } from './page-setting';
 
 export default async function () {
   const user = await AuthHelper.getSessionUser();
@@ -22,7 +21,6 @@ export default async function () {
 
   return (
     <ModelContextProvider defaultValue={defaultValue}>
-      <DraftEditor />
       <Root />
     </ModelContextProvider>
   );

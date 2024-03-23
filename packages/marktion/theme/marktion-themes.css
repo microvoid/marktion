@@ -13,7 +13,6 @@
   box-sizing: border-box;
 
   min-height: var(--space-10);
-  box-shadow: var(--shadow-3);
   padding: var(--space-4);
   border-radius: var(--radius-2);
   
@@ -29,6 +28,10 @@
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.marktion-themes.marktion-themes-border {
+  box-shadow: var(--shadow-3);
 }
 
 .marktion-themes {

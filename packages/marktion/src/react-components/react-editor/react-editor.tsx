@@ -13,7 +13,9 @@ export type ReactEditorProps = React.PropsWithChildren<
   Partial<MarktionOptions> & {
     prefix?: React.ReactNode;
     className?: string;
+    bordered?: boolean;
     dark?: boolean;
+    style?: React.CSSProperties;
   }
 >;
 
@@ -22,7 +24,7 @@ export type ReactEditorRef = {
 };
 
 export const ReactEditor = React.forwardRef<ReactEditorRef, ReactEditorProps>((props, ref) => {
-  const { children, dark = false, className, prefix, ...options } = props;
+  const { children, dark = false, bordered = true, className, prefix, style, ...options } = props;
   const rootRef = useRef<HTMLDivElement>(null);
   const slash = useSlash();
   const bubble = useBubble();
@@ -85,10 +87,12 @@ export const ReactEditor = React.forwardRef<ReactEditorRef, ReactEditorProps>((p
   return (
     <div
       className={cls('marktion-themes', className, {
+        'marktion-themes-bordered': bordered,
         dark
       })}
       data-accent-color="violet"
       ref={rootRef}
+      style={style}
     >
       <ReactEditorProvider editor={editor} dark={dark}>
         {prefix}
