@@ -1,5 +1,6 @@
 'use client';
 
+import { useTheme } from 'next-themes';
 import {
   Menubar,
   MenubarContent,
@@ -50,6 +51,9 @@ export function Root() {
 }
 
 export function SettingMenu() {
+  const { theme, setTheme } = useTheme();
+  const isDarkMode = theme === 'dark';
+
   return (
     <Menubar>
       <MenubarMenu>
@@ -60,27 +64,28 @@ export function SettingMenu() {
           <MenubarItem>
             Toggle Preview <MenubarShortcut>⌘T</MenubarShortcut>
           </MenubarItem>
-          <MenubarItem>Copy As HTML</MenubarItem>
+          <MenubarItem onClick={() => setTheme(isDarkMode ? 'light' : 'dark')}>
+            Toggle Dark Mode
+          </MenubarItem>
           <MenubarSeparator />
           <MenubarItem>Save File</MenubarItem>
-          <MenubarItem>Save File As HTML</MenubarItem>
           <MenubarItem>Save File As Pdf</MenubarItem>
+          <MenubarSeparator />
+          <MenubarItem>
+            <a href="https://github.com/microvoid/marktion" target="_blank">
+              Github
+            </a>
+          </MenubarItem>
         </MenubarContent>
       </MenubarMenu>
 
-      <MenubarMenu>
-        <MenubarTrigger>
-          <DrawerTrigger>
-            <Icon name="User" />
-          </DrawerTrigger>
-        </MenubarTrigger>
-      </MenubarMenu>
+      <DrawerTrigger>
+        <Icon name="User" />
+      </DrawerTrigger>
 
-      <MenubarMenu>
-        <MenubarTrigger>
-          <Icon name="Globe" />
-        </MenubarTrigger>
-      </MenubarMenu>
+      <Button size="sm" variant="link">
+        <Icon name="Globe" />
+      </Button>
     </Menubar>
   );
 }

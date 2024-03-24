@@ -5,10 +5,8 @@ import { ReactEditor, ReactEditorRef, useAI } from 'marktion';
 import { useTheme } from 'next-themes';
 import { Post } from '@prisma/client';
 import { debounce } from 'lodash';
-import cls from 'classnames';
 import { message, Skeleton } from 'antd';
 
-import { renderSubmitBar } from './editor-submit-bar';
 import { EditorPreviewBar } from './editor-preview-bar';
 import { useModelModifier, useCurrentProject } from '../hooks';
 
