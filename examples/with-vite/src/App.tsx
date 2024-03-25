@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { ReactEditor, ReactEditorRef, ReactSSR } from 'marktion';
+import { ReactEditor, ReactEditorRef, ReactSSR, ReactEditorProps } from 'marktion';
 
 import 'marktion/dist/style.css';
 
@@ -8,6 +8,7 @@ const INIT_MARKDOWN = [import.meta.env.VITE_README_ZH, import.meta.env.VITE_READ
 function App() {
   const [lang, setLang] = useState(0);
   const [render, setRenderer] = useState<'SSR' | 'CSR'>('SSR');
+  const [darkMode, setDarkMode] = useState<ReactEditorProps['dark']>(false);
   const marktionRef = useRef<ReactEditorRef>(null);
 
   return (
@@ -31,11 +32,22 @@ function App() {
           setRenderer(value => (value === 'SSR' ? 'CSR' : 'SSR'));
         }}
       >
-        {render}
+        Toogle Renderer: {render}
       </button>
 
-      {render === 'CSR' && <ReactEditor ref={marktionRef} content={INIT_MARKDOWN[lang]} />}
-      {render === 'SSR' && <ReactSSR content={INIT_MARKDOWN[lang]} />}
+      <button
+        style={{ margin: 10 }}
+        onClick={() => {
+          setDarkMode(!darkMode);
+        }}
+      >
+        Toggle DarkMode
+      </button>
+
+      {render === 'CSR' && (
+        <ReactEditor dark={darkMode} ref={marktionRef} content={INIT_MARKDOWN[lang]} />
+      )}
+      {render === 'SSR' && <ReactSSR dark={darkMode} content={INIT_MARKDOWN[lang]} />}
     </div>
   );
 }

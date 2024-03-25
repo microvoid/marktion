@@ -1,7 +1,7 @@
 import ReactDOM, { createPortal } from 'react-dom';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Updater, useImmer } from 'use-immer';
-import { Select } from 'antd';
+import { ConfigProvider, Select, theme } from 'antd';
 
 import { codemirror, CodeMirrorNodeView } from '../../plugin-codemirror';
 
@@ -36,7 +36,15 @@ export function useCodemirror() {
             node.setLanguage(setting.lang);
           }, [setting]);
 
-          return <Toolbar setting={setting} dispatch={dispath} />;
+          return (
+            <ConfigProvider
+              theme={{
+                algorithm: theme.darkAlgorithm
+              }}
+            >
+              <Toolbar setting={setting} dispatch={dispath} />
+            </ConfigProvider>
+          );
         }
 
         return {
@@ -91,7 +99,6 @@ function Toolbar({ setting, dispatch }: ToolbarProps) {
       }
       showSearch
       size="small"
-      variant="filled"
       placeholder="Select a language"
       optionFilterProp="children"
       placement="bottomRight"

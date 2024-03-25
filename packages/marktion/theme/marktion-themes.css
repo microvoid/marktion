@@ -30,7 +30,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.marktion-themes.marktion-themes-border {
+.marktion-themes.marktion-themes-bordered {
   box-shadow: var(--shadow-3);
 }
 

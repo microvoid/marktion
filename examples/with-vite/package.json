@@ -12,7 +12,8 @@
   "dependencies": {
     "marktion": "workspace:^",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "reset.css": "^2.0.2"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",
