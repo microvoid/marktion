@@ -6,7 +6,8 @@ import toHTML from 'snabbdom-to-html';
 import { VNodeChildren, VNodeChildElement } from 'snabbdom/build/h';
 import { DOMOutputSpec, Schema, Fragment, Node, Mark } from 'prosemirror-model';
 import { parse } from './parse';
-import { highlight } from './highlight';
+import { baseEditorStyle, highlightCodeMirror } from './remark-plugin/codemirror';
+import { oneDarkHighlightStyle, oneDarkTheme } from '@codemirror/theme-one-dark';
 
 export type StoreComponent = Record<
   string,
@@ -121,26 +122,28 @@ export const defaultStoreCompent: StoreComponent = {
   code_block: (node, children) => {
     const toDOM = node.type.spec.toDOM;
 
-    if (Array.isArray(children)) {
-      children.forEach(item => {
-        const vnode = item as VNode;
-        const language = node.attrs.language;
+    const vnode = (Array.isArray(children) ? children[0] : children) as VNode;
+    const language = node.attrs.language;
 
-        if (vnode.text && language) {
-          const html = highlight(language, vnode.text);
-          const props = {
-            ...vnode.data?.props,
-            innerHTML: html
-          };
-
-          vnode.data = {
-            ...vnode.data,
-            props
-          };
-
-          vnode.text = undefined;
-        }
+    if (vnode.text && language) {
+      const res = highlightCodeMirror(vnode.text, {
+        highlightStyle: oneDarkHighlightStyle,
+        theme: oneDarkTheme
       });
+
+      const props = {
+        ...vnode.data?.props,
+        innerHTML: `<style>${baseEditorStyle}</style><style>${res.css.rules.join(
+          '\n'
+        )}</style>${res?.code}`
+      };
+
+      vnode.data = {
+        ...vnode.data,
+        props
+      };
+
+      vnode.text = undefined;
     }
 
     return toDOM && HtmlSerializer.renderSpec(toDOM(node), children);
