@@ -9,7 +9,8 @@
     "paths": {
       "@/*": ["./*"],
       "@/components/*": ["../../packages/ui/src/components/*"],
-      "@/libs/*": ["./libs/*"]
+      "@/libs/*": ["./libs/*"],
+      "api/*": ["../api/src/*"]
     },
     "allowJs": true,
     "noEmit": true,

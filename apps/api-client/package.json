@@ -1,0 +1,21 @@
+{
+  "name": "api-client",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "dev": "tsc",
+    "gen": "tsx ./src/gen.ts"
+  },
+  "devDependencies": {
+    "@marktion/internal-recipe": "workspace:*",
+    "@marktion/internal-share": "workspace:*",
+    "@types/node": "^20.11.30",
+    "axios": "^1.4.0",
+    "tsx": "^4.7.1",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "swagger-typescript-api": "^13.0.3"
+  }
+}

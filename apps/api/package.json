@@ -1,0 +1,25 @@
+{
+  "name": "api",
+  "private": true,
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "dev": "tsx watch ./src/server.ts"
+  },
+  "devDependencies": {
+    "@hono/node-server": "^1.9.0",
+    "@marktion/internal-recipe": "workspace:*",
+    "@marktion/internal-share": "workspace:*",
+    "@types/node": "^20.11.30",
+    "tsx": "^4.7.1",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@hono/swagger-ui": "^0.2.1",
+    "@hono/zod-openapi": "^0.9.9",
+    "hono": "^3.11.7"
+  }
+}
