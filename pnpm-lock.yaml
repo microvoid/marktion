@@ -8,6 +8,9 @@ importers:
 
   .:
     devDependencies:
+      '@marktion/eslint-config':
+        specifier: link:./packages/internal-recipe/eslint-config
+        version: link:packages/internal-recipe/eslint-config
       '@marktion/internal-recipe':
         specifier: workspace:*
         version: link:packages/internal-recipe
@@ -20,6 +23,62 @@ importers:
       turbo:
         specifier: ^1.11.2
         version: 1.11.2
+
+  apps/api:
+    dependencies:
+      '@hono/swagger-ui':
+        specifier: ^0.2.1
+        version: 0.2.1(hono@3.11.7)
+      '@hono/zod-openapi':
+        specifier: ^0.9.9
+        version: 0.9.9(hono@3.11.7)(zod@3.22.4)
+      hono:
+        specifier: ^3.11.7
+        version: 3.11.7
+    devDependencies:
+      '@hono/node-server':
+        specifier: ^1.9.0
+        version: 1.9.0
+      '@marktion/internal-recipe':
+        specifier: workspace:*
+        version: link:../../packages/internal-recipe
+      '@marktion/internal-share':
+        specifier: workspace:*
+        version: link:../../packages/internal-share
+      '@types/node':
+        specifier: ^20.11.30
+        version: 20.11.30
+      tsx:
+        specifier: ^4.7.1
+        version: 4.7.1
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
+
+  apps/api-client:
+    dependencies:
+      swagger-typescript-api:
+        specifier: ^13.0.3
+        version: 13.0.3
+    devDependencies:
+      '@marktion/internal-recipe':
+        specifier: workspace:*
+        version: link:../../packages/internal-recipe
+      '@marktion/internal-share':
+        specifier: workspace:*
+        version: link:../../packages/internal-share
+      '@types/node':
+        specifier: ^20.11.30
+        version: 20.11.30
+      axios:
+        specifier: ^1.4.0
+        version: 1.4.0
+      tsx:
+        specifier: ^4.7.1
+        version: 4.7.1
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
 
   apps/docs:
     dependencies:
@@ -259,62 +318,6 @@ importers:
       tailwindcss:
         specifier: ^3.4.0
         version: 3.4.0
-
-  apps/site-api:
-    dependencies:
-      '@hono/swagger-ui':
-        specifier: ^0.2.1
-        version: 0.2.1(hono@3.11.7)
-      '@hono/zod-openapi':
-        specifier: ^0.9.9
-        version: 0.9.9(hono@3.11.7)(zod@3.22.4)
-      hono:
-        specifier: ^3.11.7
-        version: 3.11.7
-    devDependencies:
-      '@hono/node-server':
-        specifier: ^1.9.0
-        version: 1.9.0
-      '@marktion/internal-recipe':
-        specifier: workspace:*
-        version: link:../../packages/internal-recipe
-      '@marktion/internal-share':
-        specifier: workspace:*
-        version: link:../../packages/internal-share
-      '@types/node':
-        specifier: ^20.11.30
-        version: 20.11.30
-      tsx:
-        specifier: ^4.7.1
-        version: 4.7.1
-      typescript:
-        specifier: ^5.3.3
-        version: 5.4.3
-
-  apps/site-api-client:
-    dependencies:
-      swagger-typescript-api:
-        specifier: ^13.0.3
-        version: 13.0.3
-    devDependencies:
-      '@marktion/internal-recipe':
-        specifier: workspace:*
-        version: link:../../packages/internal-recipe
-      '@marktion/internal-share':
-        specifier: workspace:*
-        version: link:../../packages/internal-share
-      '@types/node':
-        specifier: ^20.11.30
-        version: 20.11.30
-      axios:
-        specifier: ^1.4.0
-        version: 1.4.0
-      tsx:
-        specifier: ^4.7.1
-        version: 4.7.1
-      typescript:
-        specifier: ^5.3.3
-        version: 5.4.3
 
   examples/with-inline-style:
     dependencies:
@@ -8310,7 +8313,7 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@eslint-community/regexpp': 4.10.0
+      '@eslint-community/regexpp': 4.5.1
       '@typescript-eslint/parser': 6.0.0(eslint@8.55.0)(typescript@5.0.4)
       '@typescript-eslint/scope-manager': 6.0.0
       '@typescript-eslint/type-utils': 6.0.0(eslint@8.55.0)(typescript@5.0.4)
