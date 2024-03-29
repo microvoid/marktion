@@ -1,6 +1,7 @@
 import { MarkSpec } from 'prosemirror-model';
 
 export const strong = {
+  excludes: 'code',
   parseDOM: [
     { tag: 'strong' },
     { tag: 'b', getAttrs: (node: HTMLElement) => node.style.fontWeight != 'normal' && null },

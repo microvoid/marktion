@@ -1,6 +1,7 @@
 import { MarkSpec } from 'prosemirror-model';
 
 export const strike = {
+  inclusive: false,
   parseDOM: [
     {
       tag: 's'

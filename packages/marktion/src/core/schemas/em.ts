@@ -1,6 +1,8 @@
 import { MarkSpec } from 'prosemirror-model';
 
 export const em: MarkSpec = {
+  excludes: 'code',
+  inclusive: false,
   parseDOM: [
     { tag: 'i' },
     { tag: 'em' },
