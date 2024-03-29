@@ -7,7 +7,7 @@ const INIT_MARKDOWN = [import.meta.env.VITE_README_ZH, import.meta.env.VITE_READ
 
 function App() {
   const [lang, setLang] = useState(0);
-  const [render, setRenderer] = useState<'SSR' | 'CSR'>('SSR');
+  const [render, setRenderer] = useState<'SSR' | 'CSR'>('CSR');
   const [darkMode, setDarkMode] = useState<ReactEditorProps['dark']>(false);
   const marktionRef = useRef<ReactEditorRef>(null);
 

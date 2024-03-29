@@ -1,5 +1,6 @@
 import { Plugin, PluginKey } from 'prosemirror-state';
 import type { CodeMirrorNodeView } from './node-view/CodeMirrorNodeView';
+
 import { createToolbar, Toolbar } from './toolbar/createToolbar';
 
 export type CodemirrorOptions = {
@@ -30,20 +31,25 @@ export class CodemirrorState {
 
   private settings = new WeakMap<CodeMirrorNodeView, Toolbar>();
 
-  attach(node: CodeMirrorNodeView) {
-    this.settings.set(node, this.options.createToolbar(node));
+  attach(nodeView: CodeMirrorNodeView) {
+    this.settings.set(nodeView, this.options.createToolbar(nodeView));
   }
 
-  destory(node: CodeMirrorNodeView) {
-    const toolbar = this.getToolbar(node);
+  destory(nodeView: CodeMirrorNodeView) {
+    const toolbar = this.getToolbar(nodeView);
 
     if (toolbar) {
       toolbar.destory();
-      this.settings.delete(node);
+      this.settings.delete(nodeView);
     }
   }
 
-  getToolbar(node: CodeMirrorNodeView) {
-    return this.settings.get(node);
+  update(nodeView: CodeMirrorNodeView) {
+    const toolbar = this.getToolbar(nodeView);
+    toolbar?.update(nodeView);
+  }
+
+  getToolbar(nodeView: CodeMirrorNodeView) {
+    return this.settings.get(nodeView);
   }
 }

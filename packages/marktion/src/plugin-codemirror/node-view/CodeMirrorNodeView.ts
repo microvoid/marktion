@@ -113,7 +113,7 @@ export class CodeMirrorNodeView implements NodeView {
 
     this.node = node;
     this.updateLanguage();
-    // this.settingViewContext.update(node);
+    CodemirrorPluginKey.getState(this.view.state)?.update(this);
     const change = computeChange(this.cm.state.doc.toString(), node.textContent);
 
     if (change) {

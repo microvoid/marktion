@@ -1,14 +1,13 @@
-import { Node as ProsemirrorNode } from 'prosemirror-model';
 import { CodeMirrorNodeView } from '../node-view/CodeMirrorNodeView';
 
 export type Toolbar = {
-  update(node: ProsemirrorNode): void;
+  update(nodeView: CodeMirrorNodeView): void;
   destory(): void;
 };
 
-export function createToolbar(node: CodeMirrorNodeView): Toolbar {
-  const languages = node.getLanguages();
-  const document = node.dom.ownerDocument;
+export function createToolbar(nodeView: CodeMirrorNodeView): Toolbar {
+  const languages = nodeView.getLanguages();
+  const document = nodeView.dom.ownerDocument;
 
   const toolbar = document.createElement('div');
   const langEl = document.createElement('select');
@@ -16,7 +15,7 @@ export function createToolbar(node: CodeMirrorNodeView): Toolbar {
   toolbar.classList.add('components-codeblock-setting');
   toolbar.appendChild(langEl);
 
-  node.dom.appendChild(toolbar);
+  nodeView.dom.appendChild(toolbar);
 
   const langs = languages
     .map(lang => {
@@ -37,14 +36,14 @@ export function createToolbar(node: CodeMirrorNodeView): Toolbar {
     langEl.appendChild(optionEl);
   });
 
-  const onLangElChange = () => node.setLanguage(langEl.value);
+  const onLangElChange = () => nodeView.setLanguage(langEl.value);
 
-  langEl.value = node.getLanguage();
+  langEl.value = nodeView.getLanguage();
   langEl.addEventListener('change', onLangElChange);
 
   return {
-    update(node) {
-      langEl.value = node.attrs.language;
+    update() {
+      langEl.value = nodeView.getLanguage();
     },
     destory() {
       langEl.removeEventListener('change', onLangElChange);

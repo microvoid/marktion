@@ -50,7 +50,7 @@ export function useCodemirror() {
         return {
           update(node) {
             dispathRef.current?.(draft => {
-              draft.lang = node.attrs.language;
+              draft.lang = node.getLanguage();
             });
           },
           destory() {
