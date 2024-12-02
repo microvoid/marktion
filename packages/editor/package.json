@@ -17,9 +17,24 @@
     "test": "vitest"
   },
   "devDependencies": {
+    "@types/react": "^18.2.61",
+    "@types/react-dom": "^18.2.19",
     "typescript": "^5.2.2",
     "vitest": "^0.34.6"
   },
   "dependencies": {
+    "@radix-ui/themes": "^3.1.6",
+    "@udecode/cn": "^40.2.8",
+    "@udecode/plate-basic-marks": "^40.0.0",
+    "@udecode/plate-block-quote": "^40.0.0",
+    "@udecode/plate-common": "^40.2.8",
+    "@udecode/plate-heading": "^40.2.6",
+    "@udecode/plate-markdown": "^40.2.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "slate": "^0.110.2",
+    "slate-dom": "^0.111.0",
+    "slate-history": "^0.110.3",
+    "slate-react": "^0.111.0"
   }
 }
