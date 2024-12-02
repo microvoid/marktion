@@ -1,4 +1,0 @@
-{
-  "extends": "@marktion/internal-recipe/typescript-config/base.json",
-  "exclude": ["node_modules"]
-}

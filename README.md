@@ -1,147 +1,81 @@
-[中文](https://github.com/microvoid/marktion/blob/main/README-zh_CN.md)/English
+# Turborepo starter
 
-# Introducing Marktion
+This is an official starter Turborepo.
 
-![](https://github.com/microvoid/marktion/blob/main/public/recorder.gif)
+## Using this example
 
-Marktion is a WYSIWYG Markdown editor based on ProseMirror, dedicated to enhancing the editing experience of Markdown.
+Run the following command:
 
-See our website [marktion.io](https://marktion.io) in action.
-
-## Features
-
-- **\[NEW] ✨ AI integration**: Built-in AI conversation interface, supporting AI plugin extensions, invoked at the beginning of a line by pressing Space;
-
-- **WYSIWYG editing**: Real-time preview of Markdown rendering results, providing an intuitive editing experience, and you can switch between source code mode and WYSIWYG editing mode with Ctrl + /;
-
-- **Slash menu and Bubble menu**: Quickly inspired by the editor of Notion using /; Dark mode support: Support for turning on or off Dark mode.
-
-- **Dark Mode Support**: Enable Dark Mode to provide a visually comfortable editing experience in low-light environments.
-
-## Installation and Usage
-
-1. Install dependencies.
-
-```bash
-npm intall marktion
+```sh
+npx create-turbo@latest
 ```
 
-2. Usage
+## What's inside?
 
-```tsx
-import { ReactEditor } from 'marktion';
-import 'marktion/dist/style.css';
+This Turborepo includes the following packages/apps:
 
-function Editor() {
-  return <ReactEditor content={`# Hello World`} />;
-}
+### Apps and Packages
+
+- `docs`: a [Next.js](https://nextjs.org/) app
+- `web`: another [Next.js](https://nextjs.org/) app
+- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
+- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
+- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+
+Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+
+### Utilities
+
+This Turborepo has some additional tools already setup for you:
+
+- [TypeScript](https://www.typescriptlang.org/) for static type checking
+- [ESLint](https://eslint.org/) for code linting
+- [Prettier](https://prettier.io) for code formatting
+
+### Build
+
+To build all apps and packages, run the following command:
+
+```
+cd my-turborepo
+pnpm build
 ```
 
-3. Example
+### Develop
 
-Have a look at the examples to see [marktion.io](https://marktion.io) in action.
+To develop all apps and packages, run the following command:
 
-## API
-
-### ReactEditorProps
-
-| **Property**           | **Description**                              | **Type**                                                                                   | Default |
-| ---------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------ | ------- |
-| content                | The initial Markdown content for the editor. | string                                                                                     | -       |
-| dark                   | Enable or disable Dark Mode in the editor.   | boolean                                                                                    | false   |
-| uploadOptions.uploader | Callback function for uploading images.      | `(file: File, event: ClipboardEvent \| InputEvent, view: ProsemirrorView) => Promise<url>` | -       |
-| render                 | renderer mode                                | `WYSIWYG`\| `SOURCE`                                                                       |         |
-| onChange               | editor content change callback               | `(editor: Marktion) => void`                                                               |         |
-
-Consult [tiptap's documentation](https://tiptap.dev/installation/react) to find more APIs.
-
-### MarktionRef
-
-| **Property** | **Description**   | **Type** | Default |
-| ------------ | ----------------- | -------- | ------- |
-| editor       | marktion instance | Marktion | -       |
-
-Example usage:
-
-```tsx
-import { ReactEditor, ReactEditorRef } from 'marktion';
-
-function App() {
-  const editorRef = useRef<ReactEditorRef>(null);
-
-  const onExport = () => {
-    const content = editorRef.current?.editor.getContent();
-    console.log(content);
-  };
-
-  return (
-    <>
-      <button onClick={onExport}>export</button>
-      <ReactEditor ref={editorRef} />
-    </>
-  );
-}
+```
+cd my-turborepo
+pnpm dev
 ```
 
-## Plugins
+### Remote Caching
 
-### AI Plugin
+Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
 
-> The AI Plugin is based on Vercel AI. Before you start, you need to create an AI router. Please refer to the documentation for more information: [Getting Started](https://sdk.vercel.ai/docs/getting-started).
+By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
 
-Example usage:
-
-```tsx
-function Editor() {
-  const ai = useAI({
-    basePath: import.meta.env.VITE_OPENAI_BASE_URL
-  });
-
-  return (
-    <ReactEditor ref={editorRef} plugins={[ai.plugin]}>
-      {ai.element}
-    </ReactEditor/>
-  )
-}
+```
+cd my-turborepo
+npx turbo login
 ```
 
-## Contributing
+This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
 
-Thank you for considering contributing to Marktion! If you would like to contribute, please follow these steps:
+Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
 
-1. Fork the repository to your GitHub account.
-
-2. Clone the forked repository to your local machine.
-
-```bash
-git clone https://github.com/yourusername/marktion.git
-cd marktion
+```
+npx turbo link
 ```
 
-3. Install dependencies.
+## Useful Links
 
-```bash
-pnpm i
-```
+Learn more about the power of Turborepo:
 
-4. Make changes and test your modifications.
-
-5. Commit your changes.
-
-6. Create a pull request.
-
-Go to the original repository and click on "New Pull Request". Fill in the necessary details and describe the changes you made.
-
-We will review your pull request as soon as possible. Thank you for your contribution!
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](https://github.com/microvoid/marktion/blob/main/LICENSE) file for more details.
-
-## Contact
-
-If you have any questions, suggestions, or issues, feel free to reach out to us through the following channels:
-
-- Email: <whistleryz@gmail.com>
-
-- Issue Tracker: Project Issues (Please specify the issue type in the issue title)
+- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
+- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
+- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
+- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
+- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
+- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)

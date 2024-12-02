@@ -1,8 +1,0 @@
-{
-  "extends": "@marktion/internal-recipe/typescript-config/react-library.json",
-  "compilerOptions": {
-    "outDir": "dist"
-  },
-  "include": ["."],
-  "exclude": ["dist", "build", "node_modules"]
-}
