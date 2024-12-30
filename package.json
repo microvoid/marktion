@@ -1,8 +1,9 @@
 {
   "private": true,
   "scripts": {
+    "dev:docs": "turbo dev --filter=docs...",
+    "dev:desktop": "turbo dev --filter=desktop...",
     "build": "turbo build",
-    "dev": "turbo dev --filter=docs...",
     "lint": "turbo lint",
     "type-check": "turbo type-check",
     "clean": "turbo clean",

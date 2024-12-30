@@ -1,30 +1,32 @@
 {
-  "name": "web",
+  "name": "desktop",
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --port 3000",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "type-check": "tsc --noEmit"
+    "tauri": "tauri"
   },
   "dependencies": {
+    "@marktion/editor": "workspace:*",
+    "@radix-ui/themes": "^3.1.6",
     "@repo/ui": "workspace:*",
-    "next": "^14.2.3",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "@tauri-apps/api": "^2",
+    "@tauri-apps/plugin-opener": "^2",
+    "next": "^15",
+    "react": "^19",
+    "react-dom": "^19"
   },
   "devDependencies": {
-    "@next/eslint-plugin-next": "^14.2.3",
+    "@next/eslint-plugin-next": "^15",
     "@repo/eslint-config": "workspace:*",
     "@repo/tailwind-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@tauri-apps/cli": "^2",
     "@types/node": "^20.11.24",
-    "@types/react": "^18.2.61",
-    "@types/react-dom": "^18.2.19",
-    "autoprefixer": "^10.4.18",
-    "postcss": "^8.4.35",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
     "tailwindcss": "^3.4.1",
     "typescript": "5.5.4"
   }

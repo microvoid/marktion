@@ -8,5 +8,8 @@
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
     "tailwindcss": "^3.4.1"
+  },
+  "dependencies": {
+    "@tailwindcss/typography": "^0.5.15"
   }
 }
