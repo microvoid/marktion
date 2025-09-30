@@ -23,7 +23,7 @@ See our website [marktion.io](https://marktion.io) in action.
 1. Install dependencies.
 
 ```bash
-npm intall marktion
+npm install marktion
 ```
 
 2. Usage
